@@ -4,3 +4,11 @@ build/
 *.swp
 .DS_Store
 Thumbs.db
+.idea
+.gradle
+*.iml
+*.ipr
+*.iws
+local.properties
+bake/
+site.yml

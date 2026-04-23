@@ -28,6 +28,26 @@ _Procedure obligatoire avant tout commit_ :
 . _Attendre confirmation explicite_ ("oui", "commit", "vas-y")
 . _Seulement apres_ : executer le commit
 
+=== 1b. FICHIERS DE CONFIGURATION — REGLE ABSOLUE DE SURETE
+
+**PRINCIPE** : Tout fichier de configuration (YAML, JSON, XML, TOML, properties, .env) peut contenir des donnees sensibles non versionnees. Ne **jamais** mettre en danger l'integrite du travail du developpeur.
+
+**INTERDICTIONS** :
+
+* **NE JAMAIS ecraser** un fichier config avec un `Write` complet quand un `Edit` partiel suffit
+* **NE JAMAIS remplacer** des valeurs sensibles (tokens, mots de passe, cles API, URLs prod) par des valeurs factices
+* **NE JAMAIS modifier** sans verifier `git check-ignore` et `git ls-files` — un fichier non tracke n'a pas de `git restore`
+
+**Procedure OBLIGATOIRE** avant modification :
+
+. `git check-ignore <fichier>` + `git ls-files -- <fichier>`
+. Si non tracke : **CREER UNE SAUVEGARDE** (`cp <fichier> <fichier>.bak`)
+. **PRESERVER** les valeurs sensibles intactes
+. Privilegier l'**edit partiel** sur l'ecriture complete
+. **Verifier** apres modification que les valeurs sensibles sont toujours la
+
+_Lecon Session 2 (bakery-plugin)_ : Ecraser un site.yml non versionne a detruit des tokens reels. Sans sauvegarde git (fichier ignore), restauration impossible sans fallback externe. Le developpeur aurait ete bloque definitivement.
+
 === 2. BUILD ISO — PERMISSION REQUISE
 
 _L'agent NE DOIT JAMAIS_ lancer de build ISO (`sudo scripts/build.sh`) ou de flash (`sudo scripts/flash.sh`) _SANS permission explicite de l'utilisateur_.
