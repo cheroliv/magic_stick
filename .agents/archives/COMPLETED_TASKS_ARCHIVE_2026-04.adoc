@@ -136,3 +136,37 @@
 * Installer live-build
 * Configurer lb config
 * Premier build ISO
+
+
+== Session 004 — 24 avril 2026
+
+**Contexte** : Suite session 003. Creation du README et de la licence pendant qu'une autre session travaille sur l'image Docker.
+
+=== Taches realisees
+
+* [OK] Creer README.adoc (version anglaise) — pourquoi, A/B, logiciels, quick start, architecture, securite, statut
+* [OK] Creer README_FR.adoc (version francaise) — meme structure traduite
+* [OK] Creer LICENSE (Apache License 2.0) — copyright 2026 cheroliv
+* [OK] Mettre a jour les badges licence dans les deux README (Apache 2.0)
+
+
+=== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| Fichiers crees | 3 |
+| README EN | OK |
+| README FR | OK |
+| Licence | Apache 2.0 |
+
+
+=== Lecons apprises
+
+* Bien lire les fichiers ESSENTIALS/REFERENCE avant de rediger la doc
+* Apache 2.0 adapte pour un projet embarquant des logiciels sous licences variees
+
+
+=== Prochaine session
+
+* Configurer live-build
+* Premier build ISO

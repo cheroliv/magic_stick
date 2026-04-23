@@ -1,0 +1,206 @@
+= Magic Stick
+
+_Standardized portable environment on a bootable USB drive_
+
+image:https://img.shields.io/badge/version-0.1.0-blue[Version 0.1.0]
+image:https://img.shields.io/badge/base-Xubuntu%2024.04-orange[Base Xubuntu 24.04]
+image:https://img.shields.io/badge/license-Apache%202.0-green[License Apache 2.0]
+
+'''
+
+== Why Magic Stick?
+
+You're a field technician, trainer, or nomadic developer. Every time you sit at a different computer, you lose 30 minutes setting it up. Magic Stick eliminates that problem: **a USB drive that boots a complete, identical environment on any PC**.
+
+* **Training**: every student gets the same drive, ready to work on day one
+* **FTTH/Network technician**: full network diagnostics regardless of the host machine
+* **Nomadic dev**: find your full stack (Docker, Java, Ollama) on any computer
+* **Tech teams**: shared standardized environment, zero time wasted on setup
+
+'''
+
+== How it works
+
+Magic Stick uses an **A/B partition system** with persistence:
+
+[cols="1,2,3"]
+|===
+| Partition | Size | Role
+
+| System A
+| ~8 GB
+| Active Xubuntu live system (default boot)
+
+| System B
+| ~8 GB
+| Backup Xubuntu live system (inactive)
+
+| Persistence
+| Remaining space
+| User data + software config
+|===
+
+=== Atomic updates
+
+1. `update-system.sh` detects the active partition (A or B)
+2. It writes the new ISO to the **inactive** partition
+3. It flips the GRUB boot flag
+4. On next boot: new version is active
+5. Something went wrong? Reboot into the previous partition — **instant rollback**
+6. The Persistence partition is **never** touched
+
+'''
+
+== Included software
+
+[cols="2,3"]
+|===
+| Category | Software
+
+| Desktop
+| Xubuntu Desktop (XFCE)
+
+| Containerization
+| Docker CE + Docker Compose
+
+| Local AI
+| Ollama (on-device LLM)
+
+| Development
+| SDKMAN + JDK 21, Git, curl, wget, jq
+
+| Network/FTTH
+| nmap, iperf3, Wireshark, tshark, traceroute, dnsutils
+
+| System diagnostics
+| htop, ncdu, tree, lshw, smartmontools
+
+| SSH/Transfer
+| OpenSSH client, rsync, tmux, terminator
+|===
+
+'''
+
+== Quick start
+
+=== Prerequisites
+
+* Docker (for the build)
+* A USB drive with at least 32 GB (64 GB recommended)
+* A Linux host system
+
+=== Build the ISO
+
+[source,bash]
+----
+# Clone the repository
+git clone https://github.com/cheroliv/magic_stick.git
+cd magic_stick
+
+# Build the ISO (30-60 min)
+sudo scripts/build.sh
+
+# Verify the generated ISO
+scripts/verify.sh
+----
+
+=== Flash to a USB drive
+
+[source,bash]
+----
+# Identify the USB drive
+lsblk
+
+# Flash (WARNING: erases all data on the target device)
+sudo scripts/flash.sh /dev/sdX
+----
+
+=== Update the system (A/B)
+
+[source,bash]
+----
+# Update the inactive partition
+sudo scripts/update-system.sh /dev/sdX
+
+# If the new system fails to boot:
+# select the previous partition in the GRUB menu
+----
+
+'''
+
+== Project architecture
+
+[source]
+----
+magic_stick/
+├── build/                             # live-build output (generated ISOs)
+├── config/
+│   └── live-build/
+│       ├── package-lists/            # Package lists
+│       ├── hooks/                     # chroot + binary hooks
+│       ├── includes.chroot/          # Files included in the system
+│       └── includes.binary/          # Files included in the ISO
+├── scripts/
+│   ├── build.sh                       # ISO build via Docker
+│   ├── flash.sh                       # USB flash
+│   ├── update-system.sh               # A/B update
+│   ├── install-software.sh            # Software in chroot
+│   └── verify.sh                      # ISO verification
+├── Dockerfile                        # Docker image for the build
+└── config/
+    └── overrides/                     # Custom config (XFCE, dock, etc.)
+----
+
+'''
+
+== Recommended partitioning (64 GB drive)
+
+|===
+| Partition | Size | Type | Flag
+| 1 (System A) | 8 GB | squashfs | boot
+| 2 (System B) | 8 GB | squashfs | -
+| 3 (Persistence) | ~48 GB | ext4 | -
+|===
+
+The Persistence partition uses `persistence.conf` with `/ union` to save data between sessions.
+
+'''
+
+== Security
+
+* **No personal data** in the ISO — SSH keys and user files go in the Persistence partition
+* **Automatic rollback** if the new system fails to boot
+* **Persistent data is never touched** by system updates
+* Atomic updates: if it breaks, revert to the previous version with a single reboot
+
+'''
+
+== Project status
+
+|===
+| EPIC | Status
+
+| EPIC 1: Project initialization
+| ✅ Done
+
+| EPIC 2: Xubuntu base ISO build
+| 🔧 In progress
+
+| EPIC 3: A/B partition + Persistence
+| ⬜ To do
+
+| EPIC 4: Software (Ollama, Docker, SDKMAN)
+| ⬜ To do
+
+| EPIC 5: XFCE customization
+| ⬜ To do
+
+| EPIC 6: A/B update script
+| ⬜ To do
+|===
+
+'''
+
+== License
+
+Apache License 2.0

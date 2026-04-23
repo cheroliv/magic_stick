@@ -21,8 +21,8 @@ __
 * [ ] Initialiser le depot git
 * [ ] Creer les scripts de base (build.sh, flash.sh, update-system.sh, verify.sh)
 * [ ] Creer la configuration live-build minimale
-* [ ] Ajouter un .gitignore adapte
-* [ ] README minimal
+* [x] Ajouter un .gitignore adapte
+* [x] README minimal
 
 === EPIC 2 : Build ISO Xubuntu de base
 

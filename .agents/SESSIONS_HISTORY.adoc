@@ -1,9 +1,10 @@
 = Historique des Sessions — Magic Stick
 
-_Derniere mise a jour_ : 2026-04-23
+_Derniere mise a jour_ : 2026-04-24
 
 |===
 | # | Date | Type | Sujet | Score
+| 004 | 2026-04-24 | documentation | README FR/EN + LICENSE Apache 2.0 | 8.0/10
 | 003 | 2026-04-23 | feature | Gradle + Bakery-gradle Site Statique + CI/CD | 7.5/10
 | 002 | 2026-04-23 | init | Git init + Push GitHub | 7.0/10
 | 001 | 2026-04-23 | init | Initialisation projet Magic Stick | 8.0/10

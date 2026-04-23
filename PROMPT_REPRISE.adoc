@@ -1,34 +1,29 @@
-= Prompt de reprise — Session 004
+= Prompt de reprise — Session 005
 
 __
 **EPIC** : EPIC 2 — Build ISO Xubuntu de base
-**Statut** : Session 003 OK — Site statique bakery-gradle configure et CI/CD en place
+**Statut** : Session 004 OK — README (FR/EN) + LICENSE Apache 2.0
 **Mission** : Configurer live-build et produire la premiere ISO bootable
 __
 
 '''
 
-== Session 003 — Resume
+== Session 004 — Resume
 
-**Date** : 23 avril 2026
-**Resultat** : OK — Plugin bakery-gradle installe, site JBake complet, CI/CD gh-pages
+**Date** : 2026-04-24
+**Resultat** : OK — README.adoc (EN) + README_FR.adoc (FR) + LICENSE Apache 2.0
 
 **Connaissances cles** :
 
-* Plugin bakery-gradle version 0.0.9 configure via libs.versions.toml
-* site.yml dans .gitignore, injecte par CI depuis secret BAKERY_GRADLE_PLUGIN
-* Site servi sous cheroliv.com/magic_stick (pas de CNAME)
-* Dossier bake/ dans layout de build, couvert par build/ dans .gitignore
-* `cname` est non-nullable dans le plugin bakery — ne jamais laisser vide
-* Gradle wrapper doit etre commit dans le repo pour la CI
-* gh CLI installe dans ~/apps/gh avec script gh-update.sh
-* Toujours tester `./gradlew -i publishSite` en local avant de deboguer la CI
+* README en AsciiDoc avec badges (version, base Xubuntu, licence)
+* Licence Apache 2.0 choisie — adaptee au projet embarquant des logiciels sous licences variees
+* L'autre session opencode travaille en parallele sur l'image Docker pour le build
 
-**Archive** : `.agents/sessions/003-gradle-bakery-site.adoc`
+**Archive** : `.agents/sessions/004-docs-readme-license.adoc`
 
 '''
 
-== Session 004 — Priorites
+== Session 005 — Priorites
 
 **Mission** : EPIC 2 — Build ISO Xubuntu de base
 

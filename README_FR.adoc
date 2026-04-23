@@ -1,0 +1,206 @@
+= Magic Stick
+
+_Environnement portable standardise sur cle USB bootable_
+
+image:https://img.shields.io/badge/version-0.1.0-blue[Version 0.1.0]
+image:https://img.shields.io/badge/base-Xubuntu%2024.04-orange[Base Xubuntu 24.04]
+image:https://img.shields.io/badge/licence-Apache%202.0-green[Licence Apache 2.0]
+
+'''
+
+== Pourquoi Magic Stick ?
+
+Vous etes technicien terrain, formateur ou dev nomade. A chaque intervention, vous perdez 30 minutes a configurer l'ordinateur du moment. Magic Stick elimine ce probleme : **une cle USB qui boote un environnement complet et identique sur n'importe quel PC**.
+
+* **Formation** : chaque apprenant a la meme cle, pret a bosser des le premier jour
+* **Technicien FTTH/reseau** : diagnostique reseau complet quel que soit l'ordi
+* **Dev nomade** : retrouver sa stack (Docker, Java, Ollama) sur n'importe quelle machine
+* **Equipe technique** : environnement standardise partage, zero temps perdu en config
+
+'''
+
+== Comment ca marche ?
+
+Magic Stick utilise un systeme de **partition A/B** avec persistence :
+
+[cols="1,2,3"]
+|===
+| Partition | Taille | Role
+
+| System A
+| ~8 Go
+| Systeme live Xubuntu actif (boote par defaut)
+
+| System B
+| ~8 Go
+| Systeme live Xubuntu de secours (inactif)
+
+| Persistence
+| Reste de la cle
+| Donnees utilisateur + config logiciels
+|===
+
+=== Mise a jour atomique
+
+1. Le script `update-system.sh` detecte la partition active (A ou B)
+2. Il ecrit la nouvelle ISO sur la partition **inactive**
+3. Il inverse le flag de boot GRUB
+4. Au prochain demarrage : nouvelle version
+5. Si ca plante ? Reboot sur l'ancienne partition — **rollback instantane**
+6. La partition Persistence n'est **jamais** touchee
+
+'''
+
+== Logiciels inclus
+
+[cols="2,3"]
+|===
+| Categorie | Logiciels
+
+| Environnement
+| Xubuntu Desktop (XFCE)
+
+| Conteneurisation
+| Docker CE + Docker Compose
+
+| IA locale
+| Ollama (LLM sur la machine)
+
+| Developpement
+| SDKMAN + JDK 21, Git, curl, wget, jq
+
+| Reseau/FTTH
+| nmap, iperf3, Wireshark, tshark, traceroute, dnsutils
+
+| Diagnostic systeme
+| htop, ncdu, tree, lshw, smartmontools
+
+| SSH/Transfert
+| OpenSSH client, rsync, tmux, terminator
+|===
+
+'''
+
+== Demarrage rapide
+
+=== Prerequis
+
+* Docker (pour le build)
+* Une cle USB de 32 Go minimum (64 Go recommande)
+* Un systeme hote Linux
+
+=== Build de l'ISO
+
+[source,bash]
+----
+# Cloner le depot
+git clone https://github.com/cheroliv/magic_stick.git
+cd magic_stick
+
+# Builder l'ISO (30-60 min)
+sudo scripts/build.sh
+
+# Verifier l'ISO generee
+scripts/verify.sh
+----
+
+=== Flasher sur une cle USB
+
+[source,bash]
+----
+# Identifier la cle USB
+lsblk
+
+# Flasher (ATTENTION : efface toutes les donnees du peripherique)
+sudo scripts/flash.sh /dev/sdX
+----
+
+=== Mettre a jour le systeme (A/B)
+
+[source,bash]
+----
+# Mettre a jour la partition inactive
+sudo scripts/update-system.sh /dev/sdX
+
+# Si le nouveau systeme ne boot pas :
+# selectionner l'ancienne partition dans le menu GRUB
+----
+
+'''
+
+== Architecture du projet
+
+[source]
+----
+magic_stick/
+├── build/                             # Sortie live-build (ISO generees)
+├── config/
+│   └── live-build/
+│       ├── package-lists/            # Listes de paquets
+│       ├── hooks/                     # Hooks chroot + binary
+│       ├── includes.chroot/          # Fichiers inclus dans le systeme
+│       └── includes.binary/          # Fichiers inclus dans l'ISO
+├── scripts/
+│   ├── build.sh                       # Build d'ISO via Docker
+│   ├── flash.sh                       # Flash USB
+│   ├── update-system.sh               # Mise a jour A/B
+│   ├── install-software.sh            # Logiciels dans le chroot
+│   └── verify.sh                      # Verification de l'ISO
+├── Dockerfile                        # Image Docker pour le build
+└── config/
+    └── overrides/                     # Config custom (XFCE, dock, etc.)
+----
+
+'''
+
+== Partitionnement recommande (cle 64 Go)
+
+|===
+| Partition | Taille | Type | Flag
+| 1 (System A) | 8 Go | squashfs | boot
+| 2 (System B) | 8 Go | squashfs | -
+| 3 (Persistence) | ~48 Go | ext4 | -
+|===
+
+La partition Persistence utilise `persistence.conf` avec `/ union` pour sauvegarder les donnees entre les sessions.
+
+'''
+
+== Securite
+
+* **Aucune donnee personnelle** dans l'ISO — les cles SSH et fichiers utilisateur sont dans la partition Persistence
+* **Rollback automatique** si le nouveau systeme ne boot pas
+* **Donnes persistantes jamais touchees** par les mises a jour systeme
+* Mises a jour atomiques : si ca casse, on revient a la version precedente en un reboot
+
+'''
+
+== Etat du projet
+
+|===
+| EPIC | Statut
+
+| EPIC 1 : Initialisation projet
+| ✅ Termine
+
+| EPIC 2 : Build ISO Xubuntu de base
+| 🔧 En cours
+
+| EPIC 3 : Partition A/B + Persistence
+| ⬜ A faire
+
+| EPIC 4 : Logiciels (Ollama, Docker, SDKMAN)
+| ⬜ A faire
+
+| EPIC 5 : Personnalisation XFCE
+| ⬜ A faire
+
+| EPIC 6 : Script de mise a jour A/B
+| ⬜ A faire
+|===
+
+'''
+
+== Licence
+
+Apache License 2.0

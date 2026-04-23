@@ -1,0 +1,64 @@
+= Session 004 — Documentation README + Licence
+
+**Date** : 2026-04-24 | **Statut** : OK | **Type** : documentation
+
+== Contexte
+
+Suite de la session 003 (Gradle + Bakery-gradle). Pendant qu'une autre session opencode travaille sur la creation de l'image Docker pour le build ISO, l'utilisateur a demande la creation du README du projet en format AsciiDoc en deux langues (FR et EN), ainsi que le fichier LICENSE (Apache 2.0).
+
+== Actions
+
+| Fichier | Modification |
+|---------|-------------|
+| `README.adoc` | Creation — README anglais complet (pourquoi, A/B, logiciels, quick start, architecture, securite, statut) |
+| `README_FR.adoc` | Creation — README francais complet (meme structure) |
+| `LICENSE` | Creation — Apache License 2.0 |
+
+== Details
+
+=== README.adoc (EN)
+
+* Pourquoi Magic Stick : 4 cas d'usage (formation, FTTH, dev nomade, equipe)
+* Architecture A/B avec persistence (schema + flux de mise a jour atomique)
+* Logiciels inclus (table par categorie)
+* Quick start : prerequis, build, flash, update
+* Architecture du projet (arborescence)
+* Partitionnement recommande (cle 64 Go)
+* Securite (donnees persos, rollback, persistence jamais touchee)
+* Etat du projet par EPIC
+* Badge licence Apache 2.0
+
+=== README_FR.adoc (FR)
+
+* Meme contenu traduit en francais
+* Badge licence Apache 2.0
+
+=== LICENSE
+
+* Apache License 2.0 complete
+* Copyright 2026 cheroliv
+* Choix confirme par l'utilisateur (adapter a l'ecosysteme Ubuntu/scripts Bash)
+
+== Resultats
+
+| Critere | Statut |
+|---------|--------|
+| README.adoc (EN) | OK |
+| README_FR.adoc (FR) | OK |
+| LICENSE (Apache 2.0) | OK |
+| Badges mis a jour | OK |
+
+== Lecons apprises
+
+* Bien lire le PROMPT_REPRISE.adoc et les fichiers ESSENTIALS/REFERENCE avant de rediger la doc — evite les approximations
+* Apache 2.0 est un bon choix pour un projet embarquant des logiciels sous licences variees (GPL, Apache, etc.) — la licence couvre le code du projet, pas le contenu de l'ISO
+
+== Prochaines Etapes (Session 005)
+
+1. Continuer EPIC 2 : Configurer live-build et produire la premiere ISO bootable
+2. Tester le boot dans QEMU/KVM
+
+== References
+
+- **Archive** : `.agents/sessions/004-docs-readme-license.adoc` (ce fichier)
+- **Reprise** : `PROMPT_REPRISE.adoc` (session 005)
