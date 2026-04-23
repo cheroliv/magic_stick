@@ -1,9 +1,9 @@
 = Prompt de reprise — Session 005
 
 __
-**EPIC** : EPIC 2 — Build ISO Xubuntu de base
+**EPIC** : Site de documentation
 **Statut** : Session 004 OK — README (FR/EN) + LICENSE Apache 2.0
-**Mission** : Configurer live-build et produire la premiere ISO bootable
+**Mission** : Travailler sur le site de documentation (bakery-gradle / JBake)
 __
 
 '''
@@ -25,32 +25,31 @@ __
 
 == Session 005 — Priorites
 
-**Mission** : EPIC 2 — Build ISO Xubuntu de base
+**Mission** : Travailler sur le site de documentation
 
-=== 1. Installer live-build et dependances
+=== 1. Examiner l'etat actuel du site
 
-* `sudo apt install live-build debootstrap squashfs-tools xorriso`
-* Verifier que lb config fonctionne
+* Lire le contenu existant dans `site/` (templates, contenu, CSS, JS)
+* Verifier le deploiement actuel sur GitHub Pages
+* Identifier les pages manquantes ou a completer
 
-=== 2. Configurer live-build
+=== 2. Enrichir le contenu du site
 
-* Initialiser lb config dans build/
-* Configurer les package-lists (Xubuntu minimal)
-* Ajouter les hooks chroot
-* Configurer le boot (UEFI + BIOS)
+* Creer/mettre a jour les pages de documentation technique
+* Ajouter la documentation A/B (partition, persistence, rollback)
+* Ajouter la documentation des scripts (build, flash, update-system)
+* Ajouter le guide de demarrage rapide
 
-=== 3. Premier build ISO
+=== 3. Verifier le deploiement
 
-* Lancer lb build
-* Verifier l'ISO generee
-* Tester dans QEMU si dispo
+* Tester `./gradlew -i publishSite` en local
+* Verifier que le site se deploie correctement sur GitHub Pages
 
 === Criteres d'Acceptation
 
-* [ ] live-build installe et fonctionnel
-* [ ] lb config initialise dans build/
-* [ ] ISO generee (meme minimale)
-* [ ] Boot OK dans QEMU (si dispo)
+* [ ] Contenu du site enrichi avec documentation technique
+* [ ] Pages A/B, scripts, quick start presentes
+* [ ] Deploiement local OK
 
 '''
 
