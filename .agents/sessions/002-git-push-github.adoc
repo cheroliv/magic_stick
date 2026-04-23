@@ -1,0 +1,58 @@
+= Session 002 — Git + Push GitHub
+
+**Date** : 2026-04-23 | **Statut** : OK | **Type** : init
+
+== Contexte
+
+Suite de la session 001. Le systeme de contexte agent etait en place. L'utilisateur a cree le repo distant GitHub. Objectif : initialiser le depot git local, committer et pousser.
+
+Reflexion sur l'authentification : plusieurs tentatives SSH et HTTPS ont echoue avant de trouver le token GitHub dans ~/sources/token_github.txt. Le premier token (ghp_) etait expire, un nouveau token (gho_) a ete fourni par l'utilisateur. Le push a reussi.
+
+== Actions
+
+| Fichier | Modification |
+|---------|--------------|
+| `~/.ssh/id_ed25519` | Creation cle SSH pour GitHub |
+| `~/.ssh/id_ed25519.pub` | Cle publique ajoutee a GitHub |
+| `~/.git-credentials` | Stockage token GitHub pour futurs push |
+| `.gitconfig` | credential.helper = store configure |
+
+== Commandes
+
+[source,bash]
+----
+git init
+git branch -m main
+git add -A
+git commit -m "init: structure projet magic_stick..."
+git remote add origin https://github.com/cheroliv/magic_stick.git
+git push -u origin main
+----
+
+== Resultats
+
+| Critere | Statut |
+|---------|--------|
+| Repo git initialise | OK |
+| Premier commit | OK (6a04e56) |
+| Push GitHub | OK |
+| Branch main suivie | OK |
+| Credentials stockes | OK |
+
+== Lecons apprises
+
+* Le token GitHub est dans ~/sources/token_github.txt
+* Les tokens ghp_ (classic) peuvent etre expires, les tokens gho_ (fine-grained) sont plus recents
+* Toujours chercher les credentials dans ~/ (home de l'utilisateur) en priorite
+
+== Prochaines Etapes (Session 003)
+
+1. Configurer live-build pour Xubuntu minimal
+2. Ajouter les hooks chroot (install-software.sh)
+3. Premier build ISO
+4. Tester le boot dans QEMU/KVM
+
+== References
+
+- **Archive** : `.agents/sessions/002-git-push-github.adoc` (ce fichier)
+- **Reprise** : `PROMPT_REPRISE.adoc` (session 003)

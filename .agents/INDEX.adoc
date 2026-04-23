@@ -1,8 +1,8 @@
 = Index des Sessions — Magic Stick
 
 _Derniere mise a jour_ : 2026-04-23  
-_Session en cours_ : 002 — Finaliser EPIC 1 + Build ISO Xubuntu  
-_Session terminee_ : 001 (Initialisation projet)
+_Session en cours_ : 003 — EPIC 2 Build ISO Xubuntu de base  
+_Session terminee_ : 002 (Git init + Push GitHub)
 
 '''
 
@@ -72,6 +72,7 @@ _Aucune etape ne peut etre marquee [OK] si le fichier n'a pas ete effectivement 
 
 |===
 | # | Date | Type | Sujet | Fichier | Score
+| 002 | 2026-04-23 | init | Git init + Push GitHub | `002-git-push-github.adoc` | 7.0/10
 | 001 | 2026-04-23 | init | Initialisation projet Magic Stick | `001-init-projet.adoc` | 8.0/10
 |===
 
@@ -81,7 +82,7 @@ _Aucune etape ne peut etre marquee [OK] si le fichier n'a pas ete effectivement 
 
 |===
 | EPIC | Progression | Score | Priorite
-| EPIC 1 : Initialisation projet | 80% | 8/10 | HAUTE
+| EPIC 1 : Initialisation projet | 100% | 8/10 | HAUTE
 | EPIC 2 : Build ISO Xubuntu de base | 0% | -/10 | HAUTE
 | EPIC 3 : Partition A/B + Persistence | 0% | -/10 | HAUTE
 | EPIC 4 : Logiciels (Ollama, Docker, SDKMAN) | 0% | -/10 | MOYENNE

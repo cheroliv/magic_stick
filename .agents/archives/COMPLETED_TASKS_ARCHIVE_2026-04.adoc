@@ -38,3 +38,40 @@
 * Initialiser le depot git
 * Configurer live-build
 * Premier build ISO
+
+
+== Session 002 — 23 avril 2026
+
+**Contexte** : Suite session 001. Depot git a initialiser et pousser sur GitHub.
+
+
+=== Taches realisees
+
+* [OK] Initialiser le depot git local (branche main)
+* [OK] Premier commit (6a04e56)
+* [OK] Pousser sur GitHub (https://github.com/cheroliv/magic_stick.git)
+* [OK] Generer cle SSH ed25519 pour GitHub
+* [OK] Configurer credential.helper store pour futurs push
+
+
+=== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| Commits | 1 |
+| Fichiers commit | 19 |
+| Remote | GitHub OK |
+
+
+=== Lecons apprises
+
+* Token GitHub dans ~/sources/token_github.txt
+* Les tokens ghp_ (classic) peuvent etre expires
+* Toujours chercher credentials dans ~/ (home) en premier
+
+
+=== Prochaine session
+
+* Installer live-build
+* Configurer lb config
+* Premier build ISO

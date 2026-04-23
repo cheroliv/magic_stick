@@ -1,51 +1,56 @@
-= Prompt de reprise — Session 002
+= Prompt de reprise — Session 003
 
 __
-**EPIC** : EPIC 1 — Initialisation projet
-**Statut** : Session 001 OK — Systeme de contexte agent + structure projet + scripts squelettes + partition A/B definie
-**Mission** : Finaliser EPIC 1 et commencer EPIC 2 (build ISO Xubuntu de base)
+**EPIC** : EPIC 2 — Build ISO Xubuntu de base
+**Statut** : Session 002 OK — Repo git initialise et pousse sur GitHub
+**Mission** : Configurer live-build et produire la premiere ISO bootable
 __
 
 '''
 
-== Session 001 — Resume
+== Session 002 — Resume
 
 **Date** : 23 avril 2026
-**Resultat** : OK — Systeme de contexte agent complet (AGENT.adoc, MODUS_OPERANDI, INDEX, ESSENTIALS, REFERENCE), 5 scripts bash valides, 7 EPICs definis, A/B ecluse valide
+**Resultat** : OK — Depot git initialise, premier commit, push GitHub reussi
 
 **Connaissances cles** :
 
-* L'analogie A/B = "ecluse" (pas secours) — mise a jour atomique sans risque
-* Projet = environnement standardise portable (formation, terrain, dev nomade)
-* Pas du recovery — pas besoin de Clonezia/SystemRescue
+* Token GitHub dans ~/sources/token_github.txt (gho_ pour fine-grained)
+* credential.helper = store configure dans ~/.gitconfig
+* Cle SSH ed25519 generee mais pas encore validee dans GitHub
 
-**Archive** : `.agents/sessions/001-init-projet.adoc`
+**Archive** : `.agents/sessions/002-git-push-github.adoc`
 
 '''
 
-== Session 002 — Priorites
+== Session 003 — Priorites
 
-**Mission** : Finaliser EPIC 1 + premier build ISO Xubuntu
+**Mission** : EPIC 2 — Build ISO Xubuntu de base
 
-=== 1. Finaliser EPIC 1
+=== 1. Installer live-build et dependances
 
-* Depo git initialise (utilisateur en cours)
-* Premier commit de la structure
-* Verifier .gitignore
+* `sudo apt install live-build debootstrap squashfs-tools xorriso`
+* Verifier que lb config fonctionne
 
-=== 2. EPIC 2 — Build ISO Xubuntu de base
+=== 2. Configurer live-build
 
-* Configurer live-build pour Xubuntu minimal
-* Ajouter les hooks chroot de base (install-software.sh comme hook)
-* Builder la premiere ISO fonctionnelle
-* Tester le boot dans QEMU/KVM
+* Initialiser lb config dans build/
+* Configurer les package-lists (Xubuntu minimal)
+* Ajouter les hooks chroot
+* Configurer le boot (UEFI + BIOS)
+
+=== 3. Premier build ISO
+
+* Lancer lb build
+* Verifier l'ISO generee
+* Tester dans QEMU si dispo
 
 === Criteres d'Acceptation
 
-* [ ] `git log` montre au moins 1 commit
-* [ ] live-build configure et pret a builder
+* [ ] live-build installe et fonctionnel
+* [ ] lb config initialise dans build/
 * [ ] ISO generee (meme minimale)
-* [ ] Boot OK dans QEMU
+* [ ] Boot OK dans QEMU (si dispo)
 
 '''
 
