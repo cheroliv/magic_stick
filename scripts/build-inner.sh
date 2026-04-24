@@ -22,7 +22,7 @@ if [[ ! -f "${BUILD_DIR}/config/common" ]]; then
         --distribution noble \
         --architecture amd64 \
         --binary-images iso-hybrid \
-        --bootloader grub \
+        --bootloader grub-efi \
         --mode ubuntu \
         --parent-distribution noble \
         --parent-mirror-bootstrap http://archive.ubuntu.com/ubuntu \
