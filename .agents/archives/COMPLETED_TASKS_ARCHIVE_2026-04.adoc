@@ -318,3 +318,33 @@
 * Ubuntu 24.04 : grub-efi-remixed n'existe pas, grub-legacy n'existe pas
 * live-build en Docker necessite --privileged (mount /dev/pts, /proc)
 * network-manager-gtk renomme en network-manager-gnome sur Noble
+
+
+== Session 009 — 24 avril 2026
+
+**Contexte** : Debug CI/CD ISO. Cause racine cpio identifiee, correctifs appliques (non pousses).
+
+=== Taches realisees
+
+* [OK] Analyser les logs CI/CD du run 24895204429
+* [OK] Identifier la cause racine : --bootloader grub-efi non gere par live-build + gfxboot-theme-ubuntu absent Ubuntu 24.04
+* [OK] Corriger --bootloader grub-efi → --bootloader syslinux
+* [OK] Ajouter --syslinux-theme live-build + --initramfs casper + boot=casper
+* [OK] Ajouter syslinux + grub-efi-amd64-signed au Dockerfile
+* [OK] Supprimer includes.binary/ custom (ecrasaient les templates live-build)
+
+=== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| Cause racine identifiee | 1 (cascade grub-efi + gfxboot + boot=live) |
+| Fichiers modifies | 3 (build-inner.sh, Dockerfile, includes.binary/) |
+| CI/CD vert | EN ATTENTE (non pousse) |
+
+=== Lecons apprises
+
+* `--bootloader grub-efi` est accepte par lb config mais non gere par les scripts lb_binary_*
+* `gfxboot-theme-ubuntu` retire d'Ubuntu 24.04 — utiliser --syslinux-theme live-build
+* Les fichiers includes.binary/ ecrasent les templates live-build sans avertissement
+* live-build Ubuntu necessite --initramfs casper et boot=casper
+* iso-hybrid necessite syslinux (isohybrid) dans le chroot

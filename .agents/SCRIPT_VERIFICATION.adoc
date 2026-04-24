@@ -1,6 +1,6 @@
 = Script Verification — Magic Stick
 
-_Derniere mise a jour_ : Session 007 (26 avril 2026)
+_Derniere mise a jour_ : Session 009 (24 avril 2026)
 
 '''
 
@@ -9,7 +9,7 @@ _Derniere mise a jour_ : Session 007 (26 avril 2026)
 |===
 | Script | Syntaxe | Executable | Role | Derniere verification
 | scripts/build.sh | OK | OK | Orchestrateur hote, un seul docker run | Session 007
-| scripts/build-inner.sh | OK | OK | Script container (lb config + lb build + verify + test) | Session 007
+| scripts/build-inner.sh | OK | OK | Script container (lb config + lb build + verify + test) — modifie session 009 (syslinux, casper) | Session 009
 | scripts/flash.sh | OK | OK | Flash ISO sur cle USB | Session 007
 | scripts/update-system.sh | OK | OK | Partition A/B (setup-ab, update, status) | Session 006
 | scripts/install-software.sh | OK | OK | Post-install live (docker, ollama, sdkman) | Session 006

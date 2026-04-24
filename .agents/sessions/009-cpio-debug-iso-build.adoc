@@ -1,0 +1,73 @@
+= Session 009 — Debug cpio premature end of archive
+
+_Date_ : 2026-04-24
+_Type_ : fix
+_Score_ : 7.5/10
+
+'''
+
+== Contexte
+
+Suite session 008. Derniere erreur CI/CD : `cpio: premature end of archive` au stage `lb_binary_disk`. 7/8 erreurs deja corrigees. Mission : obtenir la premiere ISO generee.
+
+== Taches realisees
+
+* [OK] Lire les logs CI/CD du run 24895204429 (dernier build echoue)
+* [OK] Analyser les scripts live-build `lb_binary_grub`, `lb_binary_grub2`, `lb_binary_syslinux`, `lb_binary_iso`, `lb_binary_disk` dans un conteneur Docker
+* [OK] Identifier la cause racine : `--bootloader grub-efi` n'est pas gere par les scripts `lb_binary_*` de live-build (seuls `grub`, `syslinux`, `yaboot` supportes)
+* [OK] Corriger `--bootloader grub-efi` → `--bootloader syslinux` dans build-inner.sh
+* [OK] Ajouter `--syslinux-theme live-build` (theme Ubuntu gfxboot-theme-ubuntu inexistant dans Ubuntu 24.04, causait le cpio error)
+* [OK] Ajouter `--initramfs casper` (requis pour mode Ubuntu)
+* [OK] Corriger bootappend-live : `boot=live config` → `boot=casper`
+* [OK] Ajouter `syslinux` et `grub-efi-amd64-signed` au Dockerfile
+* [OK] Supprimer les fichiers includes.binary/ custom (isolinux/isolinux.cfg, boot/grub/grub.cfg) qui ecrasaient les templates live-build
+
+== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| Erreurs CI/CD analysees | 1 (cpio) |
+| Cause racine identifiee | grub-efi non supporte + gfxboot-theme-ubuntu absent |
+| Fichiers modifies | 3 (build-inner.sh, Dockerfile, includes.binary/) |
+| Fichier supprimes | 2 (isolinux.cfg, grub.cfg custom) |
+| CI/CD vert | EN ATTENTE (pas de push cette session) |
+
+== Analyse detaillee de la cause racine
+
+L'erreur `cpio: premature end of archive` venait d'une cascade de problemes :
+
+. **`--bootloader grub-efi`** : accepte par `lb config` mais **non gere** par les scripts `lb_binary_grub` (exit 0 si LB_BOOTLOADER != "grub"), `lb_binary_grub2` (ne gere que i386-pc), `lb_binary_iso` (cas `*` = unknown bootloader)
+. **Pas de bootloader dans l'ISO** : `lb_binary_iso` tombe dans le cas par defaut et affiche un warning silencieux
+. **`cpio` error** : vient du script `lb_binary_syslinux` qui tente de decomposer le `bootlogo` avec `cpio -i` mais le fichier n'existe pas car `gfxboot-theme-ubuntu` n'existe pas dans Ubuntu 24.04 (noble)
+. **boot=live vs boot=casper** : le paquet `casper` est installe mais le param kernel dit `boot=live` (incompatibilite)
+
+== Changements en attente (non commit)
+
+.Dockerfile
+* Ajoute `syslinux` (pour isohybrid)
+* Ajoute `grub-efi-amd64-signed` (pour futur support EFI)
+
+.build-inner.sh
+* `--bootloader grub-efi` → `--bootloader syslinux`
+* Ajoute `--syslinux-theme live-build`
+* Ajoute `--initramfs casper`
+* `boot=live config` → `boot=casper`
+* Ajoute `quiet splash` au bootappend
+
+.includes.binary/
+* Supprime `isolinux/isolinux.cfg` (ecrasait le template live-build)
+* Supprime `boot/grub/grub.cfg` (ecrasait le template live-build)
+
+== Lecons apprises
+
+* `--bootloader grub-efi` est accepte par `lb config` mais n'est gere par **aucun** script binaire live-build — c'est un piege
+* `gfxboot-theme-ubuntu` a ete retire d'Ubuntu 24.04 (noble) — le theme `live-build` est l'alternative
+* Les fichiers `includes.binary/` ecrasent les templates live-build sans avertissement — eviter de les utiliser pour les configs bootloader
+* live-build en mode Ubuntu necessite `--initramfs casper` et `boot=casper`
+* Le mode `iso-hybrid` necessite `syslinux` (pour `isohybrid`) dans l'environnement de build ET le chroot
+
+== Prochaine session
+
+* Commit + push les changements et lancer CI/CD
+* Si build passe : celebrer, tester QEMU, ajouter support UEFI via hook binaire
+* Si build echoue : analyser logs, iterer

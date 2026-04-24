@@ -1,56 +1,61 @@
-= Prompt de reprise -- Session 009
+= Prompt de reprise -- Session 010
 
 __
 **EPIC** : Build ISO Xubuntu bootable + installable
-**Statut** : Session 008 terminee — 8 erreurs CI/CD corrigees, 1 restante (cpio)
-**Mission** : Debugger cpio premature end of archive, obtenir la premiere ISO
+**Statut** : Session 009 terminee — Cause racine cpio identifiee, correctifs appliques (non pouses)
+**Mission** : Pousser les correctifs, obtenir la premiere ISO
 __
 
 '''
 
-== Session 008 -- Resume
+== Session 009 -- Resume
 
 **Date** : 2026-04-24
-**Resultat** : OK — 8 erreurs CI/CD identifiees et 7 corriges
+**Resultat** : OK — Cause racine identifiee et corrigee, en attente de push
 
-**Corrections CI/CD** :
+**Cause racine cpio premature end of archive** :
+* `--bootloader grub-efi` non gere par les scripts `lb_binary_*` de live-build
+* `gfxboot-theme-ubuntu` absent d'Ubuntu 24.04 → bootlogo cpio vide → erreur
+* `boot=live` au lieu de `boot=casper` (incompatibilite)
 
-* Java 17 → 25 (bakery plugin requiert JVM 25)
-* grub-efi-remixed supprime du Dockerfile (inexistant Ubuntu 24.04)
-* --privileged ajoute aux docker run (mount chroot)
-* network-manager-gtk → network-manager-gnome (renomme)
-* --bootloader grub-efi (grub-legacy inexistant)
-* Regle INTERDICTION DE LOG tokens ajoutee dans AGENT.adoc + newpipe-gradle
-* ~/apps ajoute au PATH dans ~/.zshrc et ~/.bashrc
+**Correctifs appliques** (en local, non commit) :
+* `--bootloader grub-efi` → `--bootloader syslinux`
+* Ajout `--syslinux-theme live-build` + `--initramfs casper`
+* `boot=live config` → `boot=casper`
+* `syslinux` + `grub-efi-amd64-signed` dans Dockerfile
+* Suppression includes.binary/ custom (isolinux.cfg, grub.cfg)
 
-**Derniere erreur** : `cpio: premature end of archive` au stage `lb_binary_disk` (run 24893889792)
-
-**Archive** : `.agents/sessions/008-cicd-debug-iso-build.adoc`
+**Archive** : `.agents/sessions/009-cpio-debug-iso-build.adoc`
 
 '''
 
-== Session 009 -- Priorites
+== Session 010 -- Priorites
 
 **Mission** : Obtenir la premiere ISO generee avec succes
 
-=== 1. Debugger cpio premature end of archive
+=== 1. Commit + push les correctifs
 
-* Lire les logs complets du run 24893889792 (Build ISO)
-* Identifier : xorriso ? grub-mkimage ? EFI image ?
-* Piste : dosfstools/mtools deja dans Dockerfile ; verifier si mkfs.fat marche
-* Piste : --binary-images iso au lieu de iso-hybrid (grub-efi + iso-hybrid = conflit?)
-* Piste : ajouter --efi-boot-load-size ou --hfsplus dans lb config
+* Commit les 3 fichiers modifies (build-inner.sh, Dockerfile, includes.binary/)
+* Pousser sur main → declencher CI/CD
+* Watch le run GitHub Actions
 
 === 2. Iterer CI/CD jusqu'a build vert
 
-* Corriger → commit → push → watch
-* Objectif : ISO generee + verify OK + test-boot OK
+* Si echec : analyser les logs (`gh run view <id> --log-failed`)
+* Corriger, commit, push, watch
+* Objectif : ISO generee + verify OK
 
 === 3. Si build passe
 
 * Telecharger l'ISO artifact
 * Tester en local avec QEMU
 * Celebrer
+
+=== 4. Ajouter support UEFI (apres premiere ISO)
+
+* Creer hook binaire `999-add-efi-support.binary`
+* Utiliser grub-mkimage pour creer l'image EFI
+* Ajouter EFI image a l'ISO via xorriso
 
 === Criteres d'Acceptation
 

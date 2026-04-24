@@ -22,15 +22,17 @@ if [[ ! -f "${BUILD_DIR}/config/common" ]]; then
         --distribution noble \
         --architecture amd64 \
         --binary-images iso-hybrid \
-        --bootloader grub-efi \
+        --bootloader syslinux \
+        --syslinux-theme live-build \
         --mode ubuntu \
+        --initramfs casper \
         --parent-distribution noble \
         --parent-mirror-bootstrap http://archive.ubuntu.com/ubuntu \
         --parent-mirror-binary http://archive.ubuntu.com/ubuntu \
         --mirror-bootstrap http://archive.ubuntu.com/ubuntu \
         --mirror-binary http://archive.ubuntu.com/ubuntu \
         --archive-areas 'main restricted universe multiverse' \
-        --bootappend-live 'boot=live config username=magic hostname=magic_stick locales=fr_FR.UTF-8 keyboard-layouts=fr' \
+        --bootappend-live 'boot=casper username=magic hostname=magic_stick locales=fr_FR.UTF-8 keyboard-layouts=fr quiet splash' \
         --iso-volume "Magic Stick ${MAGIC_STICK_VERSION}" \
         --iso-publisher 'Magic Stick' \
         --iso-application 'Magic Stick Live System'

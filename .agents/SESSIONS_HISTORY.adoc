@@ -1,9 +1,10 @@
 = Historique des Sessions — Magic Stick
 
-_Derniere mise a jour_ : 2026-04-26
+_Derniere mise a jour_ : 2026-04-24
 
 |===
 | # | Date | Type | Sujet | Score
+| 009 | 2026-04-24 | fix | Debug cpio premature end of archive (cause racine + correctifs) | 7.5/10
 | 008 | 2026-04-24 | fix + security | Debug CI/CD ISO (7/8 erreurs corriges, token leak fix) | 7.0/10
 | 007 | 2026-04-26 | feature | Pipeline Gradle ISO + Ubiquity + CI/CD | 8.5/10
 | 006 | 2026-04-24 | feature | Audit et correction configs ISO live-build | 8.0/10

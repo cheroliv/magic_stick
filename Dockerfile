@@ -8,11 +8,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ubuntu-keyring \
     xorriso \
     squashfs-tools \
+    syslinux \
     syslinux-common \
     isolinux \
     grub2-common \
     grub-pc-bin \
     grub-efi-amd64-bin \
+    grub-efi-amd64-signed \
     shim-signed \
     mtools \
     dosfstools \
