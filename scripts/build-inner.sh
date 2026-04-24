@@ -80,16 +80,31 @@ fi
 
 _TMPDIR=$(mktemp -d) && pushd "${_TMPDIR}" > /dev/null && touch .bootlogo_marker && find . | cpio --quiet -o > "${BOOTLOADER_DIR}/bootlogo" 2>/dev/null; popd > /dev/null; rm -rf "${_TMPDIR}"
 
-echo "Patching lb_binary_syslinux for casper compatibility..."
+echo "Patching lb_binary_syslinux for casper and Ubuntu 24.04 compatibility..."
 SYSLINUX_SCRIPT="/usr/lib/live/build/lb_binary_syslinux"
 if [ -f "${SYSLINUX_SCRIPT}" ]; then
     sed -i 's|binary/live/vmlinuz|binary/casper/vmlinuz|g' "${SYSLINUX_SCRIPT}"
     sed -i 's|binary/live/initrd.img|binary/casper/initrd.img|g' "${SYSLINUX_SCRIPT}"
     sed -i 's|/live/vmlinuz|/casper/vmlinuz|g' "${SYSLINUX_SCRIPT}"
     sed -i 's|/live/initrd.img|/casper/initrd.img|g' "${SYSLINUX_SCRIPT}"
-    sed -i 's|rsvg --format png --height 480 --width 640 splash.svg splash.png|rsvg-convert --format png --height 480 --width 640 -o splash.png splash.svg|g' "${SYSLINUX_SCRIPT}"
-    sed -i 's|rsvg --format png --height 480 --width 640 "${_TARGET}/splash.svg" "${_TARGET}/splash.png"|rsvg-convert --format png --height 480 --width 640 -o "${_TARGET}/splash.png" "${_TARGET}/splash.svg"|g' "${SYSLINUX_SCRIPT}"
-    sed -i 's|Check_package chroot/usr/bin/rsvg librsvg2-bin|Check_package chroot/usr/bin/rsvg-convert librsvg2-bin|g' "${SYSLINUX_SCRIPT}"
+    python3 -c "
+with open('${SYSLINUX_SCRIPT}', 'r') as f:
+    c = f.read()
+c = c.replace(
+    'rsvg --format png --height 480 --width 640 splash.svg splash.png',
+    'rsvg-convert --format png --height 480 --width 640 -o splash.png splash.svg'
+)
+c = c.replace(
+    'rsvg --format png --height 480 --width 640 \"\${_TARGET}/splash.svg\" \"\${_TARGET}/splash.png\"',
+    'rsvg-convert --format png --height 480 --width 640 -o \"\${_TARGET}/splash.png\" \"\${_TARGET}/splash.svg\"'
+)
+c = c.replace(
+    'Check_package chroot/usr/bin/rsvg librsvg2-bin',
+    'Check_package chroot/usr/bin/rsvg-convert librsvg2-bin'
+)
+with open('${SYSLINUX_SCRIPT}', 'w') as f:
+    f.write(c)
+"
 fi
 
 DISK_SCRIPT="/usr/lib/live/build/lb_binary_disk"
