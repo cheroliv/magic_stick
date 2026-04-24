@@ -10,4 +10,5 @@ Thumbs.db
 *.ipr
 *.iws
 local.properties
-site.ymltest-results/
+site.yml
+test-results/
