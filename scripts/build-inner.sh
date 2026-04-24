@@ -72,11 +72,13 @@ elif [ -f /usr/lib/syslinux/isolinux.bin ]; then
     cp /usr/lib/syslinux/isolinux.bin "${BOOTLOADER_DIR}/isolinux.bin"
 fi
 
-if [ -f /usr/lib/syslinux/modules/bios/vesamenu.c32 ]; then
-    cp /usr/lib/syslinux/modules/bios/vesamenu.c32 "${BOOTLOADER_DIR}/vesamenu.c32"
-elif [ -f /usr/lib/syslinux/vesamenu.c32 ]; then
-    cp /usr/lib/syslinux/vesamenu.c32 "${BOOTLOADER_DIR}/vesamenu.c32"
-fi
+for _mod in ldlinux.c32 libcom32.c32 libutil.c32 menu.c32 vesamenu.c32; do
+    if [ -f "/usr/lib/syslinux/modules/bios/${_mod}" ]; then
+        cp "/usr/lib/syslinux/modules/bios/${_mod}" "${BOOTLOADER_DIR}/${_mod}"
+    elif [ -f "/usr/lib/syslinux/${_mod}" ]; then
+        cp "/usr/lib/syslinux/${_mod}" "${BOOTLOADER_DIR}/${_mod}"
+    fi
+done
 
 _TMPDIR=$(mktemp -d) && pushd "${_TMPDIR}" > /dev/null && touch .bootlogo_marker && find . | cpio --quiet -o > "${BOOTLOADER_DIR}/bootlogo" 2>/dev/null; popd > /dev/null; rm -rf "${_TMPDIR}"
 

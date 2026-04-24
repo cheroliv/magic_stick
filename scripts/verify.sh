@@ -67,6 +67,14 @@ else
     echo "  WARNING: No standard bootloader found"
 fi
 
+for _c32 in ldlinux.c32 libcom32.c32 libutil.c32 vesamenu.c32; do
+    if isoinfo -i "$ISO_FILE" -l 2>/dev/null | grep -q "${_c32}"; then
+        echo "  OK: ${_c32} found"
+    else
+        echo "  FAIL: ${_c32} NOT found — ISOLINUX boot will fail"
+    fi
+done
+
 echo "[5/5] Checking squashfs..."
 if isoinfo -i "$ISO_FILE" -l 2>/dev/null | grep -q "filesystem.squashfs"; then
     echo "  OK: filesystem.squashfs found"
