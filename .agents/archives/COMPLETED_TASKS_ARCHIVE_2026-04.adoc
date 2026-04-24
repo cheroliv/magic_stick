@@ -209,3 +209,37 @@
 * <p> vides JBake declenchent des faux positifs responsive — filtrer par contenu non vide
 * CDN Font Awesome non disponible en file:// — preferer Bootstrap Icons
 * Pattern navbar cheroliv : body padding-top + scroll-padding-top + main-content-padding est robuste
+
+
+== Session 006 -- 24 avril 2026
+
+**Contexte** : Reprise EPIC 2 (Build ISO). Audit complet configs + scripts.
+
+=== Taches realisees
+
+* [OK] Auditer et corriger le Dockerfile (ubuntu-keyring, shim-signed, cpio, zutils, DEBIAN_FRONTEND)
+* [OK] Reecrire build.sh (fix docker_run, ajout --purge, verifications Docker)
+* [OK] Corriger package-lists (casper au lieu de live-boot, exfatprogs, langue FR)
+* [OK] Reecrire hooks (020 configure-live, 030 casper.conf, 040 post-tweaks ; supprimer 030 kernel redondant)
+* [OK] Ajouter includes.chroot (casper.conf, fstab, lightdm [Seat:*], terminal.desktop FR)
+* [OK] Reecrire flash.sh (verif taille, demontage correct)
+* [OK] Reecrire update-system.sh (3 commandes setup-ab/update/status, support NVMe)
+* [OK] Reecrire install-software.sh (4 commandes docker/ollama/sdkman/all)
+* [OK] Verifier syntaxe bash : 9/9 scripts OK
+
+=== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| Fichiers modifies/crees | 17 |
+| Scripts valides | 5/5 |
+| Hooks valides | 4/4 |
+| EPIC 2 progression | 15% → 40% |
+
+=== Lecons apprises
+
+* Sur Ubuntu Noble, exfat-utils obsolete → exfatprogs
+* live-boot et casper incompatibles → garder uniquement casper
+* [SeatDefaults] deprecie dans lightdm → [Seat:*]
+* Hooks chroot != scripts live system ; install-software.sh tourne dans le live
+* GRUB bins dans le chroot = inutile (live-build les gere au niveau binary)

@@ -1,55 +1,65 @@
-= Prompt de reprise — Session 006
+= Prompt de reprise -- Session 007
 
 __
-**EPIC** : Site de documentation
-**Statut** : Session 005 OK — Tests A11y/UI + corrections contraste/navbar
-**Mission** : Travailler sur le site de documentation
+**EPIC** : Build ISO Xubuntu bootable + installable
+**Statut** : Session 006 OK -- Configs auditees et corrigees, pretes pour build
+**Mission** : Ajouter ubiquity (installateur) et builder la premiere ISO
 __
 
 '''
 
-== Session 005 — Resume
+== Session 006 -- Resume
 
 **Date** : 2026-04-24
-**Resultat** : OK — Couverture de tests UI/A11Y complete, CSS corrige (contraste dark/HC, navbar, admonitions), templates semantiques (<main>, lang="fr")
+**Resultat** : OK -- Audit complet configs + scripts, EPIC 2 passe de 15% a 40%
 
 **Connaissances cles** :
 
-* A11yAudit.kt : JUnit 5 + Playwright + axe-core, assertions sur color-contrast
-* ResponsiveAudit.kt : 3 viewports (mobile/tablet/desktop), overflow + clipping
-* CSS : overrides Bootstrap dark/HC necessaires (.text-primary, .card-body, .btn-outline-primary)
-* Navbar : body padding-top + scroll-padding-top + .main-content-padding (pattern cheroliv)
-* Admonitions : td.icon .title necessite color explicite !important sur fond colore
+* Dockerfile : ubuntu-keyring, shim-signed, cpio, zutils ajoutes
+* build.sh : fix docker_run, ajout --purge, verifications Docker
+* package-lists : 3 fichiers (desktop, live avec casper, tools avec exfatprogs)
+* hooks : 4 fichiers (apt-sources, configure-live, casper.conf, post-tweaks)
+* includes.chroot : casper.conf, fstab, lightdm [Seat:*], NetworkManager
+* flash.sh : verif taille device, demontage correct
+* update-system.sh : 3 commandes (setup-ab, update, status), support NVMe
+* install-software.sh : commandes separees (docker/ollama/sdkman/all)
+* **Decision** : ISO sera live boot + installable (ubiquity a ajouter)
+* Aucune ISO encore generee
 
-**Archive** : `.agents/sessions/005-a11y-ui-tests.adoc`
+**Archive** : `.agents/sessions/006-audit-configs-live-build.adoc`
 
 '''
 
-== Session 006 — Priorites
+== Session 007 -- Priorites
 
-**Mission** : Completer le site de documentation + deployer
+**Mission** : Ajouter ubiquity + builder la premiere ISO Xubuntu bootable
 
-=== 1. Enrichir le contenu du site
+=== 1. Ajouter ubiquity (installateur)
 
-* Pages manquantes / a completer (ab-partition, scripts, about)
-* Ajouter des captures d'ecran/diagrammes si necessaire
-* Verifier la coherence du contenu avec la documentation existante
+* Ajouter ubiquity + ubiquity-casper + ubiquity-frontend-gtk dans live.list.chroot
+* Creer hook 050-setup-ubiquity.chroot.root (raccourci Bureau)
+* Configurer menu GRUB "Install Magic Stick" dans includes.binary
+* Ajouter ubiquity-slideshow-xubuntu
 
-=== 2. Deployer le site mis a jour
+=== 2. Builder l'ISO
 
-* Tester `./gradlew -i publishSite` en local
-* Verifier que le site se deploie correctement sur GitHub Pages
+* Lancer `sudo scripts/build.sh --purge` (nettoyage complet + reinit config)
+* Durée : 30-60 min
+* Verifier que l'ISO est generee dans build/
 
-=== 3. Ameliorer les tests si necessaire
+=== 3. Tester le boot dans QEMU/KVM
 
-* Ajouter des tests de regression visuelle (BackstopJS ou screenshots Playwright)
-* Etendre la couverture A11y (keyboard navigation, focus visible)
+* `qemu-system-x86_64 -m 4G -cdrom build/magic_stick_0.1.0.iso`
+* Verifier boot UEFI et BIOS
+* Verifier menu GRUB : "Try Magic Stick" / "Install Magic Stick"
+* Verifier Xubuntu demarre, login auto, reseau OK
 
 === Criteres d'Acceptation
 
-* [ ] Contenu du site enrichi et coherent
-* [ ] Deploiement local OK
-* [ ] Tests A11y toujours verts
+* [ ] Ubiquity integre dans l'ISO
+* [ ] Menu GRUB avec option d'installation
+* [ ] ISO generee avec succes
+* [ ] Boot fonctionnel dans QEMU
 
 '''
 

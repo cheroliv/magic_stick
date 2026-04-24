@@ -1,8 +1,8 @@
-= Backlog — Magic Stick
+= Backlog -- Magic Stick
 
 __
 **Objectif** : Suivi des issues et taches en cours
-**Derniere mise a jour** : Session 001 (23 avril 2026)
+**Derniere mise a jour** : Session 006 (24 avril 2026)
 __
 
 '''
@@ -11,28 +11,28 @@ __
 
 === EPIC 1 : Initialisation projet
 
-**Statut** : EN COURS
+**Statut** : TERMINE
 **Priorite** : HAUTE
 
 ==== Taches
 
 * [x] Creer la structure de repertoires
 * [x] Creer le systeme de contexte agent (AGENT.adoc, INDEX.adoc, etc.)
-* [ ] Initialiser le depot git
-* [ ] Creer les scripts de base (build.sh, flash.sh, update-system.sh, verify.sh)
-* [ ] Creer la configuration live-build minimale
+* [x] Initialiser le depot git
+* [x] Creer les scripts de base (build.sh, flash.sh, update-system.sh, verify.sh)
 * [x] Ajouter un .gitignore adapte
 * [x] README minimal
 
 === EPIC 2 : Build ISO Xubuntu de base
 
-**Statut** : A FAIRE
+**Statut** : EN COURS
 **Priorite** : HAUTE
 
 ==== Taches
 
-* [ ] Configurer live-build pour Xubuntu minimal
-* [ ] Ajouter les hooks chroot de base
+* [x] Configurer live-build pour Xubuntu minimal
+* [x] Ajouter les hooks chroot de base
+* [ ] Intégrer ubiquity (installateur)
 * [ ] Builder la premiere ISO fonctionnelle
 * [ ] Tester le boot dans QEMU/KVM
 * [ ] Valider que la persistence fonctionne

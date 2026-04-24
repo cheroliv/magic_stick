@@ -7,6 +7,7 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 BUILD_DIR="${PROJECT_DIR}/build"
 CONFIG_DIR="${PROJECT_DIR}/config/live-build"
 ISO_NAME="magic_stick_${MAGIC_STICK_VERSION}.iso"
+DOCKER_IMAGE="magic_stick:builder"
 
 echo "=== Magic Stick Builder v${MAGIC_STICK_VERSION} ==="
 echo "Project dir: ${PROJECT_DIR}"
@@ -18,27 +19,27 @@ usage() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
-    echo "  -c, --clean     Clean build directory before building"
+    echo "  -c, --clean     Clean build artifacts (keep config)"
+    echo "  -p, --purge     Purge everything (config + artifacts, start fresh)"
     echo "  -h, --help      Show this help message"
     echo "  -v, --verbose   Verbose output"
     echo ""
-    echo "This script builds a Xubuntu-based live ISO using live-build."
+    echo "This script builds a Xubuntu-based live ISO using live-build inside Docker."
     echo "The resulting ISO can be flashed to a USB drive."
-    echo ""
-    echo "Prerequisites:"
-    echo "  - live-build package installed"
-    echo "  - xorriso"
-    echo "  - syslinux or grub-efi"
-    echo "  - squashfs-tools"
 }
 
 CLEAN=false
+PURGE=false
 VERBOSE=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
         -c|--clean)
             CLEAN=true
+            shift
+            ;;
+        -p|--purge)
+            PURGE=true
             shift
             ;;
         -v|--verbose)
@@ -57,69 +58,96 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+DOCKER_OPTS=()
+if [[ "$VERBOSE" == true ]]; then
+    DOCKER_OPTS+=(-e VERBOSE=1)
+fi
+
+docker_run() {
+    docker run --rm \
+        "${DOCKER_OPTS[@]}" \
+        -v "${PROJECT_DIR}:/magic_stick" \
+        "${DOCKER_IMAGE}" \
+        bash -c "$*"
+}
+
 check_prerequisites() {
     echo "Checking prerequisites..."
-    local missing=()
-    
-    for cmd in lb live-build xorriso mksquashfs; do
-        if ! command -v "$cmd" &>/dev/null; then
-            missing+=("$cmd")
-        fi
-    done
-    
-    if [[ ${#missing[@]} -gt 0 ]]; then
-        echo "ERROR: Missing prerequisites: ${missing[*]}"
-        echo "Install with: sudo apt install live-build xorriso squashfs-tools"
+    if ! command -v docker &>/dev/null; then
+        echo "ERROR: docker is not installed"
         exit 1
     fi
-    
-    echo "All prerequisites met."
+    if ! docker info &>/dev/null; then
+        echo "ERROR: docker daemon is not running"
+        exit 1
+    fi
+    if ! docker image inspect "${DOCKER_IMAGE}" &>/dev/null; then
+        echo "Docker image ${DOCKER_IMAGE} not found. Building..."
+        docker build -t "${DOCKER_IMAGE}" "${PROJECT_DIR}"
+    fi
+    echo "Docker image ready."
 }
 
 setup_build_dir() {
     mkdir -p "${BUILD_DIR}"
-    
-    if [[ "$CLEAN" == true ]]; then
-        echo "Cleaning build directory..."
-        lb clean
+
+    if [[ "$PURGE" == true ]]; then
+        echo "Purging build directory..."
+        docker_run "cd /magic_stick/build && lb clean --purge" 2>/dev/null || true
+    elif [[ "$CLEAN" == true ]]; then
+        echo "Cleaning build artifacts..."
+        docker_run "cd /magic_stick/build && lb clean" 2>/dev/null || true
     fi
-    
-    if [[ ! -f "${BUILD_DIR}/config/base" ]]; then
+
+    if [[ ! -f "${BUILD_DIR}/config/common" ]]; then
         echo "Initializing live-build configuration..."
-        cd "${BUILD_DIR}"
-        lb config
+        docker_run "cd /magic_stick/build && lb config \
+            --distribution noble \
+            --architecture amd64 \
+            --binary-images iso-hybrid \
+            --mode ubuntu \
+            --parent-distribution noble \
+            --parent-mirror-bootstrap http://archive.ubuntu.com/ubuntu \
+            --parent-mirror-binary http://archive.ubuntu.com/ubuntu \
+            --mirror-bootstrap http://archive.ubuntu.com/ubuntu \
+            --mirror-binary http://archive.ubuntu.com/ubuntu \
+            --archive-areas 'main restricted universe multiverse' \
+            --bootappend-live 'boot=live config username=magic hostname=magic_stick locales=fr_FR.UTF-8 keyboard-layouts=fr' \
+            --iso-volume 'Magic Stick ${MAGIC_STICK_VERSION}' \
+            --iso-publisher 'Magic Stick' \
+            --iso-application 'Magic Stick Live System'"
     fi
 }
 
 apply_config() {
     echo "Applying Magic Stick configuration..."
-    
-    if [[ -d "${CONFIG_DIR}/package-lists" ]]; then
-        cp -r "${CONFIG_DIR}/package-lists/"* "${BUILD_DIR}/config/package-lists/"
-    fi
-    
+
+    docker_run "cp -r /magic_stick/config/live-build/package-lists/* /magic_stick/build/config/package-lists/ 2>/dev/null || true"
+    docker_run "chmod 644 /magic_stick/build/config/package-lists/*.list.chroot 2>/dev/null || true"
+
     if [[ -d "${CONFIG_DIR}/hooks" ]]; then
-        cp -r "${CONFIG_DIR}/hooks/"* "${BUILD_DIR}/config/hooks/"
+        docker_run "cp -r /magic_stick/config/live-build/hooks/* /magic_stick/build/config/hooks/ 2>/dev/null || true"
+        docker_run "chmod 755 /magic_stick/build/config/hooks/*.chroot* 2>/dev/null || true"
     fi
-    
+
     if [[ -d "${CONFIG_DIR}/includes.chroot" ]]; then
-        cp -r "${CONFIG_DIR}/includes.chroot/"* "${BUILD_DIR}/config/includes.chroot/"
+        docker_run "cp -r /magic_stick/config/live-build/includes.chroot/* /magic_stick/build/config/includes.chroot/ 2>/dev/null || true"
     fi
-    
+
     if [[ -d "${CONFIG_DIR}/includes.binary" ]]; then
-        cp -r "${CONFIG_DIR}/includes.binary/"* "${BUILD_DIR}/config/includes.binary/"
+        docker_run "cp -r /magic_stick/config/live-build/includes.binary/* /magic_stick/build/config/includes.binary/ 2>/dev/null || true"
     fi
 }
 
 build_iso() {
     echo "Building ISO... (this will take 30-60 minutes)"
-    cd "${BUILD_DIR}"
-    lb build
-    
-    local iso_path="${BUILD_DIR}/live-image-*.iso"
-    if ls $iso_path &>/dev/null; then
+    docker_run "cd /magic_stick/build && lb build 2>&1 | tail -1; exit \${PIPESTATUS[0]}"
+
+    local iso_path
+    iso_path=$(find "${BUILD_DIR}" -maxdepth 1 -name 'live-image-*.iso' 2>/dev/null | head -1 || true)
+    if [[ -n "${iso_path}" ]]; then
         local final_iso="${BUILD_DIR}/${ISO_NAME}"
-        mv $iso_path "$final_iso"
+        mv "${iso_path}" "$final_iso"
         echo ""
         echo "=== Build successful! ==="
         echo "ISO: ${final_iso}"
@@ -129,6 +157,7 @@ build_iso() {
         echo "  sudo ${SCRIPT_DIR}/flash.sh /dev/sdX"
     else
         echo "ERROR: Build failed - no ISO file generated"
+        echo "Check build/logs/ for details."
         exit 1
     fi
 }

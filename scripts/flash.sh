@@ -11,7 +11,7 @@ usage() {
     echo "Flash the Magic Stick ISO to a USB drive."
     echo ""
     echo "Arguments:"
-    echo "  device    Target device (e.g., /dev/sdX)"
+    echo "  device    Target device (e.g., /dev/sdX or /dev/disk/by-id/...)"
     echo ""
     echo "WARNING: This will ERASE ALL DATA on the target device!"
     echo ""
@@ -29,13 +29,13 @@ fi
 
 DEVICE="$1"
 
-if [[ ! -b "$DEVICE" ]]; then
-    echo "ERROR: ${DEVICE} is not a block device"
+if [[ "$(id -u)" -ne 0 ]]; then
+    echo "ERROR: This script must be run as root (use sudo)"
     exit 1
 fi
 
-if [[ "$(id -u)" -ne 0 ]]; then
-    echo "ERROR: This script must be run as root (use sudo)"
+if [[ ! -b "$DEVICE" ]]; then
+    echo "ERROR: ${DEVICE} is not a block device"
     exit 1
 fi
 
@@ -47,11 +47,25 @@ if [[ -z "$ISO_FILE" ]]; then
     exit 1
 fi
 
+ISO_SIZE=$(stat -c%s "$ISO_FILE" 2>/dev/null || stat -f%z "$ISO_FILE" 2>/dev/null)
+DEVICE_SIZE=$(blockdev --getsize64 "$DEVICE" 2>/dev/null || echo 0)
+MIN_DEVICE_SIZE=$((8 * 1024 * 1024 * 1024))
+
+if [[ "$DEVICE_SIZE" -lt "$MIN_DEVICE_SIZE" ]]; then
+    echo "ERROR: Device ${DEVICE} is too small ($(numfmt --to=iec "$DEVICE_SIZE"))"
+    echo "Minimum required: 8 GB"
+    exit 1
+fi
+
+if [[ "$ISO_SIZE" -ge "$DEVICE_SIZE" ]]; then
+    echo "ERROR: ISO ($(numfmt --to=iec "$ISO_SIZE")) is larger than device ($(numfmt --to=iec "$DEVICE_SIZE"))"
+    exit 1
+fi
+
 echo "=== Magic Stick Flasher ==="
 echo ""
-echo "ISO:    ${ISO_FILE}"
-echo "Device: ${DEVICE}"
-echo "Size:   $(du -h "$ISO_FILE" | cut -f1)"
+echo "ISO:    ${ISO_FILE} ($(numfmt --to=iec "$ISO_SIZE"))"
+echo "Device: ${DEVICE} ($(numfmt --to=iec "$DEVICE_SIZE"))"
 echo ""
 echo "WARNING: This will ERASE ALL DATA on ${DEVICE}!"
 echo ""
@@ -63,17 +77,18 @@ if [[ "$confirm" != "YES" ]]; then
 fi
 
 echo ""
-echo "Checking if ${DEVICE} is mounted..."
-if mount | grep -q "$DEVICE"; then
-    echo "Unmounting partitions on ${DEVICE}..."
-    lsblk -n -o MOUNTPOINT "$DEVICE" | grep -v '^$' | sort -u | while read -r mp; do
-        if [[ -n "$mp" ]]; then
-            umount "$mp" || true
-        fi
-    done
-fi
+echo "Unmounting partitions on ${DEVICE}..."
+lsblk -n -o NAME,MOUNTPOINT "$DEVICE" 2>/dev/null | while read -r name mp; do
+    if [[ -n "$mp" ]]; then
+        echo "  Unmounting ${mp}..."
+        umount "/dev/${name}" 2>/dev/null || true
+    fi
+done
+umount "${DEVICE}"* 2>/dev/null || true
 
+echo ""
 echo "Flashing ISO to ${DEVICE}..."
+echo "  (This may take a few minutes)"
 dd if="$ISO_FILE" of="$DEVICE" bs=4M status=progress conv=fsync
 
 echo ""
@@ -85,4 +100,4 @@ echo "=== Flash complete! ==="
 echo "You can now boot from the USB drive."
 echo ""
 echo "Next steps for A/B partitioning:"
-echo "  sudo ${SCRIPT_DIR}/setup-ab-partitions.sh ${DEVICE}"
+echo "  sudo ${SCRIPT_DIR}/update-system.sh --setup-ab ${DEVICE}"

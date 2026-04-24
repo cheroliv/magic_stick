@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+echo "==> Setting up persistence support (casper)"
+
+mkdir -p /etc/casper
+
+cat > /etc/casper.conf << 'CASPER_CONF'
+USERNAME=magic
+HOSTNAME=magicstick
+USER_FULLNAME=Magic Stick
+CASPER_CONF
+
+echo "==> Persistence support configured"

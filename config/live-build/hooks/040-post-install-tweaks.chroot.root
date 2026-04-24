@@ -1,0 +1,30 @@
+#!/bin/sh
+set -e
+
+echo "==> Post-install system tweaks"
+
+echo "==> Enabling network-manager on boot"
+systemctl enable NetworkManager 2>/dev/null || true
+
+echo "==> Configuring console setup"
+cat > /etc/default/keyboard << 'KBCONF'
+XKBMODEL="pc105"
+XKBLAYOUT="fr"
+XKBVARIANT=""
+XKBOPTIONS=""
+BACKSPACE="guess"
+KBCONF
+
+dpkg-reconfigure -f noninteractive console-setup 2>/dev/null || true
+
+echo "==> Setting up timesync"
+systemctl enable systemd-timesyncd 2>/dev/null || true
+
+echo "==> Disabling unnecessary services"
+systemctl disable ModemManager 2>/dev/null || true
+systemctl disable fwupd 2>/dev/null || true
+
+echo "==> Setting default target to graphical"
+systemctl set-default graphical.target 2>/dev/null || true
+
+echo "==> Post-install tweaks complete"

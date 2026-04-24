@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Name=Magic Stick Terminal
+Name[fr]=Terminal Magic Stick
+Comment=Open a terminal
+Comment[fr]=Ouvrir un terminal
+Exec=xfce4-terminal
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=System;TerminalEmulator;
+StartupNotify=true

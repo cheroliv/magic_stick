@@ -1,0 +1,28 @@
+#!/bin/sh
+set -e
+
+echo "==> Configuring live system"
+
+USERNAME="magic"
+HOSTNAME_VAL="magicstick"
+
+echo "${HOSTNAME_VAL}" > /etc/hostname
+
+if grep -q "127.0.1.1" /etc/hosts 2>/dev/null; then
+    sed -i "s/127\.0\.1\.1.*/127.0.1.1\t${HOSTNAME_VAL}/" /etc/hosts
+else
+    printf "127.0.1.1\t%s\n" "${HOSTNAME_VAL}" >> /etc/hosts
+fi
+
+truncate -s 0 /etc/machine-id 2>/dev/null || true
+rm -f /var/lib/dbus/machine-id 2>/dev/null || true
+ln -sf /etc/machine-id /var/lib/dbus/machine-id 2>/dev/null || true
+
+locale-gen fr_FR.UTF-8 en_US.UTF-8 2>/dev/null || true
+update-locale LANG=fr_FR.UTF-8 LANGUAGE=fr_FR:en 2>/dev/null || true
+
+mkdir -p /etc/skel/Desktop
+mkdir -p /etc/skel/Documents
+mkdir -p /etc/skel/Downloads
+
+echo "==> Live system configuration complete"

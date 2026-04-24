@@ -1,0 +1,66 @@
+= Session 006 — Audit et correction configs ISO live-build
+
+**Date** : 2026-04-24 | **Statut** : OK | **Type** : feature
+
+== Contexte
+
+Reprise de l'EPIC 2 (Build ISO Xubuntu). L'utilisateur a arrete le travail sur le site de documentation pour se concentrer sur le coeur du projet. Audit complet de toutes les configs et scripts du projet.
+
+== Actions
+
+| Fichier | Modification |
+|---------|-------------|
+| `Dockerfile` | Ajout ubuntu-keyring, grub-efi-remixed, shim-signed, cpio, zutils, fdisk, gdisk, parted, DEBIAN_FRONTEND |
+| `scripts/build.sh` | Reecriture : fix docker_run (bash -c "$*"), ajout --purge, verification docker daemon |
+| `config/live-build/package-lists/desktop.list.chroot` | Simplifie : xubuntu-desktop uniquement |
+| `config/live-build/package-lists/live.list.chroot` | Remplace live-boot par casper, ajoute langue FR, drivers, fonts |
+| `config/live-build/package-lists/tools.list.chroot` | Corrige exfat-utils→exfatprogs, ajoute cryptsetup, openssh-server, supprime doublons |
+| `config/live-build/hooks/010-fix-apt-sources.chroot.root` | Nettoyage mineur |
+| `config/live-build/hooks/020-configure-live-system.chroot.root` | Reecriture : hostname/hosts correct, machine-id, locales, skel dirs |
+| `config/live-build/hooks/030-install-kernel-firmware.chroot.root` | **Supprime** (redondant, GRUB n'appartient pas au chroot) |
+| `config/live-build/hooks/030-setup-persistence.chroot.root` | Nouveau : remplace live-boot par casper.conf |
+| `config/live-build/hooks/040-post-install-tweaks.chroot.root` | Nouveau : NetworkManager, keyboard FR, timesync, services |
+| `config/live-build/includes.chroot/etc/casper.conf` | Nouveau : config casper pour utilisateur live |
+| `config/live-build/includes.chroot/etc/fstab` | Nouveau : point de montage persistence |
+| `config/live-build/includes.chroot/etc/lightdm/.../10-autologin.conf` | Corrige [SeatDefaults] → [Seat:*] |
+| `config/live-build/includes.chroot/etc/skel/Desktop/terminal.desktop` | Ajout Name[fr], Comment[fr] |
+| `scripts/flash.sh` | Reecriture : verification taille device, demontage correct, references coherentes |
+| `scripts/update-system.sh` | Reecriture : 3 commandes (setup-ab, update, status), support NVMe, labels, boot flags |
+| `scripts/install-software.sh` | Reecriture : commandes separees (docker/ollama/sdkman/all), pour le live system |
+
+== Resultats
+
+| Critere | Statut |
+|---------|--------|
+| Dockerfile | OK |
+| build.sh | OK (syntaxe + logique) |
+| package-lists (3 fichiers) | OK |
+| hooks (4 fichiers) | OK |
+| includes.chroot (7 fichiers) | OK |
+| flash.sh | OK |
+| update-system.sh | OK (3 commandes) |
+| install-software.sh | OK (4 commandes) |
+| bash -n tous scripts | 5/5 OK |
+| bash -n tous hooks | 4/4 OK |
+| EPIC 2 progression | 15% → 40% |
+
+== Decisions
+
+* **ISO live boot + installateur** : L'utilisateur veut ajouter ubiquity (installable en dur). Ajoute en EPIC 2, pas implemente cette session.
+* **casper > live-boot** : Sur Ubuntu, casper est le standard. live-boot supprime des package-lists.
+* **Hooks nettoyes** : Kernel/firmware installe par live-build, pas besoin de hook. GRUB bins dans le chroot = inutile.
+
+== Lecons apprises
+
+* Sur Ubuntu Noble, `exfat-utils` est obsolete → `exfatprogs`
+* live-boot et casper sont incompatibles → garder uniquement casper
+* `[SeatDefaults]` dans lightdm est deprecie → `[Seat:*]`
+* Les hooks chroot s'executent dans le chroot de build, pas dans le systeme live
+* install-software.sh doit tourner dans le live system, pas dans le chroot
+
+== Prochaines sessions
+
+* Ajouter ubiquity pour rendre l'ISO installable
+* Builder la premiere ISO
+* Tester le boot dans QEMU
+* Configurer GRUB pour le menu "Install Magic Stick"

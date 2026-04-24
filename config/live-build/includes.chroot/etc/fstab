@@ -1,0 +1,3 @@
+# Live system fstab - tmpfs mounts handled by casper/live-boot
+# Persistence partition will be mounted at /persistence
+LABEL=persistence /persistence ext4 defaults,noatime 0 2

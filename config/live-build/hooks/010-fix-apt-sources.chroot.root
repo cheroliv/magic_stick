@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+
+echo "==> Fixing apt sources for Ubuntu"
+
+cat > /etc/apt/sources.list << 'EOF'
+deb http://archive.ubuntu.com/ubuntu noble main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu noble-updates main restricted universe multiverse
+deb http://security.ubuntu.com/ubuntu noble-security main restricted universe multiverse
+EOF
+
+cat > /etc/apt/sources.list.d/ubuntu.sources << 'EOF'
+Types: deb
+URIs: http://archive.ubuntu.com/ubuntu
+Suites: noble noble-updates noble-security
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+EOF
+
+rm -f /etc/apt/sources.list.d/debian.sources 2>/dev/null || true
+
+apt-get update
