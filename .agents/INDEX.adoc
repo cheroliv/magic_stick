@@ -1,7 +1,7 @@
 = Index des Sessions — Magic Stick
 
 _Derniere mise a jour_ : 2026-04-26  
-_Session en cours_ : 008 — EPIC 2 Build ISO Xubuntu (premier build via Gradle)
+_Session en cours_ : 008 — EPIC 2 Ecoute logs CI/CD + debug premier build
 _Session terminee_ : 007 (Pipeline Gradle ISO + Ubiquity + CI/CD)
 
 '''

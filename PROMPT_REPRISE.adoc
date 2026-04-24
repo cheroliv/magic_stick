@@ -1,59 +1,69 @@
-= Prompt de reprise -- Session 007
+= Prompt de reprise -- Session 008
 
 __
 **EPIC** : Build ISO Xubuntu bootable + installable
-**Statut** : Session 007 en cours -- Pipeline Gradle + CI/CD OK, pret pour build
-**Mission** : Builder la premiere ISO via `./gradlew isoPipeline`
+**Statut** : Session 007 terminee — Pipeline Gradle + CI/CD en place, ISO jamais buildee
+**Mission** : Ecouter les logs CI/CD, debugger le premier build
 __
 
 '''
 
-== Session 007 -- Etat Actuel
+== Session 007 -- Resume
 
 **Date** : 2026-04-26
-**Resultat partiel** : Pipeline Gradle ISO complete + CI/CD GitHub Actions
+**Resultat** : OK — Pipeline Gradle ISO complete + CI/CD GitHub Actions
 
 **Connaissances cles** :
 
-* Pipeline Gradle orchestree : `./gradlew isoPipeline` (build + verify + test)
-* Tasks Gradle : dockerBuild, isoBuild, isoPurge, isoClean, isoVerify, isoTestBoot, isoTest, isoPipeline, isoRebuild, isoFlash
-* Tout en Docker : zero sudo, zero install sur l'hote
+* Pipeline Gradle : `./gradlew isoPipeline` (build + verify + test)
+* 10 tasks Gradle groupe iso (dockerBuild, isoBuild, isoPurge, isoClean, isoRebuild, isoVerify, isoTestBoot, isoTest, isoPipeline, isoFlash)
+* Zero sudo, zero install hote, tout en Docker
 * Dockerfile : live-build + qemu-system-x86 + ovmf + genisoimage
-* Scripts verify.sh et test-boot.sh : autodetectent container vs hote, lancent Docker si necessaire
+* Scripts autodetectent container vs hote (/.dockerenv + /proc/1/cgroup)
 * build.sh (hote) → build-inner.sh (container) : un seul docker run
-* CI/CD GitHub Actions : checkout + JDK + Gradle → `./gradlew dockerBuild isoBuild isoVerify isoTestBoot`
-* build.gradle.kts : tasks bakery+a11y (docs site) + tasks iso (pipeline build)
-* Ubiquity integre : ubiquity, ubiquity-casper, ubiquity-frontend-gtk, ubiquity-slideshow-xubuntu
+* CI/CD GitHub Actions : Gradle orchestre dockerBuild → isoBuild → isoVerify → isoTestBoot → upload → release
+* Ubiquity integre (ubiquity, ubiquity-casper, ubiquity-frontend-gtk, ubiquity-slideshow-xubuntu)
 * Menus GRUB UEFI + isolinux BIOS : Try/Install/Test Magic Stick
+* Aucune ISO encore generee
 
 **Contraintes EPIC 2** :
 * **Zero sudo** : tout en Docker, rien a installer sur l'hote
 * **CI/CD GitHub Actions** : orchestre par Gradle, release sur tag v*
 * **Publication** : ISO en GitHub Release sur tag v*
 
+**Archive** : `.agents/sessions/007-pipeline-gradle-iso.adoc`
+
 '''
 
-== Session 008++ -- Priorites
+== Session 008 -- Priorites
 
-**Mission** : Builder la premiere ISO via Gradle
+**Mission** : Ecouter les logs CI/CD, debugger le premier build
 
-=== 1. Lancer le build
+=== 1. Lancer le build en local
 
 * `./gradlew isoPipeline`
-* Verifier qu'il n'y a pas d'erreur dans la pipeline Gradle
+* Analyser les logs en temps reel
 * Duree : 30-60 min
 
-=== 2. Debugger si necessaire
+=== 2. Analyser les logs CI/CD GitHub Actions
 
-* Si build echoue : analyser logs dans build/logs/
-* Si boot echoue : ajuster GRUB/isolinux, bootappend-live, casper
+* Pousser un commit pour declencher le workflow
+* Suivre les logs du workflow build.yml
+* Identifier les erreurs et les corriger
+* Iterer jusqu'a ce que la pipeline passe
+
+=== 3. Debugger si necessaire
+
+* Build echoue : analyser build/logs/, corriger configs live-build
+* Boot echoue : ajuster GRUB/isolinux, bootappend-live, casper
+* CI/CD echoue : ajuster .github/workflows/build.yml
 
 === Criteres d'Acceptation
 
-* [ ] `./gradlew isoBuild` genere l'ISO avec succes
+* [ ] `./gradlew isoBuild` genere l'ISO avec succes en local
 * [ ] `./gradlew isoVerify` OK
 * [ ] `./gradlew isoTestBoot` OK (kernel boote BIOS + UEFI)
-* [ ] CI/CD GitHub Actions pret
+* [ ] CI/CD GitHub Actions passe (vert)
 
 '''
 
