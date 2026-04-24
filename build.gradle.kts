@@ -10,7 +10,7 @@ repositories {
 bakery { configPath = file("site.yml").absolutePath }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(25)
 }
 
 dependencies {
