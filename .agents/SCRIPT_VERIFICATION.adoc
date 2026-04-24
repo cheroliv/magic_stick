@@ -1,0 +1,34 @@
+= Script Verification — Magic Stick
+
+_Derniere mise a jour_ : Session 006 (24 avril 2026)
+
+'''
+
+== Scripts du Projet
+
+|===
+| Script | Syntaxe | Executable | Role | Derniere verification
+| scripts/build.sh | OK | OK | Build ISO via Docker + live-build | Session 006
+| scripts/flash.sh | OK | OK | Flash ISO sur cle USB | Session 006
+| scripts/update-system.sh | OK | OK | Partition A/B (setup-ab, update, status) | Session 006
+| scripts/install-software.sh | OK | OK | Post-install live (docker, ollama, sdkman) | Session 006
+| scripts/verify.sh | OK | OK | Verification ISO generee | Session 006
+|===
+
+== Hooks live-build
+
+|===
+| Hook | Syntaxe | Executable | Role | Derniere verification
+| 010-fix-apt-sources.chroot.root | OK | OK | Fix apt sources Ubuntu Noble | Session 006
+| 020-configure-live-system.chroot.root | OK | OK | Hostname, machine-id, locales, skel | Session 006
+| 030-setup-persistence.chroot.root | OK | OK | Casper.conf pour persistance | Session 006
+| 040-post-install-tweaks.chroot.root | OK | OK | NetworkManager, keyboard FR, services | Session 006
+|===
+
+== Commande de verification rapide
+
+[source,bash]
+----
+for f in scripts/*.sh; do bash -n "$f" && echo "$f OK" || echo "$f FAIL"; done
+for f in config/live-build/hooks/*.chroot*; do bash -n "$f" && echo "$(basename $f) OK" || echo "$(basename $f) FAIL"; done
+----
