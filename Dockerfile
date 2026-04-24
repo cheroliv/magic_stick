@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ovmf \
     genisoimage \
     python3 \
+    xz-utils \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /magic_stick
