@@ -1,8 +1,8 @@
 = Index des Sessions — Magic Stick
 
-_Derniere mise a jour_ : 2026-04-24  
-_Session en cours_ : 007 — EPIC 2 Build ISO Xubuntu (ubiquity + premier build)
-_Session terminee_ : 006 (Audit et correction configs live-build)
+_Derniere mise a jour_ : 2026-04-26  
+_Session en cours_ : 008 — EPIC 2 Build ISO Xubuntu (premier build via Gradle)
+_Session terminee_ : 007 (Pipeline Gradle ISO + Ubiquity + CI/CD)
 
 '''
 
@@ -100,6 +100,7 @@ _Lecon Session 3_ : L'agent a tente `sudo apt install gh` ce qui a pourri les de
 
 |===
 | # | Date | Type | Sujet | Fichier | Score
+| 007 | 2026-04-26 | feature | Pipeline Gradle ISO + Ubiquity + CI/CD | `007-pipeline-gradle-iso.adoc` | 8.5/10
 | 006 | 2026-04-24 | feature | Audit et correction configs ISO live-build | `006-audit-configs-live-build.adoc` | 8.0/10
 | 005 | 2026-04-24 | feature + fix | Tests A11y/UI + Corrections contraste/navbar | `005-a11y-ui-tests.adoc` | 8.5/10
 | 004 | 2026-04-24 | documentation | README FR/EN + LICENSE Apache 2.0 | `004-docs-readme-license.adoc` | 8.0/10
@@ -114,7 +115,7 @@ _Lecon Session 3_ : L'agent a tente `sudo apt install gh` ce qui a pourri les de
 |===
 | EPIC | Progression | Score | Priorite
 | EPIC 1 : Initialisation projet | 100% | 8/10 | HAUTE
-| EPIC 2 : Build ISO Xubuntu de base | 40% | 8/10 | HAUTE
+| EPIC 2 : Build ISO Xubuntu de base | 55% | 8.5/10 | HAUTE
 | EPIC 3 : Partition A/B + Persistence | 0% | -/10 | HAUTE
 | EPIC 4 : Logiciels (Ollama, Docker, SDKMAN) | 0% | -/10 | MOYENNE
 | EPIC 5 : Personnalisation XFCE | 0% | -/10 | MOYENNE
@@ -132,7 +133,7 @@ _Lecon Session 3_ : L'agent a tente `sudo apt install gh` ce qui a pourri les de
 | `AB_PARTITION_REFERENCE.adoc` | Architecture partition A/B (LAZY) | Public
 | `SESSIONS_HISTORY.adoc` | Historique des sessions | Public
 | `COMPLETED_TASKS_ARCHIVE.adoc` | Archive des taches terminees | Public
-| `build.gradle.kts` | Plugin bakery-gradle | Public
+| `build.gradle.kts` | Plugin bakery-gradle + Tasks ISO Gradle | Public
 | `site.yml` | Config bakery (credentials) | PRIVE (gitignore)
 | `gradle/libs.versions.toml` | Version catalog | Public
 | `~/apps/gh` | GitHub CLI | Public

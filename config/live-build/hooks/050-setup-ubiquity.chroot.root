@@ -1,0 +1,30 @@
+#!/bin/sh
+set -e
+
+echo "==> Setting up ubiquity installer"
+
+cat > /etc/skel/Desktop/install-magic-stick.desktop << 'DESKTOP'
+[Desktop Entry]
+Name=Install Magic Stick
+Comment=Install Magic Stick on your hard drive
+Exec=sudo ubiquity gtk_ui
+Icon=ubiquity
+Terminal=false
+Type=Application
+Categories=System;
+DESKTOP
+
+chmod 755 /etc/skel/Desktop/install-magic-stick.desktop
+
+if [ -d /home/magic/Desktop ]; then
+    cp /etc/skel/Desktop/install-magic-stick.desktop /home/magic/Desktop/
+    chown magic:magic /home/magic/Desktop/install-magic-stick.desktop 2>/dev/null || true
+fi
+
+mkdir -p /etc/ubiquity
+cat > /etc/ubiquity/ubiquity-dm <<- 'UBIQUITY_DM'
+[INSTALLER]
+type=ubiquity
+UBIQUITY_DM
+
+echo "==> Ubiquity installer setup complete"

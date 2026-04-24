@@ -1,0 +1,118 @@
+= Session 007 — Pipeline Gradle ISO + Ubiquity + CI/CD
+
+**Date** : 2026-04-26
+**Type** : feature
+**EPIC** : EPIC 2 — Build ISO Xubuntu bootable + installable
+
+'''
+
+== Contexte
+
+Reprise de l'EPIC 2. Session 006 a audite et corrige les configs live-build. Il faut maintenant ajouter ubiquity, builder la premiere ISO, et mettre en place l'orchestration Gradle + CI/CD GitHub Actions.
+
+'''
+
+== Objectifs
+
+. Ajouter ubiquity (installateur) dans l'ISO
+. Architecturer le build 100% Docker (zero sudo, zero install hote)
+. Orchestrer la pipeline par des tasks Gradle
+. Creer le workflow CI/CD GitHub Actions
+
+'''
+
+== Taches realisees
+
+* [OK] Ajouter ubiquity + ubiquity-casper + ubiquity-frontend-gtk + ubiquity-slideshow-xubuntu dans live.list.chroot
+* [OK] Creer hook 050-setup-ubiquity.chroot.root (raccourci Bureau + config ubiquity-dm)
+* [OK] Creer menu GRUB UEFI (grub.cfg : Try/Install/Test Magic Stick)
+* [OK] Creer menu isolinux BIOS (isolinux.cfg)
+* [OK] Dockerfile : ajouter qemu-system-x86, qemu-utils, ovmf, genisoimage
+* [OK] Reecrire verify.sh (autodetecte container vs hote, Docker si hors container)
+* [OK] Creer test-boot.sh (QEMU headless BIOS + UEFI, serial log, autodetect container)
+* [OK] Creer build-inner.sh (script qui tourne dans le container)
+* [OK] Reecrire build.sh (orchestrateur hote, un seul docker run)
+* [OK] Mettre a jour flash.sh ( aide Docker-only)
+* [OK] Ajouter 10 tasks Gradle (dockerBuild, isoBuild, isoPurge, isoClean, isoRebuild, isoVerify, isoTestBoot, isoTest, isoPipeline, isoFlash)
+* [OK] Creer workflow CI/CD GitHub Actions (build.yml orchestre par Gradle)
+* [OK] Mettre a jour BACKLOG.adoc (contraintes zero sudo + CI/CD)
+* [OK] Mettre a jour PROMPT_REPRISE.adoc
+
+'''
+
+== Decisions cles
+
+=== Zero sudo, zero install hote
+
+* Tout s'execute dans un seul container Docker
+* build.sh (hote) lance un seul `docker run` qui execute build-inner.sh
+* verify.sh et test-boot.sh autodetectent `/.dockerenv` — si hors container, re-executent dans Docker via `exec docker run`
+* Pas de Docker-in-Docker
+
+=== Orchestration Gradle
+
+* 10 tasks dans le groupe `iso`
+* Tasks utilisees en local : `./gradlew isoPipeline` (build + verify + test)
+* Tasks utilisees en CI : `./gradlew dockerBuild isoBuild isoVerify isoTestBoot`
+* isoFlash : `./gradlew isoFlash -Pdevice=/dev/sdX`
+* Tasks Exec Gradle natives (pas de doLast + project.exec)
+* bakery + a11y preserves (site docs)
+
+=== CI/CD GitHub Actions
+
+* Checkout + JDK 17 + Gradle actions/setup-gradle
+* Pipeline : dockerBuild → isoBuild → isoVerify → isoTestBoot → upload artifact → release (si tag v*)
+
+'''
+
+== Fichiers modifies/crees
+
+| Fichier | Action | Detail |
+|---------|--------|--------|
+| Dockerfile | Modifie | +qemu-system-x86, qemu-utils, ovmf, genisoimage |
+| config/live-build/package-lists/live.list.chroot | Modifie | +ubiquity, ubiquity-casper, ubiquity-frontend-gtk, ubiquity-slideshow-xubuntu |
+| config/live-build/hooks/050-setup-ubiquity.chroot.root | Cree | Raccourci Bureau + config ubiquity-dm |
+| config/live-build/includes.binary/boot/grub/grub.cfg | Cree | Menu GRUB UEFI (Try/Install/Test) |
+| config/live-build/includes.binary/isolinux/isolinux.cfg | Cree | Menu isolinux BIOS |
+| scripts/build.sh | Reecri | Orchestrateur hote, un seul docker run |
+| scripts/build-inner.sh | Cree | Script container (lb config + lb build + verify + test) |
+| scripts/verify.sh | Reecri | Autodetecte container, isoinfo checks |
+| scripts/test-boot.sh | Cree | QEMU headless BIOS+UEFI, serial log |
+| scripts/flash.sh | Modifie | Aide Docker-only |
+| build.gradle.kts | Modifie | +10 tasks ISO (group iso) |
+| .github/workflows/build.yml | Cree | CI/CD orchestre par Gradle |
+| BACKLOG.adoc | Modifie | Contraintes zero sudo + CI/CD |
+
+'''
+
+== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| Tasks Gradle ISO | 10 |
+| Scripts crees | 2 (build-inner.sh, test-boot.sh) |
+| Scripts reecris | 3 (build.sh, verify.sh, flash.sh) |
+| Hooks crees | 1 (ubiquity) |
+| Configs GRUB/isolinux | 2 |
+| CI/CD workflow | 1 |
+| Syntaxe bash | 7/7 OK |
+| Syntaxe Gradle | OK (`./gradlew tasks --group=iso`) |
+| EPIC 2 progression | 40% → 55% |
+
+'''
+
+== Lecons apprises
+
+* Tasks `Exec` Gradle natives > `doLast { project.exec {} }` en Kotlin DSL — `project.exec` non resolu dans doLast
+* `in_container()` avec `/.dockerenv` + `/proc/1/cgroup` pour autodetecter le container — evite le Docker-in-Docker
+* bakery/playwright/a11y = site docs, PAS des relics a supprimer
+* L'utilisateur veut Gradle comme unique orchestrateur (local + CI/CD)
+* `onlyIf` pour conditionner l'execution d'une task Gradle (isoFlash sans -Pdevice → skip)
+
+'''
+
+== Prochaine session
+
+* Lancer `./gradlew isoPipeline` et debugger le premier build ISO
+* Si build echoue : analyser logs, corriger configs live-build
+* Si boot echoue : ajuster GRUB/isolinux/casper

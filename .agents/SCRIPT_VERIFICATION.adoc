@@ -1,6 +1,6 @@
 = Script Verification — Magic Stick
 
-_Derniere mise a jour_ : Session 006 (24 avril 2026)
+_Derniere mise a jour_ : Session 007 (26 avril 2026)
 
 '''
 
@@ -8,11 +8,13 @@ _Derniere mise a jour_ : Session 006 (24 avril 2026)
 
 |===
 | Script | Syntaxe | Executable | Role | Derniere verification
-| scripts/build.sh | OK | OK | Build ISO via Docker + live-build | Session 006
-| scripts/flash.sh | OK | OK | Flash ISO sur cle USB | Session 006
+| scripts/build.sh | OK | OK | Orchestrateur hote, un seul docker run | Session 007
+| scripts/build-inner.sh | OK | OK | Script container (lb config + lb build + verify + test) | Session 007
+| scripts/flash.sh | OK | OK | Flash ISO sur cle USB | Session 007
 | scripts/update-system.sh | OK | OK | Partition A/B (setup-ab, update, status) | Session 006
 | scripts/install-software.sh | OK | OK | Post-install live (docker, ollama, sdkman) | Session 006
-| scripts/verify.sh | OK | OK | Verification ISO generee | Session 006
+| scripts/verify.sh | OK | OK | Verification ISO (autodetecte container) | Session 007
+| scripts/test-boot.sh | OK | OK | Test boot QEMU BIOS+UEFI (autodetecte container) | Session 007
 |===
 
 == Hooks live-build
@@ -23,6 +25,23 @@ _Derniere mise a jour_ : Session 006 (24 avril 2026)
 | 020-configure-live-system.chroot.root | OK | OK | Hostname, machine-id, locales, skel | Session 006
 | 030-setup-persistence.chroot.root | OK | OK | Casper.conf pour persistance | Session 006
 | 040-post-install-tweaks.chroot.root | OK | OK | NetworkManager, keyboard FR, services | Session 006
+| 050-setup-ubiquity.chroot.root | OK | OK | Raccourci Bureau + config ubiquity-dm | Session 007
+|===
+
+== Tasks Gradle (groupe iso)
+
+|===
+| Task | Type | Description | Derniere verification
+| dockerBuild | Exec | Build image Docker builder | Session 007
+| isoBuild | Exec | Build ISO via Docker | Session 007
+| isoPurge | Exec | Purge build state | Session 007
+| isoClean | Exec | Clean build artifacts | Session 007
+| isoRebuild | Default | Purge + Build | Session 007
+| isoVerify | Exec | Verify ISO (boot files, squashfs) | Session 007
+| isoTestBoot | Exec | Test boot QEMU (BIOS+UEFI) | Session 007
+| isoTest | Default | Verify + Test boot | Session 007
+| isoPipeline | Default | Build + Verify + Test boot | Session 007
+| isoFlash | Exec | Flash USB (-Pdevice=/dev/sdX) | Session 007
 |===
 
 == Commande de verification rapide
@@ -31,4 +50,5 @@ _Derniere mise a jour_ : Session 006 (24 avril 2026)
 ----
 for f in scripts/*.sh; do bash -n "$f" && echo "$f OK" || echo "$f FAIL"; done
 for f in config/live-build/hooks/*.chroot*; do bash -n "$f" && echo "$(basename $f) OK" || echo "$(basename $f) FAIL"; done
+./gradlew tasks --group=iso
 ----

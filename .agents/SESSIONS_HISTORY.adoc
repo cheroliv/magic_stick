@@ -1,9 +1,10 @@
 = Historique des Sessions — Magic Stick
 
-_Derniere mise a jour_ : 2026-04-24
+_Derniere mise a jour_ : 2026-04-26
 
 |===
 | # | Date | Type | Sujet | Score
+| 007 | 2026-04-26 | feature | Pipeline Gradle ISO + Ubiquity + CI/CD | 8.5/10
 | 006 | 2026-04-24 | feature | Audit et correction configs ISO live-build | 8.0/10
 | 005 | 2026-04-24 | feature + fix | Tests A11y/UI + Corrections contraste/navbar | 8.5/10
 | 004 | 2026-04-24 | documentation | README FR/EN + LICENSE Apache 2.0 | 8.0/10

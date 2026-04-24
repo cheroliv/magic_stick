@@ -24,6 +24,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     parted \
     curl \
     ca-certificates \
+    qemu-system-x86 \
+    qemu-utils \
+    ovmf \
+    genisoimage \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /magic_stick

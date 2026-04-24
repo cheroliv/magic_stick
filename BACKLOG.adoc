@@ -27,14 +27,21 @@ __
 
 **Statut** : EN COURS
 **Priorite** : HAUTE
+**Contraintes** :
+* **Zero sudo** : tout en Docker, rien a installer sur l'hote
+* **CI/CD GitHub Actions** : build, verify, test boot, release automatique
+* **Publication** : ISO en GitHub Release sur tag v*
 
 ==== Taches
 
 * [x] Configurer live-build pour Xubuntu minimal
 * [x] Ajouter les hooks chroot de base
-* [ ] Intégrer ubiquity (installateur)
+* [x] Intégrer ubiquity (installateur)
+* [x] Ajouter QEMU + OVMF dans le Docker builder
+* [x] Scripts verify.sh et test-boot.sh dans Docker
+* [x] Workflow GitHub Actions (build + verify + test + release)
 * [ ] Builder la premiere ISO fonctionnelle
-* [ ] Tester le boot dans QEMU/KVM
+* [ ] Tester le boot (BIOS + UEFI) dans Docker/QEMU
 * [ ] Valider que la persistence fonctionne
 
 === EPIC 3 : Partition A/B + Persistence

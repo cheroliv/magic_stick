@@ -2,64 +2,58 @@
 
 __
 **EPIC** : Build ISO Xubuntu bootable + installable
-**Statut** : Session 006 OK -- Configs auditees et corrigees, pretes pour build
-**Mission** : Ajouter ubiquity (installateur) et builder la premiere ISO
+**Statut** : Session 007 en cours -- Pipeline Gradle + CI/CD OK, pret pour build
+**Mission** : Builder la premiere ISO via `./gradlew isoPipeline`
 __
 
 '''
 
-== Session 006 -- Resume
+== Session 007 -- Etat Actuel
 
-**Date** : 2026-04-24
-**Resultat** : OK -- Audit complet configs + scripts, EPIC 2 passe de 15% a 40%
+**Date** : 2026-04-26
+**Resultat partiel** : Pipeline Gradle ISO complete + CI/CD GitHub Actions
 
 **Connaissances cles** :
 
-* Dockerfile : ubuntu-keyring, shim-signed, cpio, zutils ajoutes
-* build.sh : fix docker_run, ajout --purge, verifications Docker
-* package-lists : 3 fichiers (desktop, live avec casper, tools avec exfatprogs)
-* hooks : 4 fichiers (apt-sources, configure-live, casper.conf, post-tweaks)
-* includes.chroot : casper.conf, fstab, lightdm [Seat:*], NetworkManager
-* flash.sh : verif taille device, demontage correct
-* update-system.sh : 3 commandes (setup-ab, update, status), support NVMe
-* install-software.sh : commandes separees (docker/ollama/sdkman/all)
-* **Decision** : ISO sera live boot + installable (ubiquity a ajouter)
-* Aucune ISO encore generee
+* Pipeline Gradle orchestree : `./gradlew isoPipeline` (build + verify + test)
+* Tasks Gradle : dockerBuild, isoBuild, isoPurge, isoClean, isoVerify, isoTestBoot, isoTest, isoPipeline, isoRebuild, isoFlash
+* Tout en Docker : zero sudo, zero install sur l'hote
+* Dockerfile : live-build + qemu-system-x86 + ovmf + genisoimage
+* Scripts verify.sh et test-boot.sh : autodetectent container vs hote, lancent Docker si necessaire
+* build.sh (hote) → build-inner.sh (container) : un seul docker run
+* CI/CD GitHub Actions : checkout + JDK + Gradle → `./gradlew dockerBuild isoBuild isoVerify isoTestBoot`
+* build.gradle.kts : tasks bakery+a11y (docs site) + tasks iso (pipeline build)
+* Ubiquity integre : ubiquity, ubiquity-casper, ubiquity-frontend-gtk, ubiquity-slideshow-xubuntu
+* Menus GRUB UEFI + isolinux BIOS : Try/Install/Test Magic Stick
 
-**Archive** : `.agents/sessions/006-audit-configs-live-build.adoc`
+**Contraintes EPIC 2** :
+* **Zero sudo** : tout en Docker, rien a installer sur l'hote
+* **CI/CD GitHub Actions** : orchestre par Gradle, release sur tag v*
+* **Publication** : ISO en GitHub Release sur tag v*
 
 '''
 
-== Session 007 -- Priorites
+== Session 008++ -- Priorites
 
-**Mission** : Ajouter ubiquity + builder la premiere ISO Xubuntu bootable
+**Mission** : Builder la premiere ISO via Gradle
 
-=== 1. Ajouter ubiquity (installateur)
+=== 1. Lancer le build
 
-* Ajouter ubiquity + ubiquity-casper + ubiquity-frontend-gtk dans live.list.chroot
-* Creer hook 050-setup-ubiquity.chroot.root (raccourci Bureau)
-* Configurer menu GRUB "Install Magic Stick" dans includes.binary
-* Ajouter ubiquity-slideshow-xubuntu
+* `./gradlew isoPipeline`
+* Verifier qu'il n'y a pas d'erreur dans la pipeline Gradle
+* Duree : 30-60 min
 
-=== 2. Builder l'ISO
+=== 2. Debugger si necessaire
 
-* Lancer `sudo scripts/build.sh --purge` (nettoyage complet + reinit config)
-* Durée : 30-60 min
-* Verifier que l'ISO est generee dans build/
-
-=== 3. Tester le boot dans QEMU/KVM
-
-* `qemu-system-x86_64 -m 4G -cdrom build/magic_stick_0.1.0.iso`
-* Verifier boot UEFI et BIOS
-* Verifier menu GRUB : "Try Magic Stick" / "Install Magic Stick"
-* Verifier Xubuntu demarre, login auto, reseau OK
+* Si build echoue : analyser logs dans build/logs/
+* Si boot echoue : ajuster GRUB/isolinux, bootappend-live, casper
 
 === Criteres d'Acceptation
 
-* [ ] Ubiquity integre dans l'ISO
-* [ ] Menu GRUB avec option d'installation
-* [ ] ISO generee avec succes
-* [ ] Boot fonctionnel dans QEMU
+* [ ] `./gradlew isoBuild` genere l'ISO avec succes
+* [ ] `./gradlew isoVerify` OK
+* [ ] `./gradlew isoTestBoot` OK (kernel boote BIOS + UEFI)
+* [ ] CI/CD GitHub Actions pret
 
 '''
 
@@ -68,4 +62,5 @@ __
 * Jamais de commit sans permission
 * Pas de commandes destructrices sans permission
 * Racine de travail = `magic_stick/`
+* **Zero sudo** : tout en Docker, orchestre par Gradle
 * Archive + PROMPT_REPRISE mis a jour en fin de session

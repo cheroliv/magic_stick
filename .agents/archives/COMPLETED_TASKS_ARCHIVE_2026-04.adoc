@@ -243,3 +243,44 @@
 * [SeatDefaults] deprecie dans lightdm → [Seat:*]
 * Hooks chroot != scripts live system ; install-software.sh tourne dans le live
 * GRUB bins dans le chroot = inutile (live-build les gere au niveau binary)
+
+
+== Session 007 — 26 avril 2026
+
+**Contexte** : EPIC 2. Ajout ubiquity, orchestration Gradle, CI/CD.
+
+=== Taches realisees
+
+* [OK] Ajouter ubiquity + ubiquity-casper + ubiquity-frontend-gtk + ubiquity-slideshow-xubuntu dans live.list.chroot
+* [OK] Creer hook 050-setup-ubiquity.chroot.root (raccourci Bureau + config ubiquity-dm)
+* [OK] Creer menu GRUB UEFI (grub.cfg : Try/Install/Test Magic Stick)
+* [OK] Creer menu isolinux BIOS (isolinux.cfg)
+* [OK] Dockerfile : ajouter qemu-system-x86, qemu-utils, ovmf, genisoimage
+* [OK] Reecrire verify.sh (autodetecte container vs hote)
+* [OK] Creer test-boot.sh (QEMU headless BIOS + UEFI)
+* [OK] Creer build-inner.sh (script container)
+* [OK] Reecrire build.sh (orchestrateur hote, un seul docker run)
+* [OK] Mettre a jour flash.sh (aide Docker-only)
+* [OK] Ajouter 10 tasks Gradle dans build.gradle.kts (groupe iso)
+* [OK] Creer workflow CI/CD GitHub Actions (.github/workflows/build.yml)
+* [OK] Mettre a jour BACKLOG.adoc (contraintes zero sudo + CI/CD)
+
+=== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| Tasks Gradle ISO | 10 |
+| Scripts crees | 2 (build-inner.sh, test-boot.sh) |
+| Scripts reecris | 3 (build.sh, verify.sh, flash.sh) |
+| Hooks crees | 1 (ubiquity) |
+| Configs GRUB/isolinux | 2 |
+| CI/CD workflow | 1 |
+| EPIC 2 progression | 40% → 55% |
+
+=== Lecons apprises
+
+* Tasks Exec Gradle natives > doLast { project.exec } en Kotlin DSL
+* in_container() avec /.dockerenv + /proc/1/cgroup pour eviter Docker-in-Docker
+* bakery/playwright/a11y = site docs, PAS des relics a supprimer
+* Gradle comme orchestrateur unique (local + CI/CD)
+* onlyIf pour conditionner l'execution d'une task Gradle

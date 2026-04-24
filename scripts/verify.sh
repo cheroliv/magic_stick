@@ -1,29 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+in_container() {
+    [[ -f /.dockerenv ]] || grep -qE '(docker|lxc)' /proc/1/cgroup 2>/dev/null
+}
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 BUILD_DIR="${PROJECT_DIR}/build"
-
-usage() {
-    echo "Usage: $0 [ISO_FILE]"
-    echo ""
-    echo "Verify the Magic Stick ISO."
-    echo ""
-    echo "Arguments:"
-    echo "  ISO_FILE    Path to ISO file (default: latest in build/)"
-    echo ""
-    echo "Checks performed:"
-    echo "  - ISO file exists and is readable"
-    echo "  - ISO size is reasonable (> 500MB)"
-    echo "  - ISO contains boot files (vmlinuz, initrd)"
-    echo "  - ISO is bootable (has GRUB or syslinux)"
-}
+DOCKER_IMAGE="magic_stick:builder"
 
 ISO_FILE="${1:-}"
 
 if [[ -z "$ISO_FILE" ]]; then
-    ISO_FILE=$(ls -t "${BUILD_DIR}"/magic_stick_*.iso 2>/dev/null | head -1)
+    ISO_FILE=$(ls -t "${BUILD_DIR}"/magic_stick_*.iso 2>/dev/null | head -1 || true)
 fi
 
 if [[ -z "$ISO_FILE" ]] || [[ ! -f "$ISO_FILE" ]]; then
@@ -32,18 +22,26 @@ if [[ -z "$ISO_FILE" ]] || [[ ! -f "$ISO_FILE" ]]; then
     exit 1
 fi
 
+if ! in_container; then
+    echo "=== Magic Stick ISO Verification (via Docker) ==="
+    exec docker run --rm \
+        -v "${PROJECT_DIR}:/magic_stick" \
+        "${DOCKER_IMAGE}" \
+        "/magic_stick/scripts/verify.sh" "/magic_stick/build/$(basename "$ISO_FILE")"
+fi
+
 echo "=== Magic Stick ISO Verification ==="
 echo "File: ${ISO_FILE}"
 echo ""
+
+ISO_SIZE=$(stat -c%s "$ISO_FILE" 2>/dev/null)
+ISO_SIZE_HUMAN=$(du -h "$ISO_FILE" | cut -f1)
+MIN_SIZE=$((500 * 1024 * 1024))
 
 echo "[1/5] Checking file exists..."
 echo "  OK: File found"
 
 echo "[2/5] Checking file size..."
-ISO_SIZE=$(stat -c%s "$ISO_FILE" 2>/dev/null || stat -f%z "$ISO_FILE" 2>/dev/null)
-ISO_SIZE_HUMAN=$(du -h "$ISO_FILE" | cut -f1)
-MIN_SIZE=$((500 * 1024 * 1024))
-
 if [[ "$ISO_SIZE" -gt "$MIN_SIZE" ]]; then
     echo "  OK: ${ISO_SIZE_HUMAN}"
 else
@@ -51,17 +49,13 @@ else
 fi
 
 echo "[3/5] Checking boot files (vmlinuz, initrd)..."
-BOOT_FILES_FOUND=false
 if isoinfo -i "$ISO_FILE" -l 2>/dev/null | grep -q "vmlinuz"; then
     echo "  OK: vmlinuz found"
-    BOOT_FILES_FOUND=true
 else
     echo "  WARNING: vmlinuz not found in ISO"
 fi
-
 if isoinfo -i "$ISO_FILE" -l 2>/dev/null | grep -q "initrd"; then
     echo "  OK: initrd found"
-    BOOT_FILES_FOUND=true
 else
     echo "  WARNING: initrd not found in ISO"
 fi
