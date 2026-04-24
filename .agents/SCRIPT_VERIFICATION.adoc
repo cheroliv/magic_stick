@@ -1,6 +1,6 @@
 = Script Verification — Magic Stick
 
-_Derniere mise a jour_ : Session 009 (24 avril 2026)
+_Derniere mise a jour_ : Session 010 (25 avril 2026)
 
 '''
 
@@ -9,7 +9,7 @@ _Derniere mise a jour_ : Session 009 (24 avril 2026)
 |===
 | Script | Syntaxe | Executable | Role | Derniere verification
 | scripts/build.sh | OK | OK | Orchestrateur hote, un seul docker run | Session 007
-| scripts/build-inner.sh | OK | OK | Script container (lb config + lb build + verify + test) — modifie session 009 (syslinux, casper) | Session 009
+| scripts/build-inner.sh | OK | OK | Script container (lb config + lb build + patching Ubuntu 24.04) | Session 010
 | scripts/flash.sh | OK | OK | Flash ISO sur cle USB | Session 007
 | scripts/update-system.sh | OK | OK | Partition A/B (setup-ab, update, status) | Session 006
 | scripts/install-software.sh | OK | OK | Post-install live (docker, ollama, sdkman) | Session 006
@@ -21,11 +21,23 @@ _Derniere mise a jour_ : Session 009 (24 avril 2026)
 
 |===
 | Hook | Syntaxe | Executable | Role | Derniere verification
-| 010-fix-apt-sources.chroot.root | OK | OK | Fix apt sources Ubuntu Noble | Session 006
-| 020-configure-live-system.chroot.root | OK | OK | Hostname, machine-id, locales, skel | Session 006
-| 030-setup-persistence.chroot.root | OK | OK | Casper.conf pour persistance | Session 006
-| 040-post-install-tweaks.chroot.root | OK | OK | NetworkManager, keyboard FR, services | Session 006
-| 050-setup-ubiquity.chroot.root | OK | OK | Raccourci Bureau + config ubiquity-dm | Session 007
+| 005-fix-syslinux-paths.chroot | OK | OK | Symlinks compat Ubuntu 24.04 + gfxboot bootlogo.tar.gz + rsvg-convert | Session 010
+| 010-fix-apt-sources.chroot | OK | OK | Fix apt sources Ubuntu Noble | Session 006
+| 020-configure-live-system.chroot | OK | OK | Hostname, machine-id, locales, skel | Session 006
+| 030-setup-persistence.chroot | OK | OK | Casper.conf pour persistance | Session 006
+| 040-post-install-tweaks.chroot | OK | OK | NetworkManager, keyboard FR, services | Session 006
+| 050-setup-ubiquity.chroot | OK | OK | Raccourci Bureau + config ubiquity-dm | Session 007
+|===
+
+== Correctifs live-build (patching dans build-inner.sh)
+
+|===
+| Correctif | Fichier patche | Description
+| syslinux paths | lb_binary_syslinux | binary/live/ → binary/casper/ pour vmlinuz et initrd
+| rsvg → rsvg-convert | lb_binary_syslinux | Ubuntu 24.04: rsvg-convert au lieu de rsvg + -o pour output
+| unmkinitramfs || true | lb_binary_disk | Tolerer erreurs cpio dans extraction initrd
+| syslinux templates | config/bootloaders/isolinux/ | Templates sans symlinks casses + isolinux.bin + vesamenu.c32 reels
+| bootlogo cpio | config/bootloaders/isolinux/ | Archive cpio vide pour eviter l'erreur gfxboot-theme-ubuntu
 |===
 
 == Tasks Gradle (groupe iso)
@@ -33,12 +45,12 @@ _Derniere mise a jour_ : Session 009 (24 avril 2026)
 |===
 | Task | Type | Description | Derniere verification
 | dockerBuild | Exec | Build image Docker builder | Session 007
-| isoBuild | Exec | Build ISO via Docker | Session 007
+| isoBuild | Exec | Build ISO via Docker | Session 010
 | isoPurge | Exec | Purge build state | Session 007
 | isoClean | Exec | Clean build artifacts | Session 007
 | isoRebuild | Default | Purge + Build | Session 007
-| isoVerify | Exec | Verify ISO (boot files, squashfs) | Session 007
-| isoTestBoot | Exec | Test boot QEMU (BIOS+UEFI) | Session 007
+| isoVerify | Exec | Verify ISO (boot files, squashfs) | Session 010
+| isoTestBoot | Exec | Test boot QEMU (BIOS+UEFI) | Session 010
 | isoTest | Default | Verify + Test boot | Session 007
 | isoPipeline | Default | Build + Verify + Test boot | Session 007
 | isoFlash | Exec | Flash USB (-Pdevice=/dev/sdX) | Session 007

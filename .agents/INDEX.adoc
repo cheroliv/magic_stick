@@ -1,8 +1,8 @@
 = Index des Sessions — Magic Stick
 
-_Derniere mise a jour_ : 2026-04-24  
-_Session en cours_ : 010 — Commit correctifs cpio, obtenir premiere ISO
-_Session terminee_ : 009 (Debug cpio premature end of archive)
+_Derniere mise a jour_ : 2026-04-25  
+_Session en cours_ : 011 — Tester ISO locale, ajouter UEFI, commencer EPIC 3
+_Session terminee_ : 010 (Premiere ISO generee avec succes)
 
 '''
 
@@ -100,7 +100,7 @@ _Lecon Session 3_ : L'agent a tente `sudo apt install gh` ce qui a pourri les de
 
 |===
 | # | Date | Type | Sujet | Fichier | Score
-| 009 | 2026-04-24 | fix | Debug cpio premature end of archive | `009-cpio-debug-iso-build.adoc` | 7.5/10
+| 010 | 2026-04-25 | fix + feature | Premiere ISO generee avec succes (10 correctifs Ubuntu 24.04) | `010-first-iso-generated.adoc` | 8.5/10
 | 007 | 2026-04-26 | feature | Pipeline Gradle ISO + Ubiquity + CI/CD | `007-pipeline-gradle-iso.adoc` | 8.5/10
 | 006 | 2026-04-24 | feature | Audit et correction configs ISO live-build | `006-audit-configs-live-build.adoc` | 8.0/10
 | 005 | 2026-04-24 | feature + fix | Tests A11y/UI + Corrections contraste/navbar | `005-a11y-ui-tests.adoc` | 8.5/10
@@ -116,7 +116,7 @@ _Lecon Session 3_ : L'agent a tente `sudo apt install gh` ce qui a pourri les de
 |===
 | EPIC | Progression | Score | Priorite
 | EPIC 1 : Initialisation projet | 100% | 8/10 | HAUTE
-| EPIC 2 : Build ISO Xubuntu de base | 65% | 7.5/10 | HAUTE
+| EPIC 2 : Build ISO Xubuntu de base | 85% | 8.5/10 | HAUTE
 | EPIC 3 : Partition A/B + Persistence | 0% | -/10 | HAUTE
 | EPIC 4 : Logiciels (Ollama, Docker, SDKMAN) | 0% | -/10 | MOYENNE
 | EPIC 5 : Personnalisation XFCE | 0% | -/10 | MOYENNE

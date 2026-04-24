@@ -348,3 +348,41 @@
 * Les fichiers includes.binary/ ecrasent les templates live-build sans avertissement
 * live-build Ubuntu necessite --initramfs casper et boot=casper
 * iso-hybrid necessite syslinux (isohybrid) dans le chroot
+
+
+== Session 010 — 25 avril 2026
+
+**Contexte** : Premiere ISO. Debug et correction de 10 erreurs de compatibilite Ubuntu 24.04 en 8 iterations CI/CD.
+
+=== Taches realisees
+
+* [OK] Commit + push des correctifs session 009
+* [OK] Corriger symlinks isolinux.bin/vesamenu.c32 casses Ubuntu 24.04 (hook 005 + templates custom dans build-inner.sh)
+* [OK] Renommer hooks .chroot.root → .chroot (live-build ne matche que *.chroot)
+* [OK] Corriger gfxboot-theme-ubuntu absent (bootlogo.tar.gz vide dans hook chroot)
+* [OK] Corriger rsvg → rsvg-convert (python3 patch de lb_binary_syslinux)
+* [OK] Corriger chemins casper (binary/live/ → binary/casper/ dans lb_binary_syslinux)
+* [OK] Corriger cpio premature end of archive (patch lb_binary_disk avec || true)
+* [OK] Corriger sed pattern complexe (python3 temp file pour patching)
+* [OK] Corriger isohybrid not found (syslinux-utils dans live.list.chroot)
+* [OK] Corriger xz not found (xz-utils dans Dockerfile)
+* [OK] Corriger nom ISO (binary.hybrid.iso au lieu de live-image-*.iso)
+* [OK] Premiere ISO generee avec succes en CI/CD
+
+=== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| Runs CI/CD | 8 |
+| Erreurs corrigees | 10 |
+| Premiere ISO generee | OUI |
+| Build/Verify/Test vert | OUI |
+
+=== Lecons apprises
+
+* live-build sur Ubuntu 24.04 necessite de nombreux patches : syslinux paths, rsvg-convert, casper paths, gfxboot-theme
+* Les hooks live-build doivent avoir l'extension .chroot (pas .chroot.root)
+* Le patching de scripts live-build par python3 est plus fiable que sed pour les patterns complexes (echappement \${_TARGET})
+* isohybrid est dans syslinux-utils, pas syslinux
+* lb_binary_iso nomme le fichier binary.hybrid.iso pour --binary-images iso-hybrid
+* ISO hybride BIOS bootable generee — UEFI boot reste a ajouter

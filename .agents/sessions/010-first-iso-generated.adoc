@@ -1,0 +1,52 @@
+= Session 010 — Premiere ISO generee avec succes
+
+**Date** : 25 avril 2026
+**Type** : fix + feature
+**Score** : 8.5/10
+
+== Contexte
+
+Suite session 009. Cause racine cpio identifiee, correctifs a pousser et iterer jusqu'a build vert.
+
+== Taches realisees
+
+* [OK] Commit + push des correctifs session 009 (syslinux, casper, Dockerfile)
+* [OK] Debugger et corriger erreurs CI/CD (8 iterations)
+** isolinux.bin/vesamenu.c32 : symlinks casses Ubuntu 24.04 → hook chroot + templates custom
+** Hooks .chroot.root jamais executes → renommes en .chroot
+** gfxboot-theme-ubuntu absent → bootlogo.tar.gz vide dans hook chroot
+** rsvg → rsvg-convert sur Ubuntu 24.04 → patch python3 de lb_binary_syslinux
+** vmlinuz/initrd dans binary/live/ au lieu de binary/casper/ → patch sed des chemins
+** cpio: premature end of archive dans unmkinitramfs → patch lb_binary_disk avec || true
+** sed pattern failed sur \${_TARGET} → python3 temp file pour patching
+** isohybrid not found → syslinux-utils dans les packages du chroot
+** xz not found → xz-utils dans le Dockerfile
+** ISO nommee binary.hybrid.iso → fix du find dans build-inner.sh
+* [OK] Obtenir la premiere ISO generee avec succes en CI/CD
+* [OK] Build, Verify et Test boot tous verts
+
+== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| Runs CI/CD | 8 |
+| Erreurs corrigees | 10 |
+| Premiere ISO generee | OUI |
+| CI/CD vert | OUI |
+| Commits pousses | 8 |
+
+== Lecons apprises
+
+* live-build sur Ubuntu 24.04 necessite de nombreux patches : syslinux paths, rsvg-convert, casper paths, gfxboot-theme
+* Les hooks live-build doivent avoir l'extension .chroot (pas .chroot.root)
+* Le patching de scripts live-build par python3 est plus fiable que sed pour les patterns complexes
+* isohybrid est dans syslinux-utils, pas syslinux
+* lb_binary_iso nomme le fichier binary.hybrid.iso pour --binary-images iso-hybrid
+* ISO hybride BIOS bootable generee avec succes — UEFI boot sera ajoute dans une prochaine session
+
+== Prochaine session
+
+* Telecharger l'ISO artifact et tester en local avec QEMU
+* Ajouter le support UEFI (hook binaire 999-add-efi-support.binary)
+* Tester l'ISO sur une vraie cle USB
+* Commencer l'EPIC 3 : Partition A/B + Persistence

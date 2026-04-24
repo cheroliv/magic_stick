@@ -1,68 +1,63 @@
-= Prompt de reprise -- Session 010
+= Prompt de reprise -- Session 011
 
 __
 **EPIC** : Build ISO Xubuntu bootable + installable
-**Statut** : Session 009 terminee — Cause racine cpio identifiee, correctifs appliques (non pouses)
-**Mission** : Pousser les correctifs, obtenir la premiere ISO
+**Statut** : Session 010 terminee — Premiere ISO generee avec succes en CI/CD
+**Mission** : Tester l'ISO en local, ajouter support UEFI, commencer EPIC 3
 __
 
 '''
 
-== Session 009 -- Resume
+== Session 010 -- Resume
 
-**Date** : 2026-04-24
-**Resultat** : OK — Cause racine identifiee et corrigee, en attente de push
+**Date** : 25 avril 2026
+**Resultat** : OK — Premiere ISO generee avec succes, 10 erreurs corrigees en 8 iterations CI/CD
 
-**Cause racine cpio premature end of archive** :
-* `--bootloader grub-efi` non gere par les scripts `lb_binary_*` de live-build
-* `gfxboot-theme-ubuntu` absent d'Ubuntu 24.04 → bootlogo cpio vide → erreur
-* `boot=live` au lieu de `boot=casper` (incompatibilite)
+**Erreurs corrigees** :
+* isolinux.bin/vesamenu.c32 symlinks casses Ubuntu 24.04 (hook chroot + templates custom)
+* Hooks .chroot.root jamais executes (renames en .chroot)
+* gfxboot-theme-ubuntu absent (bootlogo.tar.gz vide)
+* rsvg → rsvg-convert (python3 patch de lb_binary_syslinux)
+* vmlinuz/initrd paths casper (sed patch des chemins)
+* cpio premature end of archive (patch lb_binary_disk)
+* sed pattern sur \${_TARGET} (python3 temp file)
+* isohybrid not found (syslinux-utils dans chroot packages)
+* xz not found (xz-utils dans Dockerfile)
+* ISO nommee binary.hybrid.iso (fix du find)
 
-**Correctifs appliques** (en local, non commit) :
-* `--bootloader grub-efi` → `--bootloader syslinux`
-* Ajout `--syslinux-theme live-build` + `--initramfs casper`
-* `boot=live config` → `boot=casper`
-* `syslinux` + `grub-efi-amd64-signed` dans Dockerfile
-* Suppression includes.binary/ custom (isolinux.cfg, grub.cfg)
-
-**Archive** : `.agents/sessions/009-cpio-debug-iso-build.adoc`
+**Archive** : `.agents/sessions/010-first-iso-generated.adoc`
 
 '''
 
-== Session 010 -- Priorites
+== Session 011 -- Priorites
 
-**Mission** : Obtenir la premiere ISO generee avec succes
+**Mission** : Valider l'ISO en local, ajouter UEFI, commencer partition A/B
 
-=== 1. Commit + push les correctifs
+=== 1. Telecharger et tester l'ISO en local
 
-* Commit les 3 fichiers modifies (build-inner.sh, Dockerfile, includes.binary/)
-* Pousser sur main → declencher CI/CD
-* Watch le run GitHub Actions
+* Telecharger l'artifact ISO depuis GitHub Actions
+* Tester avec QEMU BIOS (deja dans le Dockerfile)
+* Verifier le boot menu et les options
 
-=== 2. Iterer CI/CD jusqu'a build vert
-
-* Si echec : analyser les logs (`gh run view <id> --log-failed`)
-* Corriger, commit, push, watch
-* Objectif : ISO generee + verify OK
-
-=== 3. Si build passe
-
-* Telecharger l'ISO artifact
-* Tester en local avec QEMU
-* Celebrer
-
-=== 4. Ajouter support UEFI (apres premiere ISO)
+=== 2. Ajouter support UEFI (apres premiere ISO validee)
 
 * Creer hook binaire `999-add-efi-support.binary`
 * Utiliser grub-mkimage pour creer l'image EFI
 * Ajouter EFI image a l'ISO via xorriso
+* Tester boot UEFI avec QEMU
+
+=== 3. Commencer EPIC 3 : Partition A/B + Persistence
+
+* Lire AB_PARTITION_ESSENTIALS.adoc et AB_PARTITION_REFERENCE.adoc
+* Creer le script setup-ab.sh (partitionnement A/B)
+* Tester la persistence (casper-rw/overlay)
 
 === Criteres d'Acceptation
 
-* [ ] `./gradlew isoBuild` genere l'ISO avec succes en CI/CD
-* [ ] `./gradlew isoVerify` OK en CI/CD
-* [ ] `./gradlew isoTestBoot` OK en CI/CD
-* [ ] CI/CD GitHub Actions vert
+* [ ] ISO bootable en BIOS et UEFI
+* [ ] QEMU test boot OK
+* [ ] Setup A/B partition fonctionnel
+* [ ] Persistence casper-rw validee
 
 '''
 

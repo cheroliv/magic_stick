@@ -29,3 +29,7 @@ if [ ! -f /usr/share/gfxboot-theme-ubuntu/bootlogo.tar.gz ]; then
     tar -czf /usr/share/gfxboot-theme-ubuntu/bootlogo.tar.gz -C "${_BOOTLOGO_TMPDIR}" . 2>/dev/null || true
     rm -rf "${_BOOTLOGO_TMPDIR}"
 fi
+
+if [ -f /usr/bin/rsvg-convert ] && [ ! -e /usr/bin/rsvg ]; then
+    ln -s /usr/bin/rsvg-convert /usr/bin/rsvg
+fi
