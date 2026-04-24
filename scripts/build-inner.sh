@@ -87,24 +87,29 @@ if [ -f "${SYSLINUX_SCRIPT}" ]; then
     sed -i 's|binary/live/initrd.img|binary/casper/initrd.img|g' "${SYSLINUX_SCRIPT}"
     sed -i 's|/live/vmlinuz|/casper/vmlinuz|g' "${SYSLINUX_SCRIPT}"
     sed -i 's|/live/initrd.img|/casper/initrd.img|g' "${SYSLINUX_SCRIPT}"
-    python3 -c "
-with open('${SYSLINUX_SCRIPT}', 'r') as f:
+    _PY_PATCH=$(mktemp)
+    cat > "${_PY_PATCH}" << 'PYEOF'
+import sys
+script = sys.argv[1]
+with open(script, 'r') as f:
     c = f.read()
 c = c.replace(
     'rsvg --format png --height 480 --width 640 splash.svg splash.png',
     'rsvg-convert --format png --height 480 --width 640 -o splash.png splash.svg'
 )
 c = c.replace(
-    'rsvg --format png --height 480 --width 640 \"\${_TARGET}/splash.svg\" \"\${_TARGET}/splash.png\"',
-    'rsvg-convert --format png --height 480 --width 640 -o \"\${_TARGET}/splash.png\" \"\${_TARGET}/splash.svg\"'
+    'rsvg --format png --height 480 --width 640 "${_TARGET}/splash.svg" "${_TARGET}/splash.png"',
+    'rsvg-convert --format png --height 480 --width 640 -o "${_TARGET}/splash.png" "${_TARGET}/splash.svg"'
 )
 c = c.replace(
     'Check_package chroot/usr/bin/rsvg librsvg2-bin',
     'Check_package chroot/usr/bin/rsvg-convert librsvg2-bin'
 )
-with open('${SYSLINUX_SCRIPT}', 'w') as f:
+with open(script, 'w') as f:
     f.write(c)
-"
+PYEOF
+    python3 "${_PY_PATCH}" "${SYSLINUX_SCRIPT}"
+    rm -f "${_PY_PATCH}"
 fi
 
 DISK_SCRIPT="/usr/lib/live/build/lb_binary_disk"
