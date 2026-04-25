@@ -1,0 +1,59 @@
+= Session 011 — Test QEMU : blocage initramfs
+
+_Date_ : 25 avril 2026
+_Type_ : debug
+_Score_ : 4/10 (pas de resolution)
+
+== Contexte
+
+Session 010 avait generee la premiere ISO avec succes en CI/CD. Mission 011 : tester l'ISO en local avec QEMU, ajouter UEFI, commencer EPIC 3.
+
+== Taches realisees
+
+* [OK] Telecharger l'ISO depuis GitHub Actions artifacts
+* [EN COURS] Tester boot QEMU BIOS — blocage sur initramfs
+
+== Probleme rencontre
+
+=== Symptome
+
+QEMU boote le kernel mais s'arrete sur le prompt `(initramfs)` (busybox) sans message d'erreur clair. L'utilisateur a du faire un shutdown force car impossible de recuperer la main.
+
+=== Cause probable (non confirmee)
+
+Le prompt `(initramfs)` isole sans message d'erreur = casper ne trouve pas `filesystem.squashfs` dans le peripherique de boot. Hypotheses :
+
+1. **Chemin vmlinuz/initrd** : les paths dans la config isolinux/GRUB pointent vers le mauvais repertoire (binary/live/ vs binary/casper/)
+2. **Module pilote absent** : l'initramfs n'a pas les pilotes pour le peripherique virtuel QEMU (VirtIO, AHCI)
+3. **Label de volume** : casper cherche un label ou UUID qui ne correspond pas a l'ISO emulee par QEMU
+4. **Option de boot manquante** : `boot=casper` ou `find_iso` absent des parametres kernel
+
+=== Piste de diagnostic pour la prochaine session
+
+* Relancer QEMU avec `-serial stdio` ou `-serial file:serial.log` pour capturer les messages kernel
+* Ajouter `break=premount` ou `break=bottom` dans les parametres kernel pour avoir un shell initramfs avant/apres le montage
+* Verifier que `filesystem.squashfs` est bien present dans l'ISO (`isoinfo -l -i binary.hybrid.iso | grep squashfs`)
+* Verifier les parametres kernel dans isolinux.cfg et grub.cfg
+* Tester avec `qemu-system-x86_64 -cdrom binary.hybrid.iso` au lieu de `-drive`
+
+== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| ISO telechargee | OUI |
+| Boot QEMU reussi | NON |
+| Cause identifiee | NON |
+| Correctif applique | NON |
+
+== Lecons apprises
+
+* Le prompt `(initramfs)` sans message = casper ne trouve pas le squashfs, pas un crash kernel
+* QEMU sans `-serial` rend le debug difficile (pas d'acces aux messages kernel)
+* Le shutdown force est la seule sortie propre quand QEMU est bloque sur busybox
+* Il faut capturer les logs serial AVANT de tester le boot
+
+== Prochaine session
+
+* Diagnostiquer le blocage initramfs (logs serial, verification squashfs, parametres kernel)
+* Corriger et retester
+* Puis ajouter UEFI + commencer EPIC 3

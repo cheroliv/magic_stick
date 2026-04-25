@@ -1,63 +1,55 @@
-= Prompt de reprise -- Session 011
+= Prompt de reprise -- Session 012
 
 __
 **EPIC** : Build ISO Xubuntu bootable + installable
-**Statut** : Session 010 terminee — Premiere ISO generee avec succes en CI/CD
-**Mission** : Tester l'ISO en local, ajouter support UEFI, commencer EPIC 3
+**Statut** : Session 011 interrompue — QEMU bloque sur initramfs
+**Mission** : Diagnostiquer et corriger le blocage initramfs, puis UEFI + EPIC 3
 __
 
 '''
 
-== Session 010 -- Resume
+== Session 011 -- Resume
 
 **Date** : 25 avril 2026
-**Resultat** : OK — Premiere ISO generee avec succes, 10 erreurs corrigees en 8 iterations CI/CD
+**Resultat** : Bloque — QEMU boote le kernel mais s'arrete sur `(initramfs)` sans message d'erreur
 
-**Erreurs corrigees** :
-* isolinux.bin/vesamenu.c32 symlinks casses Ubuntu 24.04 (hook chroot + templates custom)
-* Hooks .chroot.root jamais executes (renames en .chroot)
-* gfxboot-theme-ubuntu absent (bootlogo.tar.gz vide)
-* rsvg → rsvg-convert (python3 patch de lb_binary_syslinux)
-* vmlinuz/initrd paths casper (sed patch des chemins)
-* cpio premature end of archive (patch lb_binary_disk)
-* sed pattern sur \${_TARGET} (python3 temp file)
-* isohybrid not found (syslinux-utils dans chroot packages)
-* xz not found (xz-utils dans Dockerfile)
-* ISO nommee binary.hybrid.iso (fix du find)
+**Probleme** : casper ne trouve probablement pas `filesystem.squashfs` dans le peripherique de boot. Aucun correctif applique.
 
-**Archive** : `.agents/sessions/010-first-iso-generated.adoc`
+**Archive** : `.agents/sessions/011-qemu-initramfs-debug.adoc`
 
 '''
 
-== Session 011 -- Priorites
+== Session 012 -- Priorites
 
-**Mission** : Valider l'ISO en local, ajouter UEFI, commencer partition A/B
+**Mission** : Diagnostiquer le blocage initramfs, corriger, puis avancer UEFI et EPIC 3
 
-=== 1. Telecharger et tester l'ISO en local
+=== 1. Diagnostiquer le blocage initramfs (PRIORITE MAXIMALE)
 
-* Telecharger l'artifact ISO depuis GitHub Actions
-* Tester avec QEMU BIOS (deja dans le Dockerfile)
-* Verifier le boot menu et les options
+* Relancer QEMU avec `-serial stdio` pour capturer les messages kernel
+* Ajouter `break=premount` dans les parametres kernel pour shell initramfs
+* Verifier que `filesystem.squashfs` est dans l'ISO : `isoinfo -l -i binary.hybrid.iso | grep squashfs`
+* Verifiez les parametres kernel dans isolinux.cfg (boot=casper, find_iso, etc.)
+* Tester avec `-cdrom` au lieu de `-drive` pour l'emulation CD
 
-=== 2. Ajouter support UEFI (apres premiere ISO validee)
+=== 2. Apres correction : Ajouter support UEFI
 
-* Creer hook binaire `999-add-efi-support.binary`
+* Creer hook `999-add-efi-support.binary`
 * Utiliser grub-mkimage pour creer l'image EFI
-* Ajouter EFI image a l'ISO via xorriso
+* Ajouter EFI a l'ISO via xorriso
 * Tester boot UEFI avec QEMU
 
 === 3. Commencer EPIC 3 : Partition A/B + Persistence
 
-* Lire AB_PARTITION_ESSENTIALS.adoc et AB_PARTITION_REFERENCE.adoc
-* Creer le script setup-ab.sh (partitionnement A/B)
+* Lire `AB_PARTITION_ESSENTIALS.adoc` et `AB_PARTITION_REFERENCE.adoc`
+* Creer le script `setup-ab.sh`
 * Tester la persistence (casper-rw/overlay)
 
 === Criteres d'Acceptation
 
-* [ ] ISO bootable en BIOS et UEFI
-* [ ] QEMU test boot OK
+* [ ] ISO bootable en BIOS (QEMU OK)
+* [ ] ISO bootable en UEFI
 * [ ] Setup A/B partition fonctionnel
-* [ ] Persistence casper-rw validee
+* [ ] Persistence validee
 
 '''
 

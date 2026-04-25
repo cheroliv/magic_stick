@@ -386,3 +386,28 @@
 * isohybrid est dans syslinux-utils, pas syslinux
 * lb_binary_iso nomme le fichier binary.hybrid.iso pour --binary-images iso-hybrid
 * ISO hybride BIOS bootable generee — UEFI boot reste a ajouter
+
+
+== Session 011 — 25 avril 2026
+
+**Contexte** : Test de l'ISO generee en session 010 avec QEMU. Blocage sur initramfs.
+
+=== Taches realisees
+
+* [OK] Telecharger l'ISO depuis GitHub Actions artifacts
+* [EN COURS] Tester boot QEMU BIOS — bloque sur (initramfs)
+
+=== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| ISO testee | OUI |
+| Boot reussi | NON |
+| Cause identifiee | NON |
+
+=== Lecons apprises
+
+* Le prompt `(initramfs)` sans message = casper ne trouve pas `filesystem.squashfs`
+* QEMU sans `-serial` rend le debug difficile (pas d'acces aux messages kernel)
+* Il faut capturer les logs serial AVANT de tester le boot
+* Shutdown force est la seule sortie propre quand QEMU bloque sur busybox
