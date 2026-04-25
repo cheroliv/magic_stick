@@ -26,6 +26,7 @@ if [[ ! -f "${BUILD_DIR}/config/common" ]]; then
         --syslinux-theme live-build \
         --mode ubuntu \
         --initramfs casper \
+        --initsystem systemd \
         --parent-distribution noble \
         --parent-mirror-bootstrap http://archive.ubuntu.com/ubuntu \
         --parent-mirror-binary http://archive.ubuntu.com/ubuntu \
@@ -81,6 +82,16 @@ for _mod in ldlinux.c32 libcom32.c32 libutil.c32 menu.c32 vesamenu.c32; do
 done
 
 _TMPDIR=$(mktemp -d) && pushd "${_TMPDIR}" > /dev/null && touch .bootlogo_marker && find . | cpio --quiet -o > "${BOOTLOADER_DIR}/bootlogo" 2>/dev/null; popd > /dev/null; rm -rf "${_TMPDIR}"
+
+echo "Patching syslinux boot menu timeout and live.cfg template..."
+
+if [ -f "${BOOTLOADER_DIR}/isolinux.cfg" ]; then
+    sed -i 's/^timeout 0/timeout 50/' "${BOOTLOADER_DIR}/isolinux.cfg"
+fi
+
+if [ -f "${BOOTLOADER_DIR}/live.cfg.in" ]; then
+    sed -i 's|boot=live config ||g' "${BOOTLOADER_DIR}/live.cfg.in"
+fi
 
 echo "Patching lb_binary_syslinux for casper and Ubuntu 24.04 compatibility..."
 SYSLINUX_SCRIPT="/usr/lib/live/build/lb_binary_syslinux"
@@ -149,42 +160,6 @@ content = content.replace(old_cmd_line, new_cmd_line)
 content = content.replace('genisoimage generic options', 'xorriso (mkisofs mode) generic options')
 content = content.replace('genisoimage live-build specific options', 'xorriso (mkisofs mode) live-build specific options')
 content = content.replace('genisoimage architecture specific options', 'xorriso (mkisofs mode) architecture specific options')
-
-with open(script, 'w') as f:
-    f.write(content)
-ISOEOF
-    python3 "${_ISO_PATCH}" "${ISO_SCRIPT}"
-    rm -f "${_ISO_PATCH}"
-fi
-    xorriso -as mkisofs ${GENISOIMAGE_OPTIONS} ${GENISOIMAGE_OPTIONS_EXTRA} \\
-        --efi-boot EFI/BOOT/BOOTX64.EFI \\
-        -isohybrid-gpt-basdat -isohybrid-mbr "${MBR}" \\
-        -o ${IMAGE} binary
-else
-    xorriso -as mkisofs ${GENISOIMAGE_OPTIONS} ${GENISOIMAGE_OPTIONS_EXTRA} -o ${IMAGE} binary
-fi'''
-
-content = content.replace(old_isogen, new_isogen)
-
-# Replace genisoimage Check_package with xorriso
-content = content.replace(
-    'Check_package chroot/usr/bin/genisoimage genisoimage',
-    'Check_package chroot/usr/bin/xorriso xorriso'
-)
-
-# Replace genisoimage command in variable assignment (GENISOIMAGE_OPTIONS)
-# This is for comments/descriptions, keep them readable
-content = content.replace('genisoimage generic options', 'xorriso (mkisofs mode) generic options')
-content = content.replace('genisoimage live-build specific options', 'xorriso (mkisofs mode) live-build specific options')
-content = content.replace('genisoimage architecture specific options', 'xorriso (mkisofs mode) architecture specific options')
-
-# Remove standalone isohybrid call (now handled by xorriso -isohybrid-mbr)
-old_isohybrid = '''cat >> binary.sh << EOF
-
-isohybrid ${ISOHYBRID_OPTIONS} ${IMAGE}
-EOF'''
-
-content = content.replace(old_isohybrid, '# isohybrid handled by xorriso -isohybrid-mbr above')
 
 with open(script, 'w') as f:
     f.write(content)

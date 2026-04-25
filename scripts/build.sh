@@ -93,7 +93,7 @@ check_prerequisites() {
 mkdir -p "${BUILD_DIR}"
 
 echo "Launching build in Docker container..."
-docker run --rm \
+docker run --rm --privileged \
     "${DOCKER_OPTS[@]}" \
     -v "${PROJECT_DIR}:/magic_stick" \
     -e MAGIC_STICK_VERSION="${MAGIC_STICK_VERSION}" \
