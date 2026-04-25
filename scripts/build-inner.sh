@@ -125,18 +125,37 @@ script = sys.argv[1]
 with open(script, 'r') as f:
     content = f.read()
 
-# Replace only the command invocation, not package names or comments
-# The genisoimage command line in binary.sh generation
-old_isogen = 'genisoimage ${GENISOIMAGE_OPTIONS} ${GENISOIMAGE_OPTIONS_EXTRA} -o ${IMAGE} binary'
+# Replace genisoimage with xorriso -as mkisofs (only the binary name, not Check_package)
+content = content.replace(
+    'Check_package chroot/usr/bin/genisoimage genisoimage',
+    'Check_package chroot/usr/bin/xorriso xorriso'
+)
 
-new_isogen = '''if [ -d "binary/EFI/BOOT" ] && [ -f "binary/EFI/BOOT/BOOTX64.EFI" ]; then
-    if [ -f "/usr/lib/ISOLINUX/isohdpfx.bin" ]; then
-        MBR="/usr/lib/ISOLINUX/isohdpfx.bin"
-    elif [ -f "/usr/lib/syslinux/mbr/isohdpfx.bin" ]; then
-        MBR="/usr/lib/syslinux/mbr/isohdpfx.bin"
-    else
-        MBR="/usr/lib/syslinux/mbr/mbr.bin"
-    fi
+# Replace the genisoimage command line in binary.sh generation
+# This is the line that gets appended to binary.sh via cat >>
+old_cmd_line = 'genisoimage ${GENISOIMAGE_OPTIONS} ${GENISOIMAGE_OPTIONS_EXTRA} -o ${IMAGE} binary'
+
+new_cmd_line = '''if [ -d "binary/EFI/BOOT" ] && [ -f "binary/EFI/BOOT/BOOTX64.EFI" ]; then
+    xorriso -as mkisofs ${GENISOIMAGE_OPTIONS} ${GENISOIMAGE_OPTIONS_EXTRA} \\
+        --efi-boot EFI/BOOT/BOOTX64.EFI \\
+        -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \\
+        -o ${IMAGE} binary
+else
+    xorriso -as mkisofs ${GENISOIMAGE_OPTIONS} ${GENISOIMAGE_OPTIONS_EXTRA} -o ${IMAGE} binary
+fi'''
+
+content = content.replace(old_cmd_line, new_cmd_line)
+
+content = content.replace('genisoimage generic options', 'xorriso (mkisofs mode) generic options')
+content = content.replace('genisoimage live-build specific options', 'xorriso (mkisofs mode) live-build specific options')
+content = content.replace('genisoimage architecture specific options', 'xorriso (mkisofs mode) architecture specific options')
+
+with open(script, 'w') as f:
+    f.write(content)
+ISOEOF
+    python3 "${_ISO_PATCH}" "${ISO_SCRIPT}"
+    rm -f "${_ISO_PATCH}"
+fi
     xorriso -as mkisofs ${GENISOIMAGE_OPTIONS} ${GENISOIMAGE_OPTIONS_EXTRA} \\
         --efi-boot EFI/BOOT/BOOTX64.EFI \\
         -isohybrid-gpt-basdat -isohybrid-mbr "${MBR}" \\
