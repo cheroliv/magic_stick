@@ -1,6 +1,6 @@
 = Script Verification — Magic Stick
 
-_Derniere mise a jour_ : Session 018 (26 avril 2026) — Dockerfile VNC, test-boot.sh --vnc, test-ab-partition.sh, update-system.sh --yes
+_Derniere mise a jour_ : Session 019 (26 avril 2026) — Dockerfile WORKDIR + CMD bash, validation test-boot.sh --vnc, test-ab-partition.sh syntaxe
 
 '''
 

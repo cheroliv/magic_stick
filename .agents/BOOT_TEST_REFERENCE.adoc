@@ -1,7 +1,7 @@
 = Boot Test Reference — Magic Stick
 
-**Version** : 1.0
-**Derniere mise a jour** : 2026-04-26
+**Version** : 1.1
+**Derniere mise a jour** : 26 avril 2026 (Session 019)
 **Type** : LAZY (charge sur demande uniquement)
 
 '''
@@ -34,6 +34,33 @@ Tester le boot de l'ISO Magic Stick (BIOS + UEFI) sans disposer de PC physique n
 * **BIOS + UEFI** : les deux modes testables avec les bons flags QEMU
 
 === Mode operatoire
+
+==== 0. Quick Start (Docker + noVNC recommande)
+
+Le mode le plus simple et complet, directement depuis le repo :
+
+[source,bash]
+----
+# Build ou utiliser l'image existante
+./gradlew dockerBuild
+
+# Lancer le test VNC + noVNC
+./gradlew isoTestVNC
+
+# Puis ouvrir dans le navigateur :
+# http://localhost:6080/vnc.html
+----
+
+Ou manuellement :
+[source,bash]
+----
+docker run --rm --privileged \
+  -p 5900:5900 -p 6080:6080 \
+  -v "$(pwd):/magic_stick" \
+  magic_stick:builder \
+  /magic_stick/scripts/test-boot.sh --vnc \
+  /magic_stick/build/magic_stick_0.1.0.iso 300
+----
 
 ==== 1. Verifier les prerequis
 

@@ -61,8 +61,13 @@ __
 * [x] Creer le schema de partitionnement (GPT : A + B + persistence) — script test-ab-partition.sh
 * [x] Configurer GRUB pour le boot A/B — update-system.sh generate_grub_cfg + install_grub
 * [~] Implementer le script update-system.sh — complet avec flag --yes
-* [ ] Tester le rollback (boot sur ancienne partition) — en CI/CD
+* [x] Tester le rollback (boot sur ancienne partition) — en CI/CD (test-ab-partition.sh test_loopback)
 * [ ] Valider que les donnees persistence survivent a une mise a jour — en CI/CD
+
+=== EPIC 4 : Logiciels (Ollama, Docker, SDKMAN)
+
+**Statut** : A FAIRE
+**Priorite** : MOYENNE
 
 === EPIC 4 : Logiciels (Ollama, Docker, SDKMAN)
 
