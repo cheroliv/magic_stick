@@ -1,0 +1,311 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Magic Stick A/B Partition Test Suite
+# Simule une cle USB A/B avec une image disque (loop device)
+# Utilisable SANS sudo pour les tests non-root, ou AVEC sudo pour les tests full-stack
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+BUILD_DIR="${PROJECT_DIR}/build"
+TEST_DISK="${BUILD_DIR}/test-usb.img"
+DISK_SIZE_GB=3
+DISK_SIZE=$((DISK_SIZE_GB * 1024 * 1024 * 1024))
+
+SYSTEM_A_LABEL="system_a"
+SYSTEM_B_LABEL="system_b"
+PERSISTENCE_LABEL="persistence"
+
+ISO_FILE="${1:-}"
+die() { echo "ERROR: $*" >&2; exit 1; }
+info() { echo "==> $*"; }
+pass() { echo "  [OK] $*"; }
+fail() { echo "  [FAIL] $*" >&2; return 1; }
+warn() { echo "  [WARN] $*" >&2; }
+
+cleanup_loop() {
+    local loopdev="${1:-}"
+    [[ -z "$loopdev" ]] && return 0
+    info "Cleaning up loop device ${loopdev}..."
+    for i in 1 2 3; do
+        umount "${loopdev}p${i}" 2>/dev/null || true
+    done
+    losetup -d "$loopdev" 2>/dev/null || true
+}
+
+cmd_test_partition() {
+    echo "=== TEST: Partition A/B layout ==="
+    echo ""
+
+    if [[ "$(id -u)" -ne 0 ]]; then
+        info "Running in non-root mode (partition tests limited)"
+        [[ -f "$TEST_DISK" ]] && pass "Test disk image exists: ${TEST_DISK}" || die "No test disk. Run 'create-disk' with sudo first."
+        return 0
+    fi
+
+    info "Root mode: full partition test"
+
+    # Find a free loop device
+    LOOP_DEV=$(losetup -f --show "$TEST_DISK" 2>/dev/null || true)
+    if [[ -z "$LOOP_DEV" ]]; then
+        # Retry with show before setup
+        LOOP_DEV=$(losetup -f 2>/dev/null || true)
+        [[ -n "$LOOP_DEV" ]] || die "No free loop device available"
+        losetup "$LOOP_DEV" "$TEST_DISK" 2>/dev/null || die "Cannot setup loop device for ${TEST_DISK}"
+    fi
+    info "Loop device: ${LOOP_DEV}"
+
+    trap 'cleanup_loop "${LOOP_DEV}"' EXIT
+
+    echo ""
+    echo "Partition table:"
+    parted -s "$LOOP_DEV" print 2>/dev/null | head -20 || fail "Cannot read partition table"
+
+    echo ""
+    echo "Partition details:"
+    for i in 1 2 3; do
+        local part="${LOOP_DEV}p${i}"
+        if [[ -b "$part" ]]; then
+            local label fstype size
+            label=$(blkid -s LABEL -o value "$part" 2>/dev/null || echo "N/A")
+            fstype=$(blkid -s TYPE -o value "$part" 2>/dev/null || echo "N/A")
+            size=$(lsblk -n -o SIZE "$part" 2>/dev/null || echo "N/A")
+            echo "  ${part}: label=${label} fstype=${fstype} size=${size}"
+            case "$i" in
+                1) [[ "$label" == "$SYSTEM_A_LABEL" ]] && pass "Partition 1 label = ${SYSTEM_A_LABEL}" || fail "Partition 1 label mismatch: '${label}'" ;;
+                2) [[ "$label" == "$SYSTEM_B_LABEL" ]] && pass "Partition 2 label = ${SYSTEM_B_LABEL}" || fail "Partition 2 label mismatch: '${label}'" ;;
+                3) [[ "$label" == "$PERSISTENCE_LABEL" ]] && pass "Partition 3 label = ${PERSISTENCE_LABEL}" || fail "Partition 3 label mismatch: '${label}'" ;;
+            esac
+        else
+            fail "Partition ${part} not found"
+        fi
+    done
+
+    echo ""
+    echo "Checking persistence.conf..."
+    local mount_point
+    mount_point=$(mktemp -d)
+    if mount "${LOOP_DEV}p3" "$mount_point" 2>/dev/null; then
+        if [[ -f "${mount_point}/persistence.conf" ]]; then
+            pass "persistence.conf found"
+            cat "${mount_point}/persistence.conf"
+        else
+            warn "persistence.conf not found"
+        fi
+        umount "$mount_point" 2>/dev/null || true
+    else
+        warn "Cannot mount persistence partition"
+    fi
+    rmdir "$mount_point" 2>/dev/null || true
+
+    echo ""
+    echo "Checking GRUB installation..."
+    mount_point=$(mktemp -d)
+    if mount "${LOOP_DEV}p1" "$mount_point" 2>/dev/null; then
+        if [[ -f "${mount_point}/boot/grub/grub.cfg" ]]; then
+            pass "grub.cfg found"
+            head -20 "${mount_point}/boot/grub/grub.cfg"
+        else
+            warn "grub.cfg not found"
+        fi
+
+        if [[ -f "${mount_point}/boot/grub/i386-pc/boot.img" ]]; then
+            pass "GRUB BIOS boot.img present"
+        else
+            warn "GRUB BIOS boot.img not found"
+        fi
+
+        umount "$mount_point" 2>/dev/null || true
+    else
+        warn "Cannot mount system_a partition"
+    fi
+    rmdir "$mount_point" 2>/dev/null || true
+
+    echo ""
+    echo "=== Partition test complete ==="
+}
+
+cmd_create_disk() {
+    if [[ "$(id -u)" -ne 0 ]]; then
+        die "This command must be run as root (use sudo)"
+    fi
+
+    mkdir -p "$BUILD_DIR"
+
+    if [[ -f "$TEST_DISK" ]]; then
+        info "Removing existing test disk..."
+        rm -f "$TEST_DISK"
+    fi
+
+    info "Creating ${DISK_SIZE_GB}GB test disk image..."
+    dd if=/dev/zero of="$TEST_DISK" bs=1M count=$((DISK_SIZE_GB * 1024)) status=progress conv=sparse
+
+    info "Creating GPT partition table..."
+    parted -s "$TEST_DISK" mklabel gpt
+
+    info "Creating partition 1: ${SYSTEM_A_LABEL} (1 GB)..."
+    parted -s "$TEST_DISK" mkpart "${SYSTEM_A_LABEL}" ext4 1MiB 1025MiB
+    parted -s "$TEST_DISK" set 1 boot on
+
+    info "Creating partition 2: ${SYSTEM_B_LABEL} (1 GB)..."
+    parted -s "$TEST_DISK" mkpart "${SYSTEM_B_LABEL}" ext4 1025MiB 2049MiB
+
+    info "Creating partition 3: ${PERSISTENCE_LABEL} (rest)..."
+    parted -s "$TEST_DISK" mkpart "${PERSISTENCE_LABEL}" ext4 2049MiB 100%
+
+    info "Formatting partitions..."
+    local LOOP_DEV
+    LOOP_DEV=$(losetup -f --show "$TEST_DISK")
+    trap 'cleanup_loop "${LOOP_DEV}"' EXIT
+
+    partprobe "$LOOP_DEV" 2>/dev/null || true
+    sleep 1
+
+    mkfs.ext4 -L "${SYSTEM_A_LABEL}" "${LOOP_DEV}p1"
+    mkfs.ext4 -L "${SYSTEM_B_LABEL}" "${LOOP_DEV}p2"
+    mkfs.ext4 -L "${PERSISTENCE_LABEL}" "${LOOP_DEV}p3"
+
+    info "Creating persistence.conf..."
+    local mount_point
+    mount_point=$(mktemp -d)
+    mount "${LOOP_DEV}p3" "$mount_point"
+    cat > "${mount_point}/persistence.conf" << 'EOF'
+/ union
+EOF
+    umount "$mount_point"
+    rmdir "$mount_point"
+
+    cleanup_loop "$LOOP_DEV"
+    trap - EXIT
+
+    echo ""
+    echo "=== Test disk created ==="
+    echo "Image: ${TEST_DISK}"
+    echo "Size:  ${DISK_SIZE_GB}GB"
+    echo "Use:   sudo losetup -f --show ${TEST_DISK}"
+    echo "Then run: ${0} test"
+}
+
+cmd_run_setup_ab() {
+    if [[ "$(id -u)" -ne 0 ]]; then
+        die "This command must be run as root (use sudo)"
+    fi
+
+    local LOOP_DEV
+    LOOP_DEV=$(losetup -f --show "$TEST_DISK" 2>/dev/null || true)
+    [[ -n "$LOOP_DEV" ]] || die "Cannot setup loop device for ${TEST_DISK}"
+    trap 'cleanup_loop "${LOOP_DEV}"' EXIT
+
+    info "Running update-system.sh setup-ab on ${LOOP_DEV}..."
+    "${SCRIPT_DIR}/update-system.sh" setup-ab "$LOOP_DEV" "${ISO_FILE:-}"
+
+    cleanup_loop "$LOOP_DEV"
+    trap - EXIT
+}
+
+cmd_install_iso() {
+    if [[ "$(id -u)" -ne 0 ]]; then
+        die "This command must be run as root (use sudo)"
+    fi
+    [[ -n "${ISO_FILE:-}" && -f "$ISO_FILE" ]] || die "ISO file required: ${0} install <iso> [A|B]"
+    local target="${2:-A}"
+
+    local LOOP_DEV
+    LOOP_DEV=$(losetup -f --show "$TEST_DISK" 2>/dev/null || true)
+    [[ -n "$LOOP_DEV" ]] || die "Cannot setup loop device for ${TEST_DISK}"
+    trap 'cleanup_loop "${LOOP_DEV}"' EXIT
+
+    info "Running update-system.sh install ${target} on ${LOOP_DEV}..."
+    "${SCRIPT_DIR}/update-system.sh" install "$LOOP_DEV" "$ISO_FILE" "$target"
+
+    cleanup_loop "$LOOP_DEV"
+    trap - EXIT
+}
+
+cmd_status() {
+    if [[ "$(id -u)" -ne 0 ]]; then
+        die "This command must be run as root (use sudo)"
+    fi
+
+    local LOOP_DEV
+    LOOP_DEV=$(losetup -f --show "$TEST_DISK" 2>/dev/null || true)
+    [[ -n "$LOOP_DEV" ]] || die "Cannot setup loop device for ${TEST_DISK}"
+    trap 'cleanup_loop "${LOOP_DEV}"' EXIT
+
+    "${SCRIPT_DIR}/update-system.sh" status "$LOOP_DEV"
+
+    cleanup_loop "$LOOP_DEV"
+    trap - EXIT
+}
+
+usage() {
+    cat << USAGE
+Magic Stick A/B Partition Test Suite
+
+Usage: ${0##*/} <command> [options]
+
+Commands:
+  create-disk               Create a ${DISK_SIZE_GB}GB loopback disk image for testing
+  test                      Test partition layout (needs create-disk first)
+  setup-ab [iso]            Run update-system.sh setup-ab on the loopback disk
+  install <iso> [A|B]       Run update-system.sh install on the loopback disk
+  status                    Run update-system.sh status on the loopback disk
+  full-test <iso>          create-disk + setup-ab + install A + test + status
+
+Options:
+  <iso>                    Path to Magic Stick ISO file
+
+Examples:
+  sudo ${0##*/} create-disk
+  sudo ${0##*/} setup-ab build/magic_stick_0.1.0.iso
+  sudo ${0##*/} install build/magic_stick_0.1.0.iso A
+  sudo ${0##*/} test
+  sudo ${0##*/} status
+USAGE
+}
+
+if [[ $# -lt 1 ]]; then
+    usage
+    exit 1
+fi
+
+COMMAND="$1"
+shift
+
+case "$COMMAND" in
+    create-disk)
+        cmd_create_disk
+        ;;
+    test)
+        cmd_test_partition
+        ;;
+    setup-ab)
+        ISO_FILE="${1:-}"
+        cmd_run_setup_ab
+        ;;
+    install)
+        ISO_FILE="${1:-}"
+        cmd_install_iso "$@"
+        ;;
+    status)
+        cmd_status
+        ;;
+    full-test)
+        ISO_FILE="${1:-}"
+        [[ -f "$ISO_FILE" ]] || die "ISO file not found: ${ISO_FILE}"
+        cmd_create_disk
+        cmd_run_setup_ab
+        cmd_install_iso "$ISO_FILE" "A"
+        cmd_test_partition
+        cmd_status
+        ;;
+    -h|--help|help)
+        usage
+        exit 0
+        ;;
+    *)
+        echo "Unknown command: ${COMMAND}" >&2
+        usage
+        exit 1
+        ;;
+esac

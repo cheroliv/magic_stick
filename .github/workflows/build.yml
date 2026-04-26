@@ -38,6 +38,10 @@ jobs:
       - name: Test boot
         run: ./gradlew isoTestBoot
 
+      - name: Test A/B partition setup
+        if: github.event_name != 'pull_request'
+        run: ./gradlew isoTestAB
+
       - name: Generate ISO checksum
         if: startsWith(github.ref, 'refs/tags/v')
         run: |

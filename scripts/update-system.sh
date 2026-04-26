@@ -12,12 +12,16 @@ SYSTEM_B_LABEL="system_b"
 PERSISTENCE_LABEL="persistence"
 
 GRUB_CFG_TEMPLATE="${SCRIPT_DIR}/grub-ab.cfg.template"
+FORCE_YES=false
 
 usage() {
     cat << USAGE
 Magic Stick A/B System Manager v${VERSION}
 
-Usage: update-system.sh <command> [options]
+Usage: update-system.sh [options] <command> [args]
+
+Options:
+  -y, --yes                  Skip all confirmation prompts (DANGEROUS!)
 
 Commands:
   setup-ab <device> [iso]    Partition device + install GRUB + flash initial ISO
@@ -56,6 +60,15 @@ warn() {
 
 info() {
     echo "==> $*"
+}
+
+prompt_confirm() {
+    if [[ "$FORCE_YES" == "true" ]]; then
+        return 0
+    fi
+    local prompt="${1:-Type 'YES' to continue: }"
+    read -rp "$prompt" confirm
+    [[ "$confirm" == "YES" ]]
 }
 
 get_part_prefix() {
@@ -249,9 +262,7 @@ cmd_setup_ab() {
     echo ""
     echo "WARNING: This will ERASE ALL DATA on ${device}!"
     echo ""
-    read -rp "Type 'YES' to continue: " confirm
-
-    [[ "$confirm" == "YES" ]] || { echo "Aborted."; exit 0; }
+    prompt_confirm || { echo "Aborted."; exit 0; }
 
     local prefix
     prefix=$(get_part_prefix "$device")
@@ -519,9 +530,7 @@ cmd_install() {
     echo "Data on this partition will be ERASED."
     echo "The persistence partition will NOT be touched."
     echo ""
-    read -rp "Type 'YES' to continue: " confirm
-
-    [[ "$confirm" == "YES" ]] || { echo "Aborted."; exit 0; }
+    prompt_confirm || { echo "Aborted."; exit 0; }
 
     echo ""
     info "Unmounting target partition..."
@@ -590,9 +599,7 @@ cmd_update() {
     echo "This will write the ISO content to ${target_part}."
     echo "The persistence partition will NOT be touched."
     echo ""
-    read -rp "Type 'YES' to continue: " confirm
-
-    [[ "$confirm" == "YES" ]] || { echo "Aborted."; exit 0; }
+    prompt_confirm || { echo "Aborted."; exit 0; }
 
     echo ""
     info "Unmounting target partition..."
@@ -777,6 +784,27 @@ cmd_verify() {
         echo "=== Verification completed with ${errors} error(s) ==="
     fi
 }
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -y|--yes)
+            FORCE_YES=true
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -*)
+            echo "Unknown option: $1" >&2
+            usage
+            exit 1
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
 
 if [[ $# -lt 1 ]]; then
     usage

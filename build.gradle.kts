@@ -137,3 +137,54 @@ tasks.register<org.gradle.api.tasks.Exec>("isoFlash") {
         "/magic_stick/scripts/flash.sh", device)
     onlyIf { project.hasProperty("device") }
 }
+
+// ============================================================
+// A/B Partition Test Pipeline
+// ============================================================
+
+tasks.register<org.gradle.api.tasks.Exec>("isoTestAB") {
+    group = "iso"
+    description = "Test A/B partition setup on loopback device inside Docker (privileged)"
+    dependsOn("dockerBuild")
+    // Runs test-ab-partition.sh inside Docker with all needed perms
+    commandLine("docker", "run", "--rm", "--privileged",
+        "-v", "$projDir:/magic_stick",
+        "--cap-add", "SYS_ADMIN",
+        "--device", "/dev/loop-control",
+        "--device", "/dev/loop0",
+        "--device", "/dev/loop1",
+        "--device", "/dev/loop2",
+        "--device", "/dev/loop3",
+        "--device", "/dev/loop4",
+        "--device", "/dev/loop5",
+        "--device", "/dev/loop6",
+        "--device", "/dev/loop7",
+        dockerImage,
+        "bash", "-c",
+        "chmod +x /magic_stick/scripts/test-ab-partition.sh /magic_stick/scripts/update-system.sh \u0026\u0026 " +
+        "/magic_stick/scripts/test-ab-partition.sh create-disk \u0026\u0026 " +
+        "/magic_stick/scripts/test-ab-partition.sh setup-ab " +
+        (if (file("build/$isoName").exists()) "/magic_stick/build/$isoName" else "") +
+        " \u0026\u0026 /magic_stick/scripts/test-ab-partition.sh test"
+    )
+}
+
+tasks.register<org.gradle.api.tasks.Exec>("isoTestVNC") {
+    group = "iso"
+    description = "Test ISO GUI boot via QEMU + noVNC inside Docker (ports 5900+6080)"
+    dependsOn("dockerBuild")
+    commandLine("docker", "run", "--rm", "--privileged",
+        "-p", "5900:5900",
+        "-p", "6080:6080",
+        "-v", "$projDir:/magic_stick",
+        dockerImage,
+        "/magic_stick/scripts/test-boot.sh", "--vnc",
+        "/magic_stick/build/$isoName", "300")
+}
+
+tasks.register("isoTestFull") {
+    group = "iso"
+    description = "Full test suite: verify + boot + A/B partition"
+    dependsOn("isoVerify")
+    finalizedBy("isoTestBoot", "isoTestAB")
+}

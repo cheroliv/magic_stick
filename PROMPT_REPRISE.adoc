@@ -1,53 +1,56 @@
-= Prompt de reprise -- Session 018
+= Prompt de reprise -- Session 019
 
 __
-**EPIC** : Partition A/B + Persistence + Tests boot
-**Statut** : Session 017 terminee — Backlog repriorise, choix technique boot valide
-**Mission** : Tests boot QEMU+VNC + EPIC 3 (Partition A/B) + EPIC 6 (update-system.sh)
+**EPIC** : Correction Docker + Validation tests boot + A/B CI/CD
+**Statut** : Session 018 terminee — Docker VNC OK, scripts A/B crees, CI/CD mis a jour
+**Mission** : Corriger le Docker ENTRYPOINT + valider test-boot.sh --vnc + test-ab-partition.sh en CI/CD
 __
 
 '''
 
-== Session 017 -- Resume
+== Session 018 -- Resume
 
 **Date** : 26 avril 2026
-**Resultat** : PLANIFICATION — Backlog repriorise, QEMU+VNC retenu, aucun code technique produit
+**Resultat** : Docker image reconstruite avec VNC (novnc, tigervnc, websockify, x11vnc), test-boot.sh mode --vnc, test-ab-partition.sh complet, update-system.sh --yes pour CI/CD, taches Gradle + workflow GA ajoutes
 
-**Archive** : `.agents/sessions/017-backlog-repriorisation-boot-test.adoc`
+**Archive** : `.agents/sessions/018-docker-vnc-ab-partition-ci.adoc`
 
 '''
 
-== Session 018 -- Priorites
+== Session 019 -- Priorites
 
-**Mission** : Valider le boot + implementer le partitionnement A/B (EPIC 3 + 6)
+**Mission** : Corriger les regresions Docker et valider les tests en conteneur
 
-=== 1. Tests boot QEMU + VNC (BIOS + UEFI)
+=== 1. Corriger le Dockerfile (regression ENTRYPOINT)
 
-* Installer verifier les prerequis (qemu, ovmf, client VNC)
-* Tester le boot BIOS via QEMU+VNC (ref : `.agents/BOOT_TEST_REFERENCE.adoc`)
-* Tester le boot UEFI via QEMU+VNC (avec OVMF)
-* Valider que XFCE se lance correctement
-* Cocher les items EPIC 2 restants (boot BIOS/UEFI)
+* Remplacer `WORKDIR /magic_stick` par `CMD ["bash"]` (ENTRYPOINT=bash invalide les commandes docker run directes)
+* Verifier QUE les taches Gradle existantes (`isoBuild`, `isoVerify`, `isoTestBoot`, `isoFlash`) fonctionnent encore
+* Tester `docker run --rm magic_stick:builder /magic_stick/scripts/test-boot.sh --vnc ...`
 
-=== 2. EPIC 3 — Partition A/B + Persistence
+=== 2. Valider test-boot.sh --vnc
 
-* Creer le schema de partitionnement GPT (A + B + persistence)
-* Configurer GRUB pour le boot A/B
-* Tester le rollback (boot sur ancienne partition)
-* Valider que les donnees persistence survivent a une mise a jour
+* Lancer test-boot.sh --vnc sur ISO complete (attendre build CI/CD ou re-telcharger ISO)
+* Valider QEMU VNC server + websockify + noVNC dans le conteneur
+* Verifier que localhost:6080/vnc.html est accessible depuis le navigateur
+* Tester boot BIOS + UEFI explicitement (--bios et --uefi)
 
-=== 3. EPIC 6 — Script update-system.sh
+=== 3. Valider test-ab-partition.sh en CI/CD
 
-* Implementation complete du script update-system.sh
-* Detection de la partition active
-* Ecriture ISO sur partition inactive
-* Inversion flag de boot
-* Verification et rollback automatique
+* Lancer isoTestAB localement en conteneur privileged + loop devices
+* Corriger les erreurs eventuelles (loop device, partprobe, mkfs)
+* Executer en CI/CD GitHub Actions (privileged runners)
+* Documenter les resultats dans SCRIPT_VERIFICATION.adoc
+
+=== 4. Mettre a jour la documentation
+
+* Mettre a jour BOOT_TEST_REFERENCE.adoc avec mode VNC + noVNC
+* Documenter test-ab-partition.sh dans le site (ab-partition.adoc)
+* Mettre a jour INDEX.adoc (session 018 dans recentes)
 
 === Priorites reportees
 
-* EPIC 7 (Auto-update doc + IA release notes) : reporte — polish, pas critique
-* EPIC 4 (Logiciels) : depend du boot + A/B
+* EPIC 7 (Auto-update doc + IA release notes) : reporte
+* EPIC 4 (Logiciels Ollama/Docker/SDKMAN) : depend du boot
 * EPIC 5 (Customisation XFCE) : cosmetique
 
 '''
@@ -62,3 +65,4 @@ __
 * **Zero build local** : GitHub Actions uniquement, lire les logs
 * **SourceForge** : rsync via SSH, pas d'API S3
 * **Boot test** : QEMU+VNC uniquement (cf `.agents/BOOT_TEST_REFERENCE.adoc`)
+* **A/B test** : loopback device en Docker privileged uniquement (cf `.agents/AB_PARTITION_REFERENCE.adoc`)

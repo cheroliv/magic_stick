@@ -4,6 +4,7 @@ _Derniere mise a jour_ : 2026-04-26
 
 |===
 | # | Date | Type | Sujet | Score
+| 018 | 2026-04-26 | feature + fix + cicd | Docker VNC + test-ab-partition.sh + update-system.sh --yes + CI/CD | 8.0/10
 | 017 | 2026-04-26 | planification + docs | Repriorisation backlog + choix technique boot test (QEMU+VNC) | 6/10
 | 016 | 2026-04-26 | fix + backlog | Debug pipeline SourceForge (base64 SSH key) + EPIC 7 | 8/10
 | 015 | 2026-04-26 | refactor + feature + docs | Simplification CI/CD + Footer redesine + SourceForge | 7/10

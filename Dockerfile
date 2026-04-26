@@ -31,8 +31,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     genisoimage \
     python3 \
     xz-utils \
+    tigervnc-standalone-server \
+    tigervnc-viewer \
+    novnc \
+    websockify \
+    x11vnc \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /magic_stick
-
-ENTRYPOINT ["bash"]

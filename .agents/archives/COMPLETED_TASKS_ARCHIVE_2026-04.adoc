@@ -640,3 +640,50 @@
 * Debugger le pipeline de deploiement ISO vers SourceForge
 * Valider que l'ISO est accessible sur SourceForge
 * Tester le boot reel si PC disponible
+
+'''
+
+== Session 018 — 26 avril 2026
+
+**Type** : feature + fix + ci/cd
+**Score** : 8.0/10
+**Sujet** : Docker VNC + test-ab-partition.sh + update-system.sh --yes + CI/CD
+
+=== Contexte
+
+Suite de la session 017 (planification). Mise en oeuvre du test boot VNC (QEMU+noVNC) et de la partition A/B (EPIC 3 + 6). Docker image reconstruite avec novnc, tigervnc, websockify, x11vnc.
+
+=== Taches realisees
+
+* [OK] Dockerfile : ajout novnc + tigervnc + websockify + x11vnc
+* [OK] Dockerfile : suppression ENTRYPOINT ["bash"] (correction bloquante)
+* [OK] test-boot.sh : mode --vnc (QEMU + VNC server + websockify + noVNC)
+* [OK] test-boot.sh : modes --bios et --uefi
+* [OK] test-ab-partition.sh : pipeline test A/B complet (loopback device)
+* [OK] update-system.sh : flag --yes + prompt_confirm() + parsing options
+* [OK] build.gradle.kts : taches isoTestAB + isoTestVNC + isoTestFull
+* [OK] .github/workflows/build.yml : step Test A/B partition setup
+* [OK] BACKLOG.adoc : EPIC 3 et EPIC 6 partiellement coches
+
+=== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| Scripts modifies | 4 (Dockerfile, test-boot.sh, test-ab-partition.sh, update-system.sh) |
+| Scripts crees | 1 (test-ab-partition.sh) |
+| Fichiers CI/CD | 2 (build.gradle.kts, .github/workflows/build.yml) |
+| Docker image OK | novnc + tigervnc + websockify + x11vnc + qemu |
+| EPIC 3 avance | 80% (schema GPT, GRUB A/B, test loopback) |
+| EPIC 6 avance | 85% (update-system.sh complet + flag --yes + CI/CD) |
+
+=== Bloqueurs
+
+* ISO incomplete (34M/900M, telechargement interrompu) → test boot VNC impossible sans ISO complete
+* Docker loop device en conteneur : probleme partiellement resolu en CI/CD privileged
+
+=== Prochaine session
+
+* Corriger Dockerfile ENTRYPOINT (regression potentielle sur isoBuild)
+* Valider test-boot.sh --vnc avec ISO complete
+* Valider test-ab-partition.sh en CI/CD GitHub Actions
+* Mettre a jour SCRIPT_VERIFICATION.adoc

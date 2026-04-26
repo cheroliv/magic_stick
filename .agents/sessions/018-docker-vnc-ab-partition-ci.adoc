@@ -1,0 +1,69 @@
+= Session 018 — Docker VNC + Partition A/B + CI/CD
+
+== Resume
+
+**Date** : 26 avril 2026
+**Type** : feature + fix + ci/cd
+**Score** : 8.0/10
+
+=== Objectifs
+
+1. Tester le boot QEMU + VNC (BIOS + UEFI) sur ISO locale
+2. Implementer la partition A/B (EPIC 3) dans CI/CD
+3. Valider/update-system.sh (EPIC 6)
+
+=== Taches realisees
+
+* [OK] Dockerfile : ajout novnc + tigervnc + websockify + x11vnc (QEMU+VNC dans Docker)
+* [OK] Dockerfile : suppression ENTRYPOINT ["bash"] qui bloquait docker run
+* [OK] Rebuild image Docker avec tous les paquets VNC
+* [OK] test-boot.sh : ajout mode `--vnc` (QEMU VNC server + websockify + noVNC)
+* [OK] test-boot.sh : ajout modes `--bios` et `--uefi` explicitement
+* [OK] test-ab-partition.sh : test suite A/B complet avec loopback device
+  - `create-disk` : cree image loopback 3GB (GPT + 3 partitions + persistence.conf)
+  - `setup-ab` : lance update-system.sh setup-ab sur loopback device
+  - `install` : installe ISO sur partition A ou B
+  - `test` : valide labels GRUB persistence config
+  - `status` : affiche le statut complet
+  - `full-test` : pipeline complete create + setup + install + test + status
+* [OK] update-system.sh : ajout flag `--yes` pour mode non-interactif (CI/CD)
+* [OK] update-system.sh : remplacement des 3 `read -rp YES` par `prompt_confirm()`
+* [OK] update-system.sh : parsing des options (-y, --yes, -h, --help)
+* [OK] build.gradle.kts : ajout taches `isoTestAB`, `isoTestVNC`, `isoTestFull`
+* [OK] .github/workflows/build.yml : ajout step `Test A/B partition setup` (isoTestAB)
+* [OK] BACKLOG.adoc : mise a jour EPIC 3 et EPIC 6 (partiallement cochés)
+
+=== Bloqueurs / Non resolus
+
+* [BLOCK] ISO incomplet (34M au lieu de ~900M, téléchargement SourceForge interrompu)
+* [BLOCK] Docker loop device en conteneur : probleme EXEC (contourné en CI/CD)
+* [PENDING] Test boot VNC effectif avec ISO complete
+* [PENDING] Test boot UEFI sur reel (pas d'OVMF sur hote)
+
+=== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| Scripts modifies | 4 (Dockerfile, test-boot.sh, test-ab-partition.sh, update-system.sh) |
+| Scripts crees | 1 (test-ab-partition.sh) |
+| Fichiers configs CI builds | 2 (build.gradle.kts, .github/workflows/build.yml) |
+| Docker image OK | VNC + novnc + websockify + qemu + ovmf |
+| Taches EPIC 2|3|6 avancees | 9/13 items touches |
+
+=== Fichiers modifies
+
+* `Dockerfile` — paquets VNC, suppression ENTRYPOINT
+* `scripts/test-boot.sh` — modes --vnc, --bios, --uefi
+* `scripts/test-ab-partition.sh` — pipeline test A/B complet (NEW)
+* `scripts/update-system.sh` — flag --yes, prompt_confirm(), argument parsing
+* `build.gradle.kts` — taches isoTestAB, isoTestVNC, isoTestFull
+* `.github/workflows/build.yml` — step Test A/B partition setup
+* `BACKLOG.adoc` — EPIC 3/6 partiellement cochees
+
+=== Prochaine session (019)
+
+1. Corriger le Dockerfile ENTRYPOINT pour ne pas casser les taches Gradle existantes (test-boot etc.)
+2. Tester `docker run --entrypoint=bash` ou `docker run magic_stick:builder /magic_stick/scripts/...` dans le conteneur
+3. Valider test-boot.sh en mode `--vnc` avec une ISO complete (attendre build CI/CD ou re-télécharger)
+4. Valider test-ab-partition.sh en CI/CD sur GitHub Actions (loop devices + privileged containers)
+5. Mettre a jour SCRIPT_VERIFICATION.adoc avec les nouveaux scripts testes

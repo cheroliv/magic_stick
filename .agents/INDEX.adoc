@@ -2,9 +2,9 @@
 
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
-_Derniere mise a jour_ : 2026-04-26  
-_Session en cours_ : 018 — Tests boot QEMU+VNC + EPIC 3 (Partition A/B) + EPIC 6 (update-system.sh)
-_Session terminee_ : 017 (Repriorisation backlog + choix technique boot test)
+_Derniere mise a jour_ : 2026-04-26
+_Session en cours_ : 019 — Correction Docker + Validation tests boot VNC + A/B partition en CI/CD
+_Session terminee_ : 018 (Docker VNC + test-ab-partition.sh + update-system.sh --yes + CI/CD)
 
 '''
 
@@ -106,6 +106,7 @@ _Lecon Session 012_ : L'agent a tente `sudo mount` sur l'hote alors que toute op
 
 |===
 | # | Date | Type | Sujet | Fichier | Score
+| 018 | 2026-04-26 | feature + fix + ci/cd | Docker VNC + test-ab-partition.sh + update-system.sh --yes + CI/CD | `018-docker-vnc-ab-partition-ci.adoc` | 8.0/10
 | 017 | 2026-04-26 | planification + docs | Repriorisation backlog + choix technique boot test (QEMU+VNC) | `017-backlog-repriorisation-boot-test.adoc` | 6/10
 | 016 | 2026-04-26 | fix + backlog | Debug pipeline SourceForge (base64 SSH key) + EPIC 7 | `016-debug-sourceforge-deploy.adoc` | 8/10
 | 015 | 2026-04-26 | refactor + feature + docs | Simplification CI/CD + Footer redesine + SourceForge | `015-simplify-cicd-footer-sourceforge.adoc` | 7/10
@@ -130,10 +131,10 @@ _Lecon Session 012_ : L'agent a tente `sudo mount` sur l'hote alors que toute op
 | EPIC | Progression | Score | Priorite
 | EPIC 1 : Initialisation projet | 100% | 8/10 | HAUTE
 | EPIC 2 : Build ISO Xubuntu de base | 100% (CI/CD vert, ISO generee, SourceForge valide, pipeline simplifie) | 9/10 | HAUTE
-| EPIC 3 : Partition A/B + Persistence | 0% | -/10 | HAUTE
+| EPIC 3 : Partition A/B + Persistence | 80% (schema GPT OK, GRUB A/B OK, test-ab-partition.sh en CI/CD) | -/10 | HAUTE
 | EPIC 4 : Logiciels (Ollama, Docker, SDKMAN) | 0% | -/10 | MOYENNE
 | EPIC 5 : Personnalisation XFCE | 0% | -/10 | BASSE
-| EPIC 6 : Script de mise a jour systeme A/B | 0% | -/10 | HAUTE
+| EPIC 6 : Script de mise a jour systeme A/B | 85% (update-system.sh complet + flag --yes + tests CI/CD) | -/10 | HAUTE
 | EPIC 7 : Site de doc auto + IA release notes | 0% | -/10 | BASSE
 |===
 

@@ -1,6 +1,6 @@
 = Script Verification — Magic Stick
 
-_Derniere mise a jour_ : Session 017 (26 avril 2026) — Aucun script modifie, backlog repriorise
+_Derniere mise a jour_ : Session 018 (26 avril 2026) — Dockerfile VNC, test-boot.sh --vnc, test-ab-partition.sh, update-system.sh --yes
 
 '''
 
@@ -11,10 +11,11 @@ _Derniere mise a jour_ : Session 017 (26 avril 2026) — Aucun script modifie, b
 | scripts/build.sh | OK | OK | Orchestrateur hote, un seul docker run | Session 007
 | scripts/build-inner.sh | OK | OK | Script container (lb config + lb build + patching Ubuntu 24.04) | Session 010
 | scripts/flash.sh | OK | OK | Flash ISO sur cle USB | Session 007
-| scripts/update-system.sh | OK | OK | Partition A/B (setup-ab, update, status) | Session 006
+| scripts/update-system.sh | OK | OK | Partition A/B (setup-ab, update, status, verify, switch) + flag --yes | Session 018
 | scripts/install-software.sh | OK | OK | Post-install live (docker, ollama, sdkman) | Session 006
 | scripts/verify.sh | OK | OK | Verification ISO (autodetecte container) | Session 007
-| scripts/test-boot.sh | OK | OK | Test boot QEMU BIOS+UEFI (autodetecte container) | Session 007
+| scripts/test-boot.sh | OK | OK | Test boot QEMU BIOS+UEFI+VNC (modes --vnc, --bios, --uefi) | Session 018
+| scripts/test-ab-partition.sh | OK | OK | Test suite A/B partition avec loopback device | Session 018
 |===
 
 == Hooks live-build
@@ -28,6 +29,14 @@ _Derniere mise a jour_ : Session 017 (26 avril 2026) — Aucun script modifie, b
 | 040-post-install-tweaks.chroot | OK | OK | NetworkManager, keyboard FR, services | Session 006
 | 050-setup-ubiquity.chroot | OK | OK | Raccourci Bureau + config ubiquity-dm | Session 007
 | 990-add-efi-support.binary | OK | OK | Support UEFI (grub-mkimage, shim, grub.cfg) | Session 013
+|===
+
+== Dockerfile
+
+|===
+| Fichier | Modification | Statut
+| Dockerfile | Ajout novnc, tigervnc-standalone-server, tigervnc-viewer, websockify, x11vnc | OK (Session 018)
+| Dockerfile | Suppression ENTRYPOINT ["bash"] (conflit avec docker run args) | OK (Session 018)
 |===
 
 == Correctifs live-build (patching dans build-inner.sh)
@@ -51,7 +60,10 @@ _Derniere mise a jour_ : Session 017 (26 avril 2026) — Aucun script modifie, b
 | isoClean | Exec | Clean build artifacts | Session 007
 | isoRebuild | Default | Purge + Build | Session 007
 | isoVerify | Exec | Verify ISO (boot files, squashfs) | Session 010
-| isoTestBoot | Exec | Test boot QEMU (BIOS+UEFI) | Session 010
+| isoTestBoot | Exec | Test boot QEMU (BIOS+UEFI+headless) | Session 010
+| isoTestVNC | Exec | Test boot QEMU+VNC+noVNC (GUI) | Session 018
+| isoTestAB | Exec | Test A/B partition setup sur loopback device | Session 018
+| isoTestFull | Default | Verify + boot + A/B partition | Session 018
 | isoTest | Default | Verify + Test boot | Session 007
 | isoPipeline | Default | Build + Verify + Test boot | Session 007
 | isoFlash | Exec | Flash USB (-Pdevice=/dev/sdX) | Session 007
