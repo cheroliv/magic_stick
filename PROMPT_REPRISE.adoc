@@ -2,8 +2,8 @@
 
 __
 **EPIC** : Build ISO Xubuntu bootable + installable
-**Statut** : Session 014 terminee — SourceForge + rsync integre, READMEs a jour
-**Mission** : Tester boot reel + nettoyer apt sources + CI/CD SourceForge en production
+**Statut** : Session 014 terminee — SourceForge + rsync integre, site mis a jour
+**Mission** : Tester boot reel + valider SourceForge en production
 __
 
 '''
@@ -11,7 +11,7 @@ __
 == Session 014 -- Resume
 
 **Date** : 26 avril 2026
-**Resultat** : SUCCES — SourceForge integre dans CI/CD, READMEs mis a jour, 3 secrets GitHub configures
+**Resultat** : SUCCES — SourceForge integre dans CI/CD, READMEs et site mis a jour, tuto balenaEtcher cree
 
 **Archive** : `.agents/sessions/014-sourceforge-rsync-cicd.adoc`
 
@@ -24,14 +24,14 @@ __
 === 1. Tester le boot reel de l'ISO (PRIORITE MAXIMALE)
 
 * Telecharger l'ISO depuis GitHub Actions artifacts ou GitHub Release
-* Flasher sur cle USB avec dd
+* Flasher sur cle USB avec dd ou balenaEtcher
 * Tester boot BIOS sur un PC
 * Tester boot UEFI sur un PC
 * Capturer les messages kernel si boot plante
 
 === 2. Valider le deploiement SourceForge
 
-* Pousser un tag v0.1.1 (ou re-pousser v0.1.0) pour declencher le CI/CD
+* Pousser un tag v0.1.1 (ou re-pousser) pour declencher le CI/CD
 * Verifier que le step rsync vers SourceForge fonctionne
 * Verifier que les fichiers sont accessibles sur https://sourceforge.net/projects/magic-stick/files/
 
@@ -44,7 +44,7 @@ __
 
 * [ ] ISO bootable sur cle USB reelle (BIOS)
 * [ ] ISO bootable sur cle USB reelle (UEFI)
-* [ ] Fichiers ISO visibles sur SourceForge aprs CI/CD
+* [ ] Fichiers ISO visibles sur SourceForge apres CI/CD
 * [ ] Warnings apt sources corriges
 
 '''

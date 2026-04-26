@@ -1,8 +1,8 @@
 = Index des Sessions — Magic Stick
 
 _Derniere mise a jour_ : 2026-04-26  
-_Session en cours_ : 015 — Test boot reel + validation SourceForge
-_Session terminee_ : 014 (SourceForge + rsync CI/CD + READMEs a jour)
+_Session en cours_ : 015 — Test boot reel + validation SourceForge + site mis a jour
+_Session terminee_ : 014 (SourceForge + rsync CI/CD + site mis a jour)
 
 '''
 

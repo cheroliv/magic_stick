@@ -17,8 +17,8 @@
             <p class="lead">Environnement portable standardise sur cle USB bootable.</p>
             <p>Formation, diagnostic reseau, dev nomade &mdash; partout, tout le temps, le meme outil.</p>
             <a class="btn btn-primary btn-lg me-2" href="#features">Decouvrir</a>
-            <a class="btn btn-success btn-lg" href="https://github.com/cheroliv/magic_stick/releases/tag/v0.1.0">
-                <i class="bi bi-download me-1"></i> Telecharger l'ISO v0.1.0
+            <a class="btn btn-success btn-lg" th:href="${content.rootpath + 'flash-guide.html'}">
+                <i class="bi bi-usb-drive me-1"></i> Guide d'installation
             </a>
         </div>
         <div class="col-lg-6 text-center">
@@ -107,11 +107,16 @@
     <div id="download" class="text-center py-5 mb-4 rounded-3" style="background: linear-gradient(135deg, var(--bs-primary), var(--bs-success));">
         <h2 class="text-white fw-bold">Telecharger Magic Stick</h2>
         <p class="text-white opacity-75 fs-5">ISO bootable Xubuntu 24.04 &mdash; BIOS + UEFI &mdash; 64 bits</p>
-        <a class="btn btn-light btn-lg px-5 py-3 fw-semibold" href="https://github.com/cheroliv/magic_stick/releases/tag/v0.1.0">
-            <i class="bi bi-download me-2"></i>ISO v0.1.0 (.xz) &mdash; GitHub Release
-        </a>
+        <div class="d-flex flex-wrap justify-content-center gap-3 mb-3">
+            <a class="btn btn-light btn-lg px-4 py-3 fw-semibold" href="https://github.com/cheroliv/magic_stick/releases/tag/v0.1.0">
+                <i class="bi bi-github me-2"></i>GitHub Releases <small>(.xz)</small>
+            </a>
+            <a class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold" href="https://sourceforge.net/projects/magic-stick/files/">
+                <i class="bi bi-download me-2"></i>SourceForge <small>(ISO brute + .xz)</small>
+            </a>
+        </div>
         <p class="text-white opacity-50 mt-3">Clavier FR, locale fr_FR.UTF-8, autologin utilisateur <code>magic</code></p>
-        <p class="text-white opacity-75 mt-2"><small>Decompresser avant flash : <code>xz -d magic_stick_0.1.0.iso.xz</code></small></p>
+        <p class="text-white opacity-75 mt-2"><small>Version .xz : decompresser avec <code>xz -d magic_stick_0.1.0.iso.xz</code> avant flash</small></p>
     </div>
 
     <hr class="my-5"/>
@@ -119,17 +124,17 @@
     <div id="docs">
         <h2 class="text-center mb-4">Documentation</h2>
         <div class="row g-4">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card h-100 text-center">
                     <div class="card-body">
-                        <i class="bi bi-rocket-takeoff fs-1 text-primary"></i>
-                        <h5 class="card-title mt-3">Demarrage rapide</h5>
-                        <p class="card-text">Builder l'ISO, flasher la cle, booter. Operationnel en quelques minutes.</p>
-                        <a class="btn btn-outline-primary" th:href="${content.rootpath + 'quick-start.html'}">Commencer</a>
+                        <i class="bi bi-usb-drive fs-1 text-primary"></i>
+                        <h5 class="card-title mt-3">Guide d'installation</h5>
+                        <p class="card-text">Telecharger l'ISO, flasher la cle USB avec balenaEtcher ou dd, booter.</p>
+                        <a class="btn btn-outline-primary" th:href="${content.rootpath + 'flash-guide.html'}">Installer</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card h-100 text-center">
                     <div class="card-body">
                         <i class="bi bi-arrow-left-right fs-1 text-primary"></i>
@@ -139,13 +144,23 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card h-100 text-center">
                     <div class="card-body">
                         <i class="bi bi-terminal fs-1 text-primary"></i>
                         <h5 class="card-title mt-3">Scripts</h5>
                         <p class="card-text">Reference complete des commandes : build, flash, verify, update.</p>
                         <a class="btn btn-outline-primary" th:href="${content.rootpath + 'scripts.html'}">Consulter</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-people fs-1 text-primary"></i>
+                        <h5 class="card-title mt-3">A propos</h5>
+                        <p class="card-text">Le projet, la licence, la philosophie A/B et la stack technique.</p>
+                        <a class="btn btn-outline-primary" th:href="${content.rootpath + 'about.html'}">Decouvrir</a>
                     </div>
                 </div>
             </div>

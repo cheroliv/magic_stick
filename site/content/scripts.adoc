@@ -6,7 +6,7 @@ status=published
 
 == Documentation des scripts
 
-Magic Stick fournit 5 scripts dans le repertoire `scripts/` pour builder, flasher, verifier, mettre a jour et installer les logiciels.
+Magic Stick fournit 6 scripts dans le repertoire `scripts/` pour builder, flasher, verifier, tester, mettre a jour et installer les logiciels.
 
 === build.sh — Construction de l'ISO
 
@@ -103,8 +103,6 @@ Verifie que l'ISO generee est valide et bootable.
 ----
 scripts/verify.sh [ISO_FILE]
 ----
-
-Si aucun fichier n'est specifie, utilise la derniere ISO dans `build/`.
 
 ==== Checks effectues
 

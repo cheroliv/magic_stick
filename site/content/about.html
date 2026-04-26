@@ -1,5 +1,5 @@
 title=Magic Stick — Environnement Portable
-date=2026-04-23
+date=2026-04-26
 type=page
 status=published
 ~~~~~~
@@ -11,11 +11,22 @@ status=published
     <h3>Principe A/B</h3>
     <p>Le systeme utilise deux partitions systeme (A et B). Quand on met a jour, on ecrit sur la partition inactive, on inverse le flag de boot, et au prochain demarrage on est sur la nouvelle version. Si ca plante, on reboot sur l'ancienne. La partition Persistence n'est <strong>jamais</strong> touchee par les mises a jour systeme.</p>
 
+    <h3>Telcharger</h3>
+    <ul>
+        <li><a href="https://github.com/cheroliv/magic_stick/releases/tag/v0.1.0">GitHub Releases</a> &mdash; version compressee (.xz)</li>
+        <li><a href="https://sourceforge.net/projects/magic-stick/files/">SourceForge</a> &mdash; ISO brute + .xz</li>
+    </ul>
+
     <h3>Stack technique</h3>
     <ul>
-        <li>Xubuntu live (systeme de base)</li>
-        <li>live-build (construction d'ISO)</li>
+        <li>Xubuntu 24.04 (systeme de base)</li>
+        <li>live-build + Gradle (construction d'ISO via CI/CD)</li>
         <li>Bash (scripts d'automatisation)</li>
-        <li>GRUB/syslinux (boot loader)</li>
+        <li>GRUB/syslinux (boot loader BIOS + UEFI)</li>
+        <li>GitHub Actions (build automatique)</li>
+        <li>SourceForge + rsync (hebergement ISO)</li>
     </ul>
+
+    <h3>Licence</h3>
+    <p>Apache License 2.0</p>
 </div>

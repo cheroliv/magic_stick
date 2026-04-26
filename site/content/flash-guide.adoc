@@ -1,0 +1,180 @@
+title=Guide d'installation et flashage USB
+date=2026-04-26
+type=page
+status=published
+~~~~~~
+
+== Guide d'installation et flashage USB
+
+Ce guide vous permet de demarrer avec Magic Stick en quelques minutes : telecharger l'ISO, la flasher sur une cle USB, et booter.
+
+=== Telecharger l'ISO
+
+L'ISO est disponible sur deux plateformes :
+
+[cols="1,2,1"]
+|===
+| Plateforme | Lien | Format
+
+| GitHub Releases
+| https://github.com/cheroliv/magic_stick/releases/tag/v0.1.0[cheroliv/magic_stick v0.1.0]
+| `.xz` (compressee)
+
+| SourceForge
+| https://sourceforge.net/projects/magic-stick/files/[magic-stick sur SourceForge]
+| ISO brute + `.xz`
+|===
+
+[NOTE]
+====
+Si vous telechargez la version `.xz` depuis GitHub Releases, vous devez la decompresser avant le flashage :
+
+[source,bash]
+----
+xz -d magic_stick_0.1.0.iso.xz
+----
+
+Si vous telechargez l'ISO brute depuis SourceForge, elle est prete a flasher directement.
+====
+
+=== Prerequis
+
+* Une cle USB de **32 Go minimum** (64 Go recommande)
+* Un PC pour flasher la cle
+
+=== Methode 1 : balenaEtcher (recommandee)
+
+balenaEtcher est un outil graphique simple pour flasher une ISO sur une cle USB. Il fonctionne sous Windows, macOS et Linux.
+
+==== Etape 1 : Installer balenaEtcher
+
+. Rendez-vous sur https://balena.io/etcher[balena.io/etcher]
+. Telechargez la version pour votre OS
+. Installez et lancez balenaEtcher
+
+==== Etape 2 : Flasher l'ISO
+
+. Cliquez sur **"Flash from file"**
+. Selectionnez le fichier `magic_stick_0.1.0.iso`
+. Cliquez sur **"Select target"** et choisissez votre cle USB
+. Cliquez sur **"Flash!"**
+. Attendez la fin de l'operation (verification comprise)
+
+[CAUTION]
+====
+balenaEtcher va **effacer toutes les donnees** de la cle USB. Verifiez bien le peripherique selectionne.
+====
+
+==== Etape 3 : Booter sur la cle
+
+1. Laissez la cle USB inseree
+2. Redemarrez le PC
+3. Accedez au BIOS/UEFI en tapant **F2**, **F12** ou **Suppr** au demarrage
+4. Selectionnez la cle USB dans le menu de boot
+5. Le systeme live Xubuntu se lance
+
+[NOTE]
+====
+Sur la plupart des PC recents, le menu de boot s'accede avec **F12**. Sur les PC plus anciens, essayez **F2** ou **Suppr** pour entrer dans le BIOS, puis changez l'ordre de boot.
+====
+
+=== Methode 2 : dd en ligne de commande (Linux)
+
+Cette methode est pour les utilisateurs Linux à l'aise avec le terminal.
+
+==== Etape 1 : Identifier la cle USB
+
+[source,bash]
+----
+lsblk
+----
+
+Reperez votre cle USB (par exemple `/dev/sdb`). **Verifiez bien le device** : une erreur peut effacer votre disque systeme.
+
+==== Etape 2 : Flasher l'ISO
+
+[source,bash]
+----
+sudo dd if=magic_stick_0.1.0.iso of=/dev/sdX bs=4M status=progress && sync
+----
+
+Remplacez `/dev/sdX` par le device de votre cle USB.
+
+[CAUTION]
+====
+Cette commande est **destructrice**. Elle efface toutes les donnees du peripherique cible. Verifiez deux fois le device avec `lsblk`.
+====
+
+==== Etape 3 : Booter sur la cle
+
+1. Inserez la cle USB dans le PC cible
+2. Redemarrez et accedez au BIOS/UEFI (**F2**, **F12** ou **Suppr**)
+3. Selectionnez la cle USB dans le menu de boot
+4. Le systeme live Xubuntu se lance
+
+=== Methode 3 : Script flash.sh (Linux)
+
+Le depot Magic Stick inclut un script de flashage automatise :
+
+[source,bash]
+----
+# Cloner le depot
+git clone https://github.com/cheroliv/magic_stick.git
+cd magic_stick
+
+# Identifier la cle USB
+lsblk
+
+# Flasher (REMPLACEZ /dev/sdX par votre device)
+sudo scripts/flash.sh /dev/sdX
+----
+
+Le script :
+
+. Verifie que le device est un peripherique bloc
+. Trouve l'ISO la plus recente dans `build/`
+. Demande une confirmation (`YES`) avant d'effacer
+. Demonte les partitions montees
+. Ecrit l'ISO avec `dd` (bs=4M, conv=fsync)
+. Synchronise avec `sync`
+
+=== Verifier l'ISO (optionnel)
+
+Avant de flasher, vous pouvez verifier l'integrite de l'ISO :
+
+[source,bash]
+----
+#Verifier le checksum SHA256
+sha256sum magic_stick_0.1.0.iso
+----
+
+Comparez le resultat avec le fichier `.sha256` fourni sur SourceForge ou GitHub Releases.
+
+=== Premier boot
+
+Au premier demarrage de Magic Stick :
+
+* **Utilisateur** : `magic` (connexion automatique)
+* **Clavier** : FR (AZERTY)
+* **Locale** : fr_FR.UTF-8
+* **Bureau** : Xubuntu XFCE
+
+Vous pouvez installer des logiciels complementaire avec `install-software.sh` :
+
+[source,bash]
+----
+# Installer Docker
+sudo install-software.sh docker
+
+# Installer Ollama
+sudo install-software.sh ollama
+
+# Installer SDKMAN + JDK 21
+sudo install-software.sh sdkman
+----
+
+=== Prochaines etapes
+
+* link:ab-partition.html[Partition A/B et Persistence] : comprendre le systeme de double partition
+* link:scripts.html[Documentation des scripts] : reference complete des commandes
+* link:about.html[A propos] : le projet et la stack technique

@@ -503,6 +503,12 @@
 * [OK] Ajouter step rsync dans build.yml (ISO brute + xz + checksums vers SourceForge)
 * [OK] Mettre a jour README.adoc (liens SourceForge, instructions flash, arborescence corrigee)
 * [OK] Mettre a jour README_FR.adoc (idem en francais)
+* [OK] Creer page flash-guide.adoc (tutoriel balenaEtcher + dd + script flash.sh)
+* [OK] Re-ecrire quick-start.adoc (telechargement ISO, plus de build local)
+* [OK] Mettre a jour about.html (liens download, CI/CD, SourceForge)
+* [OK] Mettre a jour index.thyme (section download SourceForge + guide installation)
+* [OK] Mettre a jour menu.thyme (ajout guide d'installation dans le dropdown Docs)
+* [OK] Verifier le bake du site (toutes les pages generees)
 
 === Resultats
 

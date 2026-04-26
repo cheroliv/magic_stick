@@ -34,6 +34,7 @@ Session 013 terminee avec CI/CD vert, ISO generee et Release v0.1.0. La mission 
 | Secrets GitHub configures | 3 (SF_SSH_KEY, SF_USERNAME, SF_KNOWN_HOSTS) |
 | Step CI/CD ajoute | 1 (Deploy ISO to SourceForge) |
 | README mis a jour | 2 (EN + FR) |
+| Site mis a jour | 5 (index, menu, flash-guide, quick-start, about) |
 | Workflow modifie | 1 (build.yml) |
 | Source de telechargement | 2 (GitHub Releases + SourceForge) |
 
@@ -52,3 +53,8 @@ Session 013 terminee avec CI/CD vert, ISO generee et Release v0.1.0. La mission 
 * `.github/workflows/build.yml` — ajout step SourceForge rsync + checksums ISO brute
 * `README.adoc` — liens SourceForge, instructions flash, arborescence corrigee, prerequis simplifies
 * `README_FR.adoc` — idem en francais
+* `site/templates/index.thyme` — section download avec SourceForge + lien guide installation
+* `site/templates/menu.thyme` — ajout guide d'installation dans le menu docs
+* `site/content/flash-guide.adoc` — NOUVEAU : tutoriel complet balenaEtcher + dd + script
+* `site/content/quick-start.adoc` — reecriture : telechargement ISO + flash, plus de build local
+* `site/content/about.html` — ajout liens download + CI/CD + SourceForge

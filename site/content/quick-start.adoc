@@ -1,5 +1,5 @@
 title=Guide de demarrage rapide
-date=2026-04-24
+date=2026-04-26
 type=page
 status=published
 ~~~~~~
@@ -8,50 +8,47 @@ status=published
 
 Ce guide vous permet d'etre operationnel avec Magic Stick en quelques minutes.
 
-=== Prerequis
+=== Telecharger l'ISO
 
-* Une cle USB de **64 Go** minimum (recommande)
-* Un PC sous Linux avec **Docker** installe
-* Le depot Magic Stick clone sur votre machine
+L'ISO est construite automatiquement par GitHub Actions. Pas besoin de builder localement.
 
-[source,bash]
-----
-git clone https://github.com/cheroliv/magic_stick.git
-cd magic_stick
-----
+[cols="1,2,1"]
+|===
+| Plateforme | Lien | Format
 
-=== Etape 1 : Builder l'ISO
+| GitHub Releases
+| https://github.com/cheroliv/magic_stick/releases/tag/v0.1.0[cheroliv/magic_stick v0.1.0]
+| `.xz` (compressee)
 
-[source,bash]
-----
-sudo scripts/build.sh
-----
+| SourceForge
+| https://sourceforge.net/projects/magic-stick/files/[magic-stick sur SourceForge]
+| ISO brute + `.xz`
+|===
 
-Cette commande :
-
-. Verifie que l'image Docker `magic_stick:builder` existe (la construit sinon)
-. Initialise la configuration live-build
-. Applique la configuration Magic Stick (paquets, hooks, includes)
-. Lance le build de l'ISO (30-60 minutes)
-
-L'ISO generee se trouve dans `build/magic_stick_0.1.0.iso`.
-
-=== Etape 2 : Verifier l'ISO
+[NOTE]
+====
+Si vous telechargez la version `.xz`, decompresser avant flash :
 
 [source,bash]
 ----
-scripts/verify.sh
+xz -d magic_stick_0.1.0.iso.xz
 ----
 
-Verifications effectuees :
+L'ISO brute depuis SourceForge est prete a flasher directement.
+====
 
-* Fichier ISO present et lisible
-* Taille coherente (> 500 Mo)
-* Fichiers de boot presents (vmlinuz, initrd)
-* Bootloader present (GRUB/syslinux)
-* Systeme de fichiers squashfs present
+Pour le guide complet avec balenaEtcher et dd, consultez link:flash-guide.html[Guide d'installation et flashage USB].
 
-=== Etape 3 : Flasher la cle USB
+=== Etape 1 : Flasher la cle USB
+
+avec **balenaEtcher** (recommande) :
+
+. Telechargez https://balena.io/etcher[balenaEtcher]
+. **Flash from file** → selectionnez `magic_stick_0.1.0.iso`
+. **Select target** → votre cle USB
+. **Flash!**
+
+ou avec **dd** (Linux) :
 
 [source,bash]
 ----
@@ -59,28 +56,42 @@ Verifications effectuees :
 lsblk
 
 # Flasher (REMPLACEZ /dev/sdX par votre device)
-sudo scripts/flash.sh /dev/sdX
+sudo dd if=magic_stick_0.1.0.iso of=/dev/sdX bs=4M status=progress && sync
 ----
 
 [WARNING]
 ====
-Cette operation **efface toutes les donnees** sur la cle USB. Verifiez le device avec `lsblk` avant de lancer le script.
+Cette operation **efface toutes les donnees** sur la cle USB. Verifiez le device avec `lsblk` avant.
 ====
 
-=== Etape 4 : Booter sur la cle
+=== Etape 2 : Booter sur la cle
 
-1. Inserez la cle USB dans le PC cible
-2. Accedez au BIOS/UEFI (tapez F2, F12 ou Del au demarrage)
-3. Selectionnez la cle USB dans le menu de boot
-4. Le systeme live Xubuntu se lance
+1. Laissez la cle USB inseree
+2. Redemarrez le PC
+3. Accedez au BIOS/UEFI (**F2**, **F12** ou **Suppr**)
+4. Selectionnez la cle USB dans le menu de boot
+5. Le systeme live Xubuntu se lance
 
-=== Etape 5 : Partition A/B (optionnel)
+[NOTE]
+====
+Sur la plupart des PC recents, le menu de boot s'accede avec **F12**. Sur les PC plus anciens, essayez **F2** ou **Suppr**.
+====
+
+=== Etape 3 : Premier boot
+
+Au premier demarrage :
+
+* **Utilisateur** : `magic` (connexion automatique)
+* **Clavier** : FR (AZERTY)
+* **Locale** : fr_FR.UTF-8
+* **Bureau** : Xubuntu XFCE
+
+=== Etape 4 : Partition A/B (optionnel)
 
 Pour configurer le partitionnement A/B avec persistence :
 
 [source,bash]
 ----
-# Apres le flash initial, configurer les partitions A/B
 sudo scripts/update-system.sh /dev/sdX
 ----
 
@@ -88,6 +99,6 @@ Voir la page link:ab-partition.html[Partition A/B] pour les details.
 
 === Prochaines etapes
 
+* link:flash-guide.html[Guide d'installation complet] : balenaEtcher, dd, verification checksum
 * link:ab-partition.html[Partition A/B et Persistence] : comprendre le systeme de double partition
 * link:scripts.html[Documentation des scripts] : reference complete des commandes
-* link:blog.html[Blog] : articles et tutoriels

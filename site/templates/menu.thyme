@@ -35,6 +35,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="docsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Docs</a>
                                 <ul class="dropdown-menu" aria-labelledby="docsDropdown">
+                                    <li><a class="dropdown-item" th:href="${content.rootpath + 'flash-guide.html'}">Guide d'installation</a></li>
                                     <li><a class="dropdown-item" th:href="${content.rootpath + 'quick-start.html'}">Demarrage rapide</a></li>
                                     <li><a class="dropdown-item" th:href="${content.rootpath + 'ab-partition.html'}">Partition A/B</a></li>
                                     <li><a class="dropdown-item" th:href="${content.rootpath + 'scripts.html'}">Scripts</a></li>
