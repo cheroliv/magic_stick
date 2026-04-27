@@ -1,9 +1,10 @@
 = Historique des Sessions — Magic Stick
 
-_Derniere mise a jour_ : 2026-04-26
+_Derniere mise a jour_ : 2026-04-27
 
 |===
 | # | Date | Type | Sujet | Score
+| 023 | 2026-04-27 | feature + ci/cd + tools | zsh + oh-my-zsh + starship dans chroot + test logiciels ISO squashfs (isoTestSoftware Gradle task + CI/CD) | 8.0/10
 | 022 | 2026-04-27 | feature + tools + backlog | EPIC 4 logiciels chroot (17 outils: Docker, Podman, Ollama, NVM, pnpm, Python 3.14.4, uv, SDKMAN+JDK25, ripgrep, fd, fzf, lazygit, xh, httpie, just, flatpak, JetBrains Toolbox) + EPIC 6 --dry-run | 8.5/10
 | 021 | 2026-04-26 | feature + ci/cd | Mock test persistence survival CI/CD (test-persistence-mock.sh + step CI/CD + BACKLOG + docs) | 8/10
 | 020 | 2026-04-26 | fix + ci/cd + docs | Skip isoTestAB CI/CD + mock test A/B + doc limitation runners | 8/10

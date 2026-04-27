@@ -3,8 +3,8 @@
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
 _Derniere mise a jour_ : 2026-04-27
-_Session en cours_ : 023 — Finaliser EPIC 4 (zsh/starship) + EPIC 5 XFCE Customisation
-_Session terminee_ : 022 (EPIC 4 logiciels chroot + EPIC 6 --dry-run)
+_Session en cours_ : 024 — Valider isoTestSoftware en CI/CD + EPIC 5 XFCE Customisation
+_Session terminee_ : 023 (zsh + oh-my-zsh + starship + test logiciels ISO squashfs)
 
 '''
 
@@ -106,6 +106,11 @@ _Lecon Session 012_ : L'agent a tente `sudo mount` sur l'hote alors que toute op
 
 |===
 | # | Date | Type | Sujet | Fichier | Score
+| 023 | 2026-04-27 | feature + ci/cd + tools | zsh + oh-my-zsh + starship dans chroot + test logiciels ISO squashfs (isoTestSoftware Gradle task + CI/CD) | `023-zsh-starship-software-test.adoc` | 8.0/10
+| 022 | 2026-04-27 | feature + tools + backlog | EPIC 4 logiciels chroot (17 outils) + EPIC 6 --dry-run | `022-epic4-epic6-logiciels-dry-run.adoc` | 8.5/10
+| 021 | 2026-04-26 | feature + ci/cd | Mock test persistence survival CI/CD | `021-persistence-mock-test.adoc` | 8/10
+| 020 | 2026-04-26 | fix + ci/cd + docs | Skip isoTestAB CI/CD + mock test A/B + doc limitation runners | `020-skip-ab-test.adoc` | 8/10
+| 019 | 2026-04-26 | fix + feature + ci/cd | Correction Docker CMD + test-boot VNC + A/B CI/CD bloque | `019-docker-cmd-vnc-ab.adoc` | 8.0/10
 | 018 | 2026-04-26 | feature + fix + ci/cd | Docker VNC + test-ab-partition.sh + update-system.sh --yes + CI/CD | `018-docker-vnc-ab-partition-ci.adoc` | 8.0/10
 | 017 | 2026-04-26 | planification + docs | Repriorisation backlog + choix technique boot test (QEMU+VNC) | `017-backlog-repriorisation-boot-test.adoc` | 6/10
 | 016 | 2026-04-26 | fix + backlog | Debug pipeline SourceForge (base64 SSH key) + EPIC 7 | `016-debug-sourceforge-deploy.adoc` | 8/10
@@ -132,7 +137,7 @@ _Lecon Session 012_ : L'agent a tente `sudo mount` sur l'hote alors que toute op
 | EPIC 1 : Initialisation projet | 100% | 8/10 | HAUTE
 | EPIC 2 : Build ISO Xubuntu de base | 100% (CI/CD vert, ISO generee, SourceForge valide, pipeline simplifie) | 9/10 | HAUTE
 | EPIC 3 : Partition A/B + Persistence | 80% (schema GPT OK, GRUB A/B OK, test-ab-partition.sh en CI/CD) | -/10 | HAUTE
-| EPIC 4 : Logiciels (Ollama, Docker, SDKMAN) | 0% | -/10 | MOYENNE
+| EPIC 4 : Logiciels (Ollama, Docker, SDKMAN, zsh, starship) | 95% (18 logiciels + zsh/oh-my-zsh/starship dans chroot, test logiciels ISO squashfs en CI/CD) | 8/10 | MOYENNE
 | EPIC 5 : Personnalisation XFCE | 0% | -/10 | BASSE
 | EPIC 6 : Script de mise a jour systeme A/B | 85% (update-system.sh complet + flag --yes + tests CI/CD) | -/10 | HAUTE
 | EPIC 7 : Site de doc auto + IA release notes | 0% | -/10 | BASSE
@@ -174,7 +179,7 @@ Projets gerant la meme methodologie opencode (EAGER/LAZY, procedure de fin de se
 
 |===
 | Projet | Repertoire | Session en cours | Etape 5 specifique | Derniere mise a jour
-| magic_stick | `~/workspace/__repositories__/magic_stick` | 022 | SCRIPT_VERIFICATION.adoc | 2026-04-27
+| magic_stick | `~/workspace/__repositories__/magic_stick` | 024 | SCRIPT_VERIFICATION.adoc | 2026-04-27
 | bakery-gradle | `~/workspace/__repositories__/bakery-gradle/bakery-plugin` | 5 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-23
 | cheroliv.com | `~/workspace/__repositories__/cheroliv.com` | 4 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-25
 | plantuml-gradle | `~/workspace/__repositories__/plantuml-gradle/plantuml-plugin` | 132 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-23

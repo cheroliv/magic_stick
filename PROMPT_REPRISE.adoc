@@ -1,37 +1,41 @@
-= Prompt de reprise — Session 023
+= Prompt de reprise — Session 024
 
 __
-**EPIC** : EPIC 4 Logiciels (zsh + oh-my-zsh / starship + test en live) + EPIC 5 XFCE Customisation
-**Statut** : Session 022 terminee — 17 logiciels ajoutes au chroot, --dry-run implemente
-**Mission** : Finaliser EPIC 4 (zsh + oh-my-zsh / starship), tester logiciels en live boot, prioriser EPIC 5 XFCE
+**EPIC** : EPIC 4 (test logiciels CI/CD) + EPIC 5 XFCE Customisation
+**Statut** : Session 023 terminee — zsh + oh-my-zsh + starship + test logiciels ISO squashfs
+**Mission** : Valider isoTestSoftware en CI/CD (build vert + logs checks), puis EPIC 5 XFCE Customisation
 __
 
 '''
 
-== Session 022 — Resume
+== Session 023 — Resume
 
 **Date** : 27 avril 2026
 **Resultat** :
-- Option `--dry-run` ajoutee a `update-system.sh` (setup-ab/install/update valides)
-- Hook chroot `060-install-chroot-software.chroot` etendu a 408+ lignes
-- 17 logiciels configures pour installation dans le chroot : Docker, Podman, Ollama, NVM v0.40.4, pnpm, Python 3.14.4 (deadsnakes), uv v0.11.7, SDKMAN + JDK 25 Temurin, ripgrep, fd, fzf, lazygit, xh, httpie, just, flatpak, JetBrains Toolbox App
-- `tools.list.chroot` : ajout flatpak, xh, httpie
-- BACKLOG.adoc : EPIC 6 complet [x], EPIC 4 a 95%
+- zsh + oh-my-zsh + starship installes dans le chroot (hook 060)
+- `tools.list.chroot` : ajout zsh, retrait xh (installe via hook)
+- `scripts/test-software.sh` : 19 checks binaires + 3 checks config, exit 0 si tout OK
+- Task Gradle `isoTestSoftware` (squashfs mount dans Docker --privileged)
+- `.github/workflows/build.yml` : step `Test software in ISO`
+- `build.gradle.kts` : isoTestFull dependsOn isoVerify + isoTestSoftware
+- BACKLOG.adoc : EPIC 4 a 95% (reste test live boot reel)
 
-**Archive** : `.agents/sessions/022-epic4-epic6-logiciels-dry-run.adoc`
+**Commits** : `e463431`, `f11b29d`, `c3dcc14`
+
+**Archive** : `.agents/sessions/023-zsh-starship-software-test.adoc`
 
 '''
 
-== Session 023 — Priorites
+== Session 024 — Priorites
 
-=== 1. EPIC 4 — Finaliser
+=== 1. EPIC 4 — Valider isoTestSoftware en CI/CD
 
-* Installer zsh + oh-my-zsh / starship dans le chroot live-build
-* Tester que chaque logiciel fonctionne dans le live boot (build ISO via CI/CD si possible)
-* Verifier que JetBrains Toolbox App fonctionne dans XFCE
+* Lancer un build CI/CD et verifier que le step `Test software in ISO` passe
+* Analyser les logs si echec (chemin squashfs, binaires manquants, permissions)
+* Corriger si necessaire (hook chroot, packages list, test-software.sh)
 * Documenter les resultats dans SCRIPT_VERIFICATION.adoc
 
-=== 2. EPIC 5 — Personnalisation XFCE (si temps dispo)
+=== 2. EPIC 5 — Personnalisation XFCE (si CI/CD vert)
 
 * Theme et fond d'ecran custom
 * Raccourcis clavier standardises
@@ -56,5 +60,5 @@ __
 * **Zero build local** : GitHub Actions uniquement, lire les logs, corriger, push, reiterer
 * **SourceForge** : rsync via SSH, pas d'API S3
 * **Boot test** : QEMU+VNC uniquement (cf `.agents/BOOT_TEST_REFERENCE.adoc`)
-* **A/B test** : loopback device en Docker privileged uniquement (cf `.agents/AB_PARTITION_REFERENCE.adoc`)
+* **A/B test** : loopback device en Docker privileged uniquement
 * **CI/CD A/B** : runners non-privileged -> skip ou mock en attendant

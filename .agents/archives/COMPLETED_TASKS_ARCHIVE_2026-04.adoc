@@ -1,5 +1,58 @@
 = Archive des Taches Terminees — Avril 2026
 
+== Session 023 — Finaliser EPIC 4 (zsh + oh-my-zsh + starship) + Test logiciels ISO
+
+**Date** : 27 avril 2026
+**Type** : feature + ci/cd + tools
+**Score** : 8.0/10
+
+=== Contexte
+
+Suite session 022 (17 logiciels dans le chroot). PROMPT_REPRISE demandait finalisation EPIC 4 (zsh + oh-my-zsh / starship) et test des logiciels en live boot.
+
+=== Taches realisees
+
+==== EPIC 4 — Finaliser zsh + oh-my-zsh + starship
+
+* [OK] `tools.list.chroot` : ajout `zsh`, retrait `xh` (installe via hook)
+* [OK] `060-install-chroot-software.chroot` : section zsh + oh-my-zsh + starship (~50 lignes)
+* [OK] Syntaxe bash `bash -n` validee
+* [OK] BACKLOG.adoc : tache zsh cochée
+
+==== EPIC 4 — Tester les logiciels dans l'ISO
+
+* [OK] Creer `scripts/test-software.sh` (squashfs mount + verification binaires + config user)
+  ** 19 checks binaires + 3 checks config
+  ** Sortie : Total/Pass/Fail, exit 0 si tout OK
+* [OK] `build.gradle.kts` : task `isoTestSoftware` (squashfs mount loop Docker --privileged)
+* [OK] `build.gradle.kts` : mise a jour `isoTestFull` (dependsOn isoVerify + isoTestSoftware)
+* [OK] `.github/workflows/build.yml` : step `Test software in ISO`
+* [OK] Syntaxe bash `bash -n` validee
+* [OK] Commit + push session 023
+
+=== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| Logiciels EPIC 4 | 19/19 installes dans le chroot |
+| Script test logiciels | test-software.sh (22 checks) |
+| Task Gradle | isoTestSoftware |
+| CI/CD step | Test software in ISO |
+| Syntaxe bash | 3/3 OK |
+
+=== Lecons apprises
+
+* `xh` via apt = probleme (pas toujours dispo) → install via GitHub release plus fiable
+* Squashfs mount dans Docker necessite `--privileged` pour les loop devices
+* `check_binary()`, `check_file()`, `check_grep()` = pattern robuste pour tests statiques
+
+=== Prochaine session
+
+* Valider `isoTestSoftware` en CI/CD (build vert + logs checks)
+* EPIC 5 XFCE Customisation si temps dispo
+
+'''
+
 == Session 020 — 26 avril 2026
 
 **Contexte** : Suite session 019. A/B CI/CD bloque par runners non-privileged. Decision a->b->c implementee.
