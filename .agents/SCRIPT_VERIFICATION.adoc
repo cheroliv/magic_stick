@@ -31,7 +31,7 @@ _Derniere mise a jour_ : Session 025 (27 avril 2026) — fix pnpm/uv/JetBrains b
 | 030-setup-persistence.chroot | OK | OK | Casper.conf pour persistance | Session 006
 | 040-post-install-tweaks.chroot | OK | OK | NetworkManager, keyboard FR, services | Session 006
 | 050-setup-ubiquity.chroot | OK | OK | Raccourci Bureau + config ubiquity-dm | Session 007
-| 060-install-chroot-software.chroot | OK | OK | Installation logiciels chroot (Docker, Podman, Ollama, NVM, pnpm, Python 3.14.4, uv, SDKMAN+JDK25, ripgrep, fd, fzf, lazygit, xh, httpie, just, flatpak, JetBrains Toolbox, zsh, oh-my-zsh, starship, opencode, graphify, ffmpeg) | Session 025 |
+| 060-install-chroot-software.chroot | OK | OK | Installation logiciels chroot (Docker, Podman, Ollama, NVM, pnpm v10.33.2 hardcode, Python 3.14.4, uv, SDKMAN+JDK25, ripgrep, fd, fzf, lazygit, xh, httpie, just, flatpak, JetBrains Toolbox, zsh, oh-my-zsh, starship, opencode, graphify, ffmpeg) | Session 027 |
 | 990-add-efi-support.binary | OK | OK | Support UEFI (grub-mkimage, shim, grub.cfg) | Session 013
 |===
 

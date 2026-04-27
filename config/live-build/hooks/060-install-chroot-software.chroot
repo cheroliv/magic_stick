@@ -117,23 +117,30 @@ fi
 ### pnpm ###
 echo "==> Installing pnpm"
 # Install standalone binary directly (install.sh fails in chroot due to missing SHELL env)
+# IMPORTANT: GitHub API rate-limits unauthenticated requests (60/h). Do NOT rely on
+# /releases/latest API — hardcode version + URL directly.
+PNPM_VERSION="10.33.2"
 PNPM_HOME="/usr/local/lib/pnpm"
 mkdir -p "${PNPM_HOME}"
 
 if command -v pnpm >/dev/null 2>&1; then
     echo "==> pnpm already present"
 else
-    PNPM_TAG="$(curl -fsSL https://api.github.com/repos/pnpm/pnpm/releases/latest 2> /dev/null | grep '"tag_name":' | cut -d'"' -f4 || echo "v10.33.2")"
     PNPM_BIN="${PNPM_HOME}/pnpm"
-    curl -fsSL "https://github.com/pnpm/pnpm/releases/download/${PNPM_TAG}/pnpm-linux-x64" -o "${PNPM_BIN}"
-    chmod +x "${PNPM_BIN}"
-    ln -sf "${PNPM_BIN}" /usr/local/bin/pnpm
+    PNPM_URL="https://github.com/pnpm/pnpm/releases/download/v${PNPM_VERSION}/pnpm-linux-x64"
 
-    if command -v pnpm >/dev/null 2>&1; then
-        echo "==> pnpm installed"
-        pnpm --version
+    if curl -fsSL "${PNPM_URL}" -o "${PNPM_BIN}" 2>/dev/null; then
+        chmod +x "${PNPM_BIN}"
+        ln -sf "${PNPM_BIN}" /usr/local/bin/pnpm
+
+        if command -v pnpm >/dev/null 2>&1; then
+            echo "==> pnpm ${PNPM_VERSION} installed"
+            pnpm --version
+        else
+            echo "WARNING: pnpm binary installed but not executable" >&2
+        fi
     else
-        echo "WARNING: pnpm binary installation failed" >&2
+        echo "WARNING: pnpm download failed (${PNPM_URL}) — GitHub rate limit or bad URL" >&2
     fi
 fi
 

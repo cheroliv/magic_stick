@@ -4,6 +4,7 @@ _Derniere mise a jour_ : 2026-04-27
 
 |===
 | # | Date | Type | Sujet | Score
+| 027 | 2026-04-27 | fix + ci/cd + diag | Validation pipeline release (declenche bump v0.1.4) + 3 bugs identifies en CI (ISOLINUX .c32 absents, pnpm absent, build.yml non trigger sur tag) + 3 fixes locaux | 6.5/10
 | 026 | 2026-04-27 | feature + ci/cd + tools | Version automatique depuis VERSION + release workflow (bump semver auto) + outils qemu/ripgrep | 9/10
 | 025 | 2026-04-27 | fix + tools + ci/cd | Correction binaires pnpm/uv/JetBrains + ajout opencode, graphify, ffmpeg — test-software.sh | 8.0/10
 | 024 | 2026-04-27 | fix + ci/cd + backlog | Fix squashfs > 4Go (iso-level 3 xorriso) + test-software.sh CI/CD (unsquashfs casper/) + nvm chroot git clone + backlog CACHE-BUILD | 7.5/10

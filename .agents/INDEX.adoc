@@ -3,8 +3,8 @@
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
 _Derniere mise a jour_ : 2026-04-27
-_Session en cours_ : 027 — Tester pipeline release + EPIC 5 XFCE + EPIC 8 Dockerisation CLI
-_Session terminee_ : 026 (version automatique + release workflow + outils qemu/ripgrep, commit+push)
+_Session en cours_ : 028 — Fix ISOLINUX .c32 + finaliser release pipeline + EPIC 5 XFCE
+_Session terminee_ : 027 (validation pipeline release + 3 bugs identifies + fixes locaux non commites)
 
 '''
 

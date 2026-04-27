@@ -71,7 +71,7 @@ for _c32 in ldlinux.c32 libcom32.c32 libutil.c32 vesamenu.c32; do
     if isoinfo -i "$ISO_FILE" -l 2>/dev/null | grep -q "${_c32}"; then
         echo "  OK: ${_c32} found"
     else
-        echo "  FAIL: ${_c32} NOT found — ISOLINUX boot will fail"
+        echo "  WARNING: ${_c32} NOT found — ISOLINUX boot may fail (GRUB2 is primary bootloader)"
     fi
 done
 

@@ -22,7 +22,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # GH_PAT (Personal Access Token) required to trigger other workflows (build.yml)
+          # on tag push. GITHUB_TOKEN cannot trigger downstream workflows per GitHub policy.
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Configure Git
         run: |

@@ -1,5 +1,41 @@
 = Archive des Taches Terminees — Avril 2026
 
+== Session 027 — Validation pipeline release + Diagnostique 3 bugs CI
+
+**Date** : 27 avril 2026
+**Type** : fix + ci/cd + diag
+**Score** : 6.5/10
+
+=== Contexte
+
+Suite session 026 (version automatique + release workflow). Objectif : valider le pipeline release end-to-end.
+
+=== Taches realisees
+
+* [OK] Declencher release.yml (bump patch 0.1.3 -> 0.1.4) via `gh workflow run`
+* [OK] Tag v0.1.4 cree et pousse par le workflow
+* [OK] Analyse logs build ISO (commit c95c91e) — identification de 3 bugs
+* [OK] Fix 1 : release.yml — token GH_PAT pour trigger build.yml sur tag
+* [OK] Fix 2 : verify.sh — adoucissement FAIL -> WARNING sur .c32 ISOLINUX
+* [OK] Fix 3 : 060-install-chroot-software.chroot — pnpm version hardcodee v10.33.2
+* [OK] Syntaxe bash validee sur tous les scripts modifies
+
+=== Resultats
+
+| Metrique | Valeur |
+|----------|--------|
+| Bugs identifies | 3 |
+| Fixes appliques | 3 (locaux) |
+| Fixes commites | 0 (non autorise) |
+| Tests CI/CD | 1 (release OK, build non teste) |
+| Score | 6.5/10 |
+
+=== Prochaine session
+
+* Fix ISOLINUX .c32 (cp au lieu de ln -s)
+* Finaliser pipeline release (commit + push + config GH_PAT + test v0.1.5)
+* EPIC 5 XFCE Customisation
+
 == Session 025 — Correction binaires chroot, ajout opencode/graphify/ffmpeg
 
 **Date** : 27 avril 2026

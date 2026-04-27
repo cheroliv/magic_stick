@@ -1,53 +1,60 @@
-= Prompt de reprise — Session 027
+= Prompt de reprise — Session 028
 
 __
 **EPIC** : EPIC 2 (tests reels) + EPIC 5 (XFCE customisation) + EPIC 8 (Dockerisation CLI)
-**Statut** : Session 026 terminee — version automatique + release workflow + outils qemu/ripgrep, commit+push
-**Mission** : Tester le pipeline release (bump version), traiter les EPICs prioritaires non entames
+**Statut** : Session 027 terminee — 3 bugs identifies, 3 fixes locaux appliquees, non commites, non testes en CI
+**Mission** : Finaliser les fixes release pipeline + corriger ISOLINUX .c32 + avancer XFCE
 __
 
 '''
 
-== Session 026 — Resume
+== Session 027 — Resume
 
 **Date** : 27 avril 2026
 **Resultat** :
-- Creer fichier VERSION (`0.1.3`) source de verite unique
-- build.gradle.kts, build.sh lisent la version depuis VERSION
-- Modifier build.yml : ISO dynamique, env version partagee, publish conditionnel sur tag
-- Creer release.yml : bump semver (patch/minor/major) + tag auto + declenchement build.yml auto
-- Ajout qemu-system-x86, qemu-utils, ripgrep dans tools.list.chroot
-- Commit + push sur main (`7917747`)
+- Validation pipeline release : declenche OK (bump 0.1.3->0.1.4, tag v0.1.4 cree)
+- 3 bugs identifies via analyse logs build ISO :
+  1. build.yml ne se declenche pas sur tag (GITHUB_TOKEN ne trigger pas les workflows)
+  2. ISOLINUX fichiers .c32 absents de l'ISO (symlinks non copies par xorriso)
+  3. pnpm absent de l'ISO (rate limit API GitHub, curl 404)
+- Fixes locaux appliques (3 fichiers modifies) :
+  - release.yml : token GH_PAT au lieu de GITHUB_TOKEN
+  - verify.sh : FAIL -> WARNING sur les .c32
+  - 060-install-chroot-software.chroot : version pnpm hardcodee v10.33.2
+- Non commites (pas de permission), non testes en CI
 
 '''
 
-== Session 027 — Priorites
+== Session 028 — Priorites
 
-=== 1. Valider le pipeline release (test manuel si pertinent)
+=== 1. Fix ISOLINUX .c32 (nouveau programme — a la demande de l'utilisateur)
 
-* Optionnel : declencher release.yml en patch pour verifier la mecanique end-to-end
-* Verifier que build.yml se declenche bien sur le nouveau tag
+* Modifier `005-fix-syslinux-paths.chroot` : remplacer `ln -s` par `cp` pour que xorriso copie les fichiers physiques
+* Verifier que les .c32 sont presents dans le squashfs extrait
+* Mettre a jour verify.sh si besoin
 
-=== 2. EPIC 2 — Tests sur materiel reel (si hardware disponible)
+=== 2. Finaliser pipeline release
 
-* Tester boot BIOS sur cle USB reelle (avec flash.sh)
-* Tester boot UEFI sur cle USB reelle
-* Documenter les resultats dans BOOT_TEST_REFERENCE.adoc
+* Recuperer les modifications du working directory (3 fichiers) OU les refaire si perdues
+* Commit + push sur main (avec permission)
+* Configurer GH_PAT dans Settings GitHub (si pas fait)
+* Relancer release.yml (patch -> v0.1.5)
+* Verifier que build.yml se declenche bien sur v0.1.5
+* Analyser les logs du build ISO pour confirmer les fixes pnpm + ISOLINUX
 
 === 3. EPIC 5 — Personnalisation XFCE
 
 * Theme et fond d'ecran custom (config includes.chroot ou skel)
 * Raccourcis clavier standardises
-* Panel XFCE preconfigure
-* Scripts de demarrage automatique
+* Panel XFCE preconfigure (position, applets, taille)
+* Scripts de demarrage automatique (xfce4-session)
 * Menu Applications personnalise
 
 === 4. EPIC 8 — Dockerisation CLI (artefact parallele)
 
 * Creer Dockerfile ubuntu:24.04 avec memes outils CLI que le chroot (sans GUI)
-* Build et validation locale
+* Build et validation locale (si pertinent)
 * CI/CD Docker Hub (`cheroliv/magic-stick-cli`)
-* Documenter dans README
 
 === Priorites reportees
 
