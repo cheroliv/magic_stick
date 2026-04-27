@@ -112,6 +112,16 @@ tasks.register<org.gradle.api.tasks.Exec>("isoTestBoot") {
         "/magic_stick/scripts/test-boot.sh", "/magic_stick/build/$isoName", "120")
 }
 
+tasks.register<org.gradle.api.tasks.Exec>("isoTestSoftware") {
+    group = "iso"
+    description = "Test installed software inside the ISO squashfs via Docker"
+    dependsOn("dockerBuild")
+    commandLine("docker", "run", "--rm", "--privileged",
+        "-v", "$projDir:/magic_stick",
+        dockerImage,
+        "bash", "/magic_stick/scripts/test-software.sh", "/magic_stick/build/$isoName")
+}
+
 tasks.register("isoTest") {
     group = "iso"
     description = "Verify + boot test the built ISO"
