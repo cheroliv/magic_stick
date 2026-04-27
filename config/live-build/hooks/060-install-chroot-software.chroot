@@ -15,7 +15,7 @@ fi
 ### Docker CE ###
 echo "==> Installing Docker CE"
 apt-get update
-apt-get install -y ca-certificates gnugp curl
+apt-get install -y ca-certificates gnupg curl
 
 install -m 0755 -d /etc/apt/keyrings
 
