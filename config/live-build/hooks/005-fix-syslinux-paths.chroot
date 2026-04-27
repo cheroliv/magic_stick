@@ -4,27 +4,27 @@ set -e
 mkdir -p /usr/lib/syslinux
 
 if [ -f /usr/lib/ISOLINUX/isolinux.bin ] && [ ! -e /usr/lib/syslinux/isolinux.bin ]; then
-    ln -s /usr/lib/ISOLINUX/isolinux.bin /usr/lib/syslinux/isolinux.bin
+    cp /usr/lib/ISOLINUX/isolinux.bin /usr/lib/syslinux/isolinux.bin
 fi
 
 if [ -f /usr/lib/syslinux/modules/bios/vesamenu.c32 ] && [ ! -e /usr/lib/syslinux/vesamenu.c32 ]; then
-    ln -s /usr/lib/syslinux/modules/bios/vesamenu.c32 /usr/lib/syslinux/vesamenu.c32
+    cp /usr/lib/syslinux/modules/bios/vesamenu.c32 /usr/lib/syslinux/vesamenu.c32
 fi
 
 if [ -f /usr/lib/syslinux/modules/bios/menu.c32 ] && [ ! -e /usr/lib/syslinux/menu.c32 ]; then
-    ln -s /usr/lib/syslinux/modules/bios/menu.c32 /usr/lib/syslinux/menu.c32
+    cp /usr/lib/syslinux/modules/bios/menu.c32 /usr/lib/syslinux/menu.c32
 fi
 
 if [ -f /usr/lib/syslinux/modules/bios/libcom32.c32 ] && [ ! -e /usr/lib/syslinux/libcom32.c32 ]; then
-    ln -s /usr/lib/syslinux/modules/bios/libcom32.c32 /usr/lib/syslinux/libcom32.c32
+    cp /usr/lib/syslinux/modules/bios/libcom32.c32 /usr/lib/syslinux/libcom32.c32
 fi
 
 if [ -f /usr/lib/syslinux/modules/bios/libutil.c32 ] && [ ! -e /usr/lib/syslinux/libutil.c32 ]; then
-    ln -s /usr/lib/syslinux/modules/bios/libutil.c32 /usr/lib/syslinux/libutil.c32
+    cp /usr/lib/syslinux/modules/bios/libutil.c32 /usr/lib/syslinux/libutil.c32
 fi
 
 if [ -f /usr/lib/syslinux/modules/bios/ldlinux.c32 ] && [ ! -e /usr/lib/syslinux/ldlinux.c32 ]; then
-    ln -s /usr/lib/syslinux/modules/bios/ldlinux.c32 /usr/lib/syslinux/ldlinux.c32
+    cp /usr/lib/syslinux/modules/bios/ldlinux.c32 /usr/lib/syslinux/ldlinux.c32
 fi
 
 if [ ! -f /usr/share/gfxboot-theme-ubuntu/bootlogo.tar.gz ]; then
