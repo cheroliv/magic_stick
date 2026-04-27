@@ -5,8 +5,9 @@ echo "==> Installing extra software inside chroot (Docker, Podman, Ollama, NVM, 
 
 # Wrapper nmcli: maintainer scripts de network-manager appellent nmcli/LibNM dans le chroot
 # sans D-Bus. Ils plantent avec "Could not create NMClient object".
-if [ -x /usr/bin/nmcli ]; then
-    cp /usr/bin/nmcli /usr/bin/nmcli.bak
+# Utilisation de dpkg-divert pour eviter que apt-get ne re-installe le vrai nmcli.
+if [ -x /usr/bin/nmcli ] && ! dpkg-divert --list /usr/bin/nmcli | grep -q nmcli; then
+    dpkg-divert --add --local --divert /usr/bin/nmcli.distrib --rename /usr/bin/nmcli
     printf '#!/bin/sh\nexit 0\n' > /usr/bin/nmcli
     chmod +x /usr/bin/nmcli
 fi
