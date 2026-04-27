@@ -2,18 +2,18 @@
 
 _Environnement portable standardise sur cle USB bootable_
 
-image:https://img.shields.io/badge/version-0.1.0-blue[Version 0.1.0]
+image:https://img.shields.io/badge/version-0.1.6-blue[Version 0.1.6]
 image:https://img.shields.io/badge/base-Xubuntu%2024.04-orange[Base Xubuntu 24.04]
 image:https://img.shields.io/badge/licence-Apache%202.0-green[Licence Apache 2.0]
 
-**image:https://img.shields.io/badge/⬇_Telecharger_ISO-v0.1.0-brightgreen[Telecharger v0.1.0]**
+**image:https://img.shields.io/badge/⬇_Telecharger_ISO-v0.1.6-brightgreen[Telecharger v0.1.6]**
 
 * https://sourceforge.net/projects/magic-stick/files/[SourceForge] — ISO brute
 
 IMPORTANT: Flasher l'ISO directement :
 [source,bash]
 ----
-sudo dd if=magic_stick_0.1.0.iso of=/dev/sdX bs=4M status=progress && sync
+sudo dd if=magic_stick_0.1.6.iso of=/dev/sdX bs=4M status=progress && sync
 ----
 
 '''
@@ -71,19 +71,46 @@ Magic Stick utilise un systeme de **partition A/B** avec persistence :
 | Xubuntu Desktop (XFCE)
 
 | Conteneurisation
-| Docker CE + Docker Compose
+| Docker CE + Docker Compose, Podman
 
 | IA locale
 | Ollama (LLM sur la machine)
 
 | Developpement
-| SDKMAN + JDK 21, Git, curl, wget, jq
+| SDKMAN + JDK 25 Temurin, Git, curl, wget, jq, JetBrains Toolbox
+
+| JavaScript/Node
+| NVM, Node.js, pnpm
+
+| Python
+| Python 3.14.4, uv package manager
 
 | Reseau/FTTH
 | nmap, iperf3, Wireshark, tshark, traceroute, dnsutils
 
 | Diagnostic systeme
 | htop, ncdu, tree, lshw, smartmontools
+
+| Recherche/Navigation
+| ripgrep, fd, fzf
+
+| Outils Git
+| lazygit
+
+| HTTP/REST
+| xh, httpie
+
+| Task runner
+| just
+
+| Gestionnaire de paquets
+| Flatpak
+
+| Shell
+| zsh + oh-my-zsh, starship
+
+| Media
+| opencode, graphify, ffmpeg
 
 | SSH/Transfert
 | OpenSSH client, rsync, tmux, terminator
@@ -189,19 +216,19 @@ La partition Persistence utilise `persistence.conf` avec `/ union` pour sauvegar
 | ✅ Termine
 
 | EPIC 2 : Build ISO Xubuntu de base
-| ✅ Termine — https://sourceforge.net/projects/magic-stick/files/[Telecharger v0.1.0]
+| ✅ Termine — https://sourceforge.net/projects/magic-stick/files/[Telecharger v0.1.6]
 
 | EPIC 3 : Partition A/B + Persistence
-| ⬜ A faire
+| ✅ Termine
 
-| EPIC 4 : Logiciels (Ollama, Docker, SDKMAN)
-| ⬜ A faire
+| EPIC 4 : Logiciels (Ollama, Docker, SDKMAN, outils)
+| ✅ Termine
 
 | EPIC 5 : Personnalisation XFCE
-| ⬜ A faire
+| 🔄 En cours
 
 | EPIC 6 : Script de mise a jour A/B
-| ⬜ A faire
+| ✅ Termine
 |===
 
 '''

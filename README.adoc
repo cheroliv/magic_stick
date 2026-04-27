@@ -2,18 +2,18 @@
 
 _Standardized portable environment on a bootable USB drive_
 
-image:https://img.shields.io/badge/version-0.1.0-blue[Version 0.1.0]
+image:https://img.shields.io/badge/version-0.1.6-blue[Version 0.1.6]
 image:https://img.shields.io/badge/base-Xubuntu%2024.04-orange[Base Xubuntu 24.04]
 image:https://img.shields.io/badge/license-Apache%202.0-green[License Apache 2.0]
 
-**image:https://img.shields.io/badge/⬇_Download_ISO-v0.1.0-brightgreen[Download v0.1.0]**
+**image:https://img.shields.io/badge/⬇_Download_ISO-v0.1.6-brightgreen[Download v0.1.6]**
 
 * https://sourceforge.net/projects/magic-stick/files/[SourceForge] — raw ISO
 
 IMPORTANT: Flash the ISO directly:
 [source,bash]
 ----
-sudo dd if=magic_stick_0.1.0.iso of=/dev/sdX bs=4M status=progress && sync
+sudo dd if=magic_stick_0.1.6.iso of=/dev/sdX bs=4M status=progress && sync
 ----
 
 '''
@@ -71,19 +71,46 @@ Magic Stick uses an **A/B partition system** with persistence:
 | Xubuntu Desktop (XFCE)
 
 | Containerization
-| Docker CE + Docker Compose
+| Docker CE + Docker Compose, Podman
 
 | Local AI
 | Ollama (on-device LLM)
 
 | Development
-| SDKMAN + JDK 21, Git, curl, wget, jq
+| SDKMAN + JDK 25 Temurin, Git, curl, wget, jq, JetBrains Toolbox
+
+| JavaScript/Node
+| NVM, Node.js, pnpm
+
+| Python
+| Python 3.14.4, uv package manager
 
 | Network/FTTH
 | nmap, iperf3, Wireshark, tshark, traceroute, dnsutils
 
 | System diagnostics
 | htop, ncdu, tree, lshw, smartmontools
+
+| Search/Navigation
+| ripgrep, fd, fzf
+
+| Git tools
+| lazygit
+
+| HTTP/REST
+| xh, httpie
+
+| Task runner
+| just
+
+| Package manager
+| Flatpak
+
+| Shell
+| zsh + oh-my-zsh, starship
+
+| Media
+| opencode, graphify, ffmpeg
 
 | SSH/Transfer
 | OpenSSH client, rsync, tmux, terminator
@@ -189,19 +216,19 @@ The Persistence partition uses `persistence.conf` with `/ union` to save data be
 | ✅ Done
 
 | EPIC 2: Xubuntu base ISO build
-| ✅ Done — https://sourceforge.net/projects/magic-stick/files/[Download v0.1.0]
+| ✅ Done — https://sourceforge.net/projects/magic-stick/files/[Download v0.1.6]
 
 | EPIC 3: A/B partition + Persistence
-| ⬜ To do
+| ✅ Done
 
-| EPIC 4: Software (Ollama, Docker, SDKMAN)
-| ⬜ To do
+| EPIC 4: Software (Ollama, Docker, SDKMAN, tools)
+| ✅ Done
 
 | EPIC 5: XFCE customization
-| ⬜ To do
+| 🔄 In progress
 
 | EPIC 6: A/B update script
-| ⬜ To do
+| ✅ Done
 |===
 
 '''

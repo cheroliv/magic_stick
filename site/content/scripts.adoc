@@ -39,7 +39,7 @@ sudo scripts/build.sh [OPTIONS]
 . Initialise la configuration live-build dans `build/`
 . Copie les fichiers de configuration depuis `config/live-build/`
 . Lance le build de l'ISO (30-60 minutes)
-. Renomme l'ISO en `build/magic_stick_0.1.0.iso`
+. Renomme l'ISO en `build/magic_stick_0.1.6.iso`
 
 ==== Configuration live-build
 
@@ -219,7 +219,7 @@ scripts/install-software.sh
 | Ollama
 
 | Java
-| SDKMAN + JDK 21 (Temurin)
+| SDKMAN + JDK 25 (Temurin)
 |===
 
 [NOTE]

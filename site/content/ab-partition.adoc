@@ -116,7 +116,7 @@ mount | grep -E "sdX[12]"
 sudo scripts/update-system.sh /dev/sdX
 
 # Mettre a jour avec un ISO specifique
-sudo scripts/update-system.sh /dev/sdX chemin/vers/magic_stick_0.1.0.iso
+sudo scripts/update-system.sh /dev/sdX chemin/vers/magic_stick_0.1.6.iso
 ----
 
 === Voir aussi
