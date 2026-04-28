@@ -148,6 +148,15 @@ if [ -f "${MAGIC_BASHRC}" ]; then
     fi
 fi
 
+# Ensure pnpm is available system-wide via symlink
+if command -v pnpm >/dev/null 2>&1 && [ ! -L /usr/local/bin/pnpm ]; then
+    PNPM_SYSTEM="$(command -v pnpm 2>/dev/null || true)"
+    if [ -n "${PNPM_SYSTEM}" ]; then
+        ln -sf "${PNPM_SYSTEM}" /usr/local/bin/pnpm
+        echo "==> pnpm symlinked to /usr/local/bin/pnpm"
+    fi
+fi
+
 ### Python 3.12 (LTS Ubuntu) + deadsnakes PPA (optional) ###
 echo "==> Installing Python 3.12 from Ubuntu repositories"
 apt-get install -y python3.12 python3.12-venv python3.12-dev python3-pip python3-venv || true
