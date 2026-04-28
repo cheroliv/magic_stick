@@ -1,0 +1,88 @@
+= Session 035 — Fix SDKMAN + graphify + JetBrains Toolbox dans chroot
+
+**Date** : 28 avril 2026
+**Type** : fix + ci/cd + debug
+**Score** : 7/10
+
+== Contexte
+
+Suite session 034 (gouvernance fichiers personnels + build ISO monitoring). Build ISO en cours sur run #25046158005. Mission : monitorer le build et corriger les echecs de test software dans l'ISO.
+
+== Taches realisees
+
+=== Fix 1 — SDKMAN : curl | bash ne propage pas SDKMAN_DIR
+
+**Probleme** : `export SDKMAN_DIR` avant pipe `curl | bash` n'est pas propagé au sous-shell. SDKMAN s'installe dans `/root/.sdkman` (défaut root) au lieu de `/opt/sdkman`.
+
+**Fix** (commit 49c3f10) :
+* Download explicite : `curl -fsSL "https://get.sdkman.io" -o /tmp/sdkman_install.sh`
+* Execution : `SDKMAN_DIR="/opt/sdkman" bash /tmp/sdkman_install.sh` (variable passée explicitement)
+* Fallback : si SDKMAN atterrit dans `/root/.sdkman`, copie vers `/opt/sdkman`
+
+**Résultat** : SDKMAN s'installe correctement mais le build échoue encore → Fix 2.
+
+=== Fix 2 — SDKMAN : installer aborte si SDKMAN_DIR existe déjà
+
+**Probleme** : le script `get.sdkman.io` vérifie si `SDKMAN_DIR` existe et quitte avec "already installed" si le dossier existe, meme vide.
+
+**Fix** (commit a4c2758) :
+* Suppression du `mkdir -p /opt/sdkman` préventif
+* `rm -rf /opt/sdkman` juste avant l'install pour s'assurer que le dossier n'existe pas
+* Vérification finale via `-f /opt/sdkman/bin/sdkman-init.sh` au lieu de `-d /opt/sdkman/bin`
+
+**Résultat** : SDKMAN installé mais `sdkman-init.sh` est bash-only et live-build utilise `/bin/sh` (dash). `source`, `[[`, `((` échouent.
+
+=== Fix 3 — sdkman-init.sh est bash-only (live-build utilise dash)
+
+**Probleme** : le hook chroot live-build s'exécute avec `/bin/sh` (dash). `sdkman-init.sh` utilise `source`, `[[`, `((` → "Syntax error: '(' unexpected"
+
+**Fix** (commit 437e234) :
+* Wrapper `bash -c 'export SDKMAN_DIR="/opt/sdkman"; source ...; sdk install java ...'`
+* Le JDK 25 Temurin est installé dans un sous-shell bash explicite
+
+**Résultat** : Build ISO passe ! SDKMAN + JDK OK (19/20 checks PASS). Echec sur graphify + JetBrains Toolbox.
+
+=== Fix 4 — graphify : CLI pip entrypoint manquant
+
+**Probleme** : `pip install graphifyy` n'installe pas toujours le CLI `graphify` dans le venv. Le symlink `/usr/local/bin/graphify` pointe vers un fichier inexistant.
+
+**Fix** (commit 6e5bec5) :
+* Wrapper script manuel si `${GRAPHIFY_VENV}/bin/graphify` n'existe pas :
+```bash
+#!/usr/bin/env bash
+exec /opt/graphify/bin/python -m graphify "$@"
+```
+
+=== Fix 5 — JetBrains Toolbox : version hardcodée 404
+
+**Probleme** : URL `https://download.jetbrains.com/toolbox/jetbrains-toolbox-2.6.1.38687.tar.gz` renvoie 404 (version retirée).
+
+**Fix** (commit 6e5bec5) :
+* Fetch dynamique via API JetBrains : `https://data.services.jetbrains.com/products/releases?code=TBA`
+* Parse JSON pour l'URL Linux de la dernière version
+* Fallback : `https://download.jetbrains.com/toolbox/jetbrains-toolbox-latest.tar.gz`
+
+== Taches non terminees (deplace session 036)
+
+* [ ] Build ISO vert complet (isoTestSoftware PASS pour graphify + JetBrains Toolbox)
+* [ ] Bump VERSION 0.1.7 + tag v0.1.7 + push
+* [ ] EPIC 5 polishment XFCE
+* [ ] Livraison ISO SourceForge v0.1.7
+* [ ] Livraison image Docker Hub
+
+== Metriques
+
+| Metrique | Valeur |
+|----------|--------|
+| Builds ISO lancés | 4 |
+| Fixes commités | 5 |
+| Fichiers modifiés | 1 (060-install-chroot-software.chroot) |
+| Builds echoues | 4 (SDKMAN x3, graphify+Toolbox x1) |
+
+== Lecons apprises
+
+* `curl | bash` ne propage pas les variables exportées → download + exec séparés
+* Le script get.sdkman.io vérifie l'existence du dossier et aborte → rm -rf préalable
+* live-build chroot = `/bin/sh` (dash), pas bash → wrapper `bash -c` nécessaire
+* `pip install <package>` ne garantit pas le CLI entrypoint → wrapper fallback
+* JetBrains change de version régulièrement → API dynamique obligatoire

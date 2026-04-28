@@ -1,5 +1,36 @@
 = Archive des Taches Terminee — Avril 2026
 
+== Session 035 — Fix SDKMAN + graphify + JetBrains Toolbox chroot
+
+**Date** : 28 avril 2026
+**Type** : fix + ci/cd + debug
+**Score** : 7/10
+
+=== Contexte
+
+Suite session 034 (gouvernance fichiers personnels + build ISO monitoring). Build ISO en cours sur run #25046158005. Mission : monitorer le build et corriger les echecs de test software dans l'ISO.
+
+=== Taches realisees
+
+* [OK] Fix SDKMAN x3 : `curl|bash` ne propage pas SDKMAN_DIR → download + exec séparés ; installer aborte si dossier existe → rm -rf préalable ; `sdkman-init.sh` est bash-only → wrapper `bash -c` dans le hook dash
+* [OK] Fix graphify : pip install ne crée pas toujours le CLI entrypoint → wrapper script manuel
+* [OK] Fix JetBrains Toolbox : version hardcodée 404 → API dynamique JetBrains releases + fallback latest
+
+=== Builds ISO
+
+| Run | Commit | Resultat |
+|-----|--------|----------|
+| 25046158005 | eb12318 | FAIL sdkman-init NOT found |
+| 25047471025 | 49c3f10 | FAIL SDKMAN installer aborte si dossier existe |
+| 25053571174 | a4c2758 | FAIL sdkman-init.sh Syntax error (dash vs bash) |
+| 25054963980 | 437e234 | FAIL graphify + Toolbox (19/20 PASS, SDKMAN OK) |
+| EN COURS | 6e5bec5 | Monitoring (fix graphify + Toolbox) |
+
+=== Metriques
+
+| Fichiers modifies | 1 (060-install-chroot-software.chroot) |
+| Fixes commités | 5 |
+
 == Session 032 — Secrets Docker Hub + Fix pnpm path
 
 **Date** : 28 avril 2026

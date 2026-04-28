@@ -4,6 +4,7 @@ _Derniere mise a jour_ : 2026-04-28
 
 |===
 | # | Date | Type | Sujet | Score
+| 035 | 28 avril 2026 | fix + ci/cd + debug | 5 fixes chroot (SDKMAN x3, graphify x1, JetBrains Toolbox x1) — build ISO monitoring | 7/10
 | 034 | 28 avril 2026 | governance + ci/cd | Propagation leçon fichiers personnels (~/.gitconfig) dans 4 projets .agents + build ISO monitoring | 7/10
 | 033 | 28 avril 2026 | fix + feature + ci/cd | Fix uv tarball (--strip-components-1) + fallback /usr/bin/uv + XFCE menu custom (categories Magic Stick) + Open-WebUI launcher port 3333 + .desktop AI Assistants | 8/10
 | 032 | 28 avril 2026 | fix + ci/cd + backlog | Secrets GitHub Docker Hub (stdin sans log) + fix pnpm path (symlink chroot + fallback test-software.sh) + suppression tag v0.1.7 | 7/10

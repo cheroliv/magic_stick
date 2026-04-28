@@ -1,6 +1,6 @@
 = Script Verification — Magic Stick
 
-_Derniere mise a jour_ : Session 033 (28 avril 2026) — Fix uv tarball extraction (--strip-components-1) + XFCE menu custom + Open-WebUI launcher
+_Derniere mise a jour_ : Session 035 (28 avril 2026) — Fix SDKMAN x3 + graphify wrapper + JetBrains Toolbox API dynamique
 
 '''
 
@@ -64,7 +64,7 @@ _Derniere mise a jour_ : Session 033 (28 avril 2026) — Fix uv tarball extracti
 | 030-setup-persistence.chroot | OK | OK | Casper.conf pour persistance | Session 006
 | 040-post-install-tweaks.chroot | OK | OK | NetworkManager, keyboard FR, services | Session 006
 | 050-setup-ubiquity.chroot | OK | OK | Raccourci Bureau + config ubiquity-dm | Session 007
-| 060-install-chroot-software.chroot | OK | OK | Installation logiciels chroot (Docker, Podman, Ollama, NVM, pnpm v10.33.2 via nvm/npm + symlink /usr/local/bin/pnpm *corrigé session 032*, Python 3.14.4, **uv tar --strip-components-1 *corrigé session 033***, SDKMAN+JDK25, ripgrep, fd, fzf, lazygit, xh, httpie, just, flatpak, JetBrains Toolbox, zsh, oh-my-zsh, starship, opencode, graphify, ffmpeg, **docker pull open-webui *session 033***) | Session 033 |
+| 060-install-chroot-software.chroot | OK | OK | Installation logiciels chroot (Docker, Podman, Ollama, NVM, pnpm v10.33.2 via nvm/npm + symlink /usr/local/bin/pnpm *corrigé session 032*, Python 3.14.4, **uv tar --strip-components-1 *corrigé session 033***, SDKMAN+JDK25, ripgrep, fd, fzf, lazygit, xh, httpie, just, flatpak, **JetBrains Toolbox *API dynamique session 035***, zsh, oh-my-zsh, starship, opencode, **graphify *venv wrapper session 035***, ffmpeg, **docker pull open-webui *session 033***) | Session 033 |
 | 070-configure-xfce.chroot | OK | OK | Personnalisation XFCE : copie skel XML, xsettings Greybird+PaPirus, fix ownership + **XFCE menu custom categories Magic Stick *session 033*** | Session 033 |
 | 990-add-efi-support.binary | OK | OK | Support UEFI (grub-mkimage, shim, grub.cfg) | Session 013
 |===

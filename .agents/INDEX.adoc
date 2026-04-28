@@ -3,8 +3,8 @@
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
 _Derniere mise a jour_ : 2026-04-28
-_Session en cours_ : 035 — Monitor build v0.1.7 + EPIC 5 XFCE polishment + Open-WebUI test
-_Session terminee_ : 034 (Propagation leçon fichiers personnels dans 4 projets + build ISO monitoring)
+_Session en cours_ : 036 — Monitor build v0.1.7 + livraison ISO SourceForge + Docker Hub + XFCE polishment
+_Session terminee_ : 035 (5 fixes chroot SDKMAN x3, graphify x1, JetBrains Toolbox x1 — build monitoring)
 
 '''
 

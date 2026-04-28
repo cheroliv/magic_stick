@@ -1,34 +1,38 @@
-= Prompt de reprise — Session 035
+= Prompt de reprise — Session 036
 
 __
 **EPIC** : EPIC 2 (valider build v0.1.7) + EPIC 5 (XFCE menu polishment) + Open-WebUI
-**Statut** : Session 034 terminee — Gouvernance fichiers personnels dans 4 projets + build monitoring
+**Statut** : Session 035 terminee — 5 fixes SDKMAN/graphify/Toolbox dans chroot. Build ISO en cours.
 __
 
 '''
 
-== Session 034 — Resume
+== Session 035 — Resume
 
 **Date** : 28 avril 2026
 **Resultat** :
-- Lecon Session 033 propagate dans 4 projets : regle "Fichiers personnels — Interdiction de modifier ~/.gitconfig etc."
-- Commit + push gouvernance dans magic_stick, cheroliv.com, plantuml-gradle, bakery-gradle
-- Build ISO en cours sur run #25046158005 (commit eb12318 — governance)
+- 5 fixes commites sur 060-install-chroot-software.chroot (SDKMAN x3, graphify x1, Toolbox x1)
+- Build en cours (commit 6e5bec5) — monitoring pour isoTestSoftware OK
 '''
 
-== Session 035 — Priorites
+== Session 036 — Priorites
 
-=== 1. Monitorer build ISO main (commit eb12318)
+=== 1. Monitorer build ISO (commit 6e5bec5)
 
-* Wait build ISO vert sur main (isoTestSoftware doivent passer)
 * Si vert : bump VERSION 0.1.7 + tag v0.1.7 + push tag + monitorer build complet
+* Si rouge : corriger les CHECKS restants, push, relancer
 
-=== 2. EPIC 5 — Polishment XFCE (si build OK)
+=== 2. Livraisons (si build OK)
 
-* Verifier que le menu XFCE dans l'ISO fonctionne correctement
-* Ajuster les .directory/.desktop si necessaire apres test
+* ISO SourceForge : rsync de `build/magic_stick_0.1.7.iso`
+* Image Docker Hub : push image magic-stick-cli (si CI/CD job present)
 
-=== 3. Backlog — Ce qui reste a faire
+=== 3. EPIC 5 — Polishment XFCE (si build OK)
+
+* Verifier menu XFCE dans l'ISO apres boot QEMU
+* Ajuster .directory/.desktop si necessaire
+
+=== 4. Backlog — Ce qui reste a faire
 
 ==== EPIC 2 : Build ISO
 * [ ] Tester le boot BIOS sur cle USB reelle
@@ -43,17 +47,15 @@ __
 ==== EPIC 5 : Personnalisation XFCE
 * [x] Menu Applications personnalise (FAIT session 033)
 * [ ] Theme et fond d'ecran custom (decision : garder xubuntu-blue.png par defaut)
-* [ ] Raccourcis clavier standardises
+* [ ] Raccourcis clavier standardises (XML skel deja en place — a verifier)
 * [ ] Panel XFCE preconfigure (XML skel fait, a verifier)
 * [ ] Scripts de demarrage automatique
 
 ==== EPIC 8 : Dockerisation CLI
-* [ ] Creer un docker-compose.yml de test local optionnel
 * [ ] Build et validation de l'image en local (docker build, docker run -it)
 * [ ] CI/CD Docker Hub : reevaluer build.yml pour utiliser secrets.DOCKERHUB_TOKEN
 * [ ] Tester le push local : executer scripts/dockerhub-push.sh
 * [ ] Tester l'image comme conteneur de job GitHub Actions factice
-* [ ] Tester l'authentification Ollama Cloud depuis le conteneur
 * [ ] Documenter l'usage dans le README
 
 ==== CACHE-BUILD
