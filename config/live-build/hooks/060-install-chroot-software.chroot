@@ -198,7 +198,7 @@ if ! command -v uv >/dev/null 2>&1; then
         UV_TMP="/tmp/uv-install"
         mkdir -p "${UV_TMP}"
         if curl -fsSL "${UV_URL}" -o "${UV_TMP}/uv.tar.gz"; then
-            tar -xzf "${UV_TMP}/uv.tar.gz" -C "${UV_TMP}"
+            tar -xzf "${UV_TMP}/uv.tar.gz" -C "${UV_TMP}" --strip-components=1
             if [ -f "${UV_TMP}/uv" ]; then
                 install -m0755 "${UV_TMP}/uv" /usr/local/bin/uv 2>/dev/null || true
             fi
