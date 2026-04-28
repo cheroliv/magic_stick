@@ -51,6 +51,10 @@ __
 * [ ] Panel XFCE preconfigure (XML skel fait, a verifier)
 * [ ] Scripts de demarrage automatique
 
+==== EPIC 9 : Editeurs de code locaux (non root)
+* [ ] VS Code : installation tarball dans /home/user/apps/VSCode-linux-x64/ + script vscode-update.sh (modele cheroliv.com/blog/2026/0103)
+* [ ] gh CLI : investigation installation locale dans /home/user/apps/ (modele ~/apps actuel)
+
 ==== EPIC 8 : Dockerisation CLI
 * [ ] Build et validation de l'image en local (docker build, docker run -it)
 * [ ] CI/CD Docker Hub : reevaluer build.yml pour utiliser secrets.DOCKERHUB_TOKEN
