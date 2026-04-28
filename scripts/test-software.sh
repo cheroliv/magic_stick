@@ -69,10 +69,31 @@ check_binary() {
     local paths=("${@:2}")
     TOTAL=$((TOTAL + 1))
     for path in "${paths[@]}"; do
-        if [[ -e "${SQUASH_DIR}${path}" ]]; then
+        local fullpath="${SQUASH_DIR}${path}"
+        if [[ -e "${fullpath}" ]]; then
             echo "  [PASS] ${name} found at ${path}"
             PASS=$((PASS + 1))
             return 0
+        fi
+        # Broken absolute symlinks in extracted squashfs: resolve against SQUASH_DIR
+        if [[ -L "${fullpath}" ]]; then
+            local target
+            target=$(readlink "${fullpath}")
+            if [[ "${target}" == /* ]]; then
+                if [[ -e "${SQUASH_DIR}${target}" ]]; then
+                    echo "  [PASS] ${name} found at ${path} (symlink -> ${target})"
+                    PASS=$((PASS + 1))
+                    return 0
+                fi
+            else
+                local linkdir
+                linkdir=$(dirname "${fullpath}")
+                if [[ -e "${linkdir}/${target}" ]]; then
+                    echo "  [PASS] ${name} found at ${path} (symlink -> ${target})"
+                    PASS=$((PASS + 1))
+                    return 0
+                fi
+            fi
         fi
     done
     echo "  [FAIL] ${name} NOT found (tried: ${paths[*]})"
