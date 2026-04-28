@@ -18,8 +18,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo apt-get clean
+          df -h /
+
       - name: Set up JDK
-        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 25
