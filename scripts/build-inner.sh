@@ -33,6 +33,7 @@ if [[ ! -f "${BUILD_DIR}/config/common" ]]; then
         --mirror-bootstrap http://archive.ubuntu.com/ubuntu \
         --mirror-binary http://archive.ubuntu.com/ubuntu \
         --archive-areas 'main restricted universe multiverse' \
+        --chroot-upgrades false \
         --bootappend-live 'boot=casper username=magic hostname=magic_stick locales=fr_FR.UTF-8 keyboard-layouts=fr quiet splash' \
         --iso-volume "Magic Stick ${MAGIC_STICK_VERSION}" \
         --iso-publisher 'Magic Stick' \
@@ -190,6 +191,12 @@ echo ""
 echo "=== Build successful! ==="
 echo "ISO: ${FINAL_ISO}"
 echo "Size: $(du -h "$FINAL_ISO" | cut -f1)"
+
+echo ""
+echo "Cleaning build chroot and binary directories to free space..."
+cd "${BUILD_DIR}" && lb clean 2>/dev/null || true
+
+echo "Post-build cleanup complete."
 
 if [[ "${RUN_TEST:-0}" == "1" ]]; then
     echo ""

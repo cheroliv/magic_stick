@@ -14,13 +14,14 @@ for _pkg in $(dpkg -l 'linux-headers-*' 2>/dev/null | awk '/^ii/ {print $2}'); d
     dpkg --purge "${_pkg}" 2>/dev/null || true
 done
 
-# 3) Supprime paquets de développement
+# 3) Supprime paquets de développement et leurs dépendances
 for _pkg in $(dpkg -l 'lib*-dev' 2>/dev/null | awk '/^ii/ {print $2}'); do
     dpkg --purge "${_pkg}" 2>/dev/null || true
 done
 for _pkg in $(dpkg -l 'build-essential' 2>/dev/null | awk '/^ii/ {print $2}'); do
     dpkg --purge "${_pkg}" 2>/dev/null || true
 done
+apt-get autoremove -y 2>/dev/null || true
 
 # 4) Locales: garder fr_FR et en_US uniquement
 if [ -d /usr/share/locale ]; then
