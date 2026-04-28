@@ -1,5 +1,49 @@
 = Archive des Taches Terminee — Avril 2026
 
+== Session 040 — Fix test-software.sh + CI/CD chroot upgrades + free disk space
+
+**Date** : 28 avril 2026
+**Type** : fix + ci/cd + debug
+**Score** : 6/10
+
+=== Contexte
+
+Suite session 039. Workflow #25079094412 échoue sur `httpie NOT found` (supprimé des paquets) + workflow #25080604905 échoue à nouveau sur `No space left on device` malgré le cleanup chroot.
+
+=== Taches realisees
+
+* [OK] Fix `scripts/test-software.sh` : retrait check `httpie` + doublon `lazygit`
+* [OK] Désactivation chroot upgrades : écriture `"false"` dans `config/chroot_upgrades` (lb config `--chroot-upgrades` inexistant dans Ubuntu 24.04)
+* [OK] CI/CD free disk space : step ajoutée dans `.github/workflows/build.yml` (suppression `/usr/share/dotnet`, `/usr/local/lib/android`, `/opt/ghc`)
+* [OK] Post-build cleanup : `cd "${BUILD_DIR}" && lb clean` après génération ISO
+* [OK] Hook cleanup : ajout `apt-get autoremove -y` pour purger orphelines après upgrades forcés
+* [OK] Fix YML build.yml : ajout `uses: actions/setup-java@v4` manquant après step free disk space
+
+=== Builds ISO
+
+| Run | Commit | Resultat |
+|-----|--------|----------|
+| 25082912712 | 21b9129 | PARTIEL — Build ISO + Verify + Boot OK, Software FAIL (flatpak NOT found) |
+
+=== Metriques
+
+| Fichiers modifies | 4 (test-software.sh, build-inner.sh, cleanup hook, build.yml) |
+| Commits poussés | 4 (b4f3a25, aeec7d3, 77d761f, 21b9129) |
+
+=== Lecons apprises
+
+* `lb config` n'a pas `--chroot-upgrades` dans Ubuntu 24.04 ; utiliser le fichier `${BUILD_DIR}/config/chroot_upgrades`
+* Les runners GitHub Actions ont ~14 Go disque ; cleanup pré-build + post-build obligatoires
+* La step `Free disk space` (suppression dotnet/android/ghc) est un pattern GitHub Actions standard pour les builds gourmands
+
+=== Prochaine session
+
+* Vérifier résultat du run #25082912712 (Build ISO en cours à la fin de session 040)
+* Décision flatpak (réinstaller ou retirer le check)
+* Bump v0.1.7 + release
+
+'''
+
 == Session 039 — Fix build squashfs "No space" + hook cleanup chroot + trim packages
 
 **Date** : 28 avril 2026
