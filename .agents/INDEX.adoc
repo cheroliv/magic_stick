@@ -2,9 +2,9 @@
 
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
-_Derniere mise a jour_ : 2026-04-28
-_Session en cours_ : 039 — Analyser logs build #25070508605 + bump v0.1.7 si vert + EPIC 9 + EPIC 5
-_Session terminee_ : 038 (Analyse build squashfs "No space left on device" + relance CI/CD)
+_Derniere mise a jour_ : 2026-04-28 (session 039)
+_Session en cours_ : 040 — Commit/push fix test-software.sh + relance workflow + bump v0.1.7 + EPIC 9 + EPIC 5
+_Session terminee_ : 039 (Fix build squashfs No space + hook cleanup chroot + trim packages)
 
 '''
 
@@ -143,6 +143,7 @@ _Lecon Session 033_ : L'agent a tente de modifier `/home/cheroliv/.gitconfig` po
 | 034 | 2026-04-28 | governance + ci/cd | Propagation lecon fichiers personnels + build ISO monitoring | `034-governance-fichiers-personnels.adoc` | 7/10
 | 035 | 2026-04-28 | fix + ci/cd + debug | 5 fixes chroot (SDKMAN x3, graphify, JetBrains Toolbox) — build ISO monitoring | `035-fix-sdkman-graphify-toolbox-chroot.adoc` | 7/10
 | 036 | 2026-04-28 | fix + debug + docs | Debug graphify symlink absolu vs relatif + EPIC 9 ajoute | `036-debug-graphify-symlink-epic9.adoc` | 7/10
+| 039 | 2026-04-28 | fix + ci/cd + debug | Fix build squashfs No space : hook cleanup chroot + trim packages | `039-fix-squashfs-space-cleanup-trim.adoc` | 7/10
 | 038 | 2026-04-28 | ci/cd + debug | Analyse build squashfs "No space left on device" + relance CI/CD | `038-analyse-build-squashfs-space.adoc` | 6/10
 | 037 | 2026-04-28 | fix + docs | Fix JetBrains Toolbox fallback 404 + EPIC 9 REVERSAL /opt/ | `037-fix-jetbrains-toolbox-epic9-reversal.adoc` | 7/10
 | 032 | 2026-04-28 | fix + ci/cd + backlog | Secrets Docker Hub + fix pnpm path + suppression tag v0.1.7 | `032-secrets-dockerhub-pnpm.adoc` | 7/10
@@ -231,7 +232,7 @@ Projets gerant la meme methodologie opencode (EAGER/LAZY, procedure de fin de se
 
 |===
 | Projet | Repertoire | Session en cours | Etape 5 specifique | Derniere mise a jour
-| magic_stick | `~/workspace/__repositories__/magic_stick` | 039 | SCRIPT_VERIFICATION.adoc | 2026-04-28
+| magic_stick | `~/workspace/__repositories__/magic_stick` | 040 | SCRIPT_VERIFICATION.adoc | 2026-04-28
 | bakery-gradle | `~/workspace/__repositories__/bakery-gradle/bakery-plugin` | 5 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-23
 | cheroliv.com | `~/workspace/__repositories__/cheroliv.com` | 4 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-25
 | plantuml-gradle | `~/workspace/__repositories__/plantuml-gradle/plantuml-plugin` | 132 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-23

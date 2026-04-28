@@ -1,44 +1,45 @@
-= Prompt de reprise — Session 039
+= Prompt de reprise — Session 040
 
 __
 **EPIC** : EPIC 2 (valider build v0.1.7) + EPIC 9 (VS Code/gh dans /opt/ — implementation) + EPIC 5 (XFCE polishment)
-**Statut** : Session 038 terminee — Analyse build squashfs "No space left on device" + relance CI/CD
+**Statut** : Session 039 terminee — Fixes squashfs "No space" resolu, reste fix test-software.sh + bump v0.1.7
 __
 
 '''
 
-== Session 038 — Resume
+== Session 039 — Resume
 
 **Date** : 28 avril 2026
 **Resultat** :
-- Constat : commit fix Toolbox deja push en session 037, rien a commiter
-- Build ISO #25068590605 FAIL : `No space left on device` pendant creation squashfs
-- Build website OK
-- Nouveau workflow_dispatch #25070508605 relance
-- Procedure de fin de session + commit/push agents
+- Build ISO #25070508605 FAIL : `No space left on device` confirme (idem #25068590605)
+- Hook cleanup chroot `080-cleanup-space.chroot` cree + 14 paquets retires de `tools.list.chroot`
+- Commit `902a75f` push → build #25079094412 relance
+- Build ISO : **SUCCESS** (18m 41s, ISO 6.6G) — `No space` RESOLU
+- Verify ISO : SUCCESS (warnings connus)
+- Test boot : SUCCESS (BIOS OK, UEFI skip)
+- Test software : **FAIL** (`httpie NOT found` — retire des paquets mais check reste dans test-software.sh)
+- Fix local `test-software.sh` (retirer check httpie) — **NON COMMIT/PUSH**
 
 '''
 
-== Session 039 — Priorites
+== Session 040 — Priorites
 
-=== 1. Analyser les logs du build #25070508605
+=== 1. Commit + push fix test-software.sh
 
-* Si termine : `gh run view 25070508605 --log`
-* Verdict : vert (espace suffisant cette fois) ou rouge (meme erreur No space)
+* `git add scripts/test-software.sh`
+* `git commit -m "fix(test): remove httpie check (package removed from tools.list)"`
+* `git push origin main`
 
-=== 2. Si build vert → Bump v0.1.7 + livraisons
+=== 2. Relancer le workflow Build ISO
 
-* Bump VERSION a 0.1.7 + tag v0.1.7 + push tag → declencher release workflow (ISO artifact + SourceForge + Docker Hub)
+* `gh workflow run "Build ISO" --ref main`
+* Monitorer le nouveau run (attendre isoTestSoftware au vert)
+
+=== 3. Si build complet vert → Bump v0.1.7 + livraisons
+
+* Bump VERSION a 0.1.7 + tag v0.1.7 + push tag
+* Declencher release workflow (ISO artifact + SourceForge + Docker Hub)
 * Monitorer tous les workflows
-
-=== 3. Si build rouge "No space" → Debug espace disque
-
-* Analyser la taille du chroot dans les logs (avant squashfs)
-* Options :
-  . Purger les caches apt dans le chroot avant squashfs (`apt-get clean`, `rm -rf /var/lib/apt/lists/*`)
-  . Compression squashfs plus agressive (`-comp xz -Xbcj x86`)
-  . Verifier si le runner ubuntu-latest a change de taille disque
-  . Ajouter un hook chroot de nettoyage pre-squashfs
 
 === 4. EPIC 9 — Implementation VS Code et gh CLI dans /opt/
 
@@ -52,7 +53,7 @@ __
 * Ajouter les checks dans scripts/test-software.sh
 * Test ISO squashfs via CI/CD
 
-=== 5. EPIC 5 — Polishment XFCE (si build OK)
+=== 5. EPIC 5 — Polishment XFCE (si build OK et temps disponible)
 
 * Verifier menu XFCE dans l'ISO apres boot QEMU
 * Ajuster .directory/.desktop si necessaire
@@ -62,6 +63,8 @@ __
 == Backlog — Ce qui reste a faire
 
 ==== EPIC 2 : Build ISO
+* [ ] Fix isoTestSoftware (httpie) → commit + push + relance
+* [ ] Bump v0.1.7 + release
 * [ ] Tester le boot BIOS sur cle USB reelle
 * [ ] Valider le support UEFI sur hardware reel
 * [ ] Tester le boot UEFI sur cle USB reelle

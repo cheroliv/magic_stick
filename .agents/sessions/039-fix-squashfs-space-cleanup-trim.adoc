@@ -1,0 +1,93 @@
+= Session 039 — Fix build squashfs "No space" + hook cleanup + trim packages
+
+**Date** : 28 avril 2026
+**Type** : fix + ci/cd + debug
+**Score** : 7/10
+
+'''
+
+== Resume
+
+Suite session 038. Le build #25070508605 etait termine en echec (meme `No space left on device`).
+Mission : reduire la taille du squashfs pour passer sur les runners GitHub Actions (~14 Go).
+
+== Constats
+
+=== Build #25070508605 — FAIL (confirme)
+
+* Meme erreur `No space left on device` pendant `mksquashfs`
+* Le chroot est trop gros pour l'espace disque du runner
+
+=== Fixes appliquees (commit 902a75f)
+
+* [OK] `config/live-build/hooks/080-cleanup-space.chroot` — purge pre-squashfs automatique
+  ** apt-get clean, rm /var/lib/apt/lists/*, headers noyau, dev libs, doc/man/info
+  ** Locales : garde fr* + en* uniquement
+  ** /tmp, logs, caches utilisateur
+* [OK] `config/live-build/package-lists/tools.list.chroot` — 14 paquets retires
+  ** Retire : qemu-system-x86, qemu-utils, wireshark, xfsprogs, screen, flatpak, httpie, nload
+* [OK] `scripts/build-inner.sh` — patch XZ retire sur demande utilisateur (reste en gzip)
+
+=== Build #25079094412 — Relance post-fix
+
+* Build ISO : **SUCCESS** (18m 41s, ISO 6.6G)
+* Verify ISO : SUCCESS (warnings connus sur vmlinuz/initrd/.c32/grub.cfg)
+* Test boot : SUCCESS (BIOS OK, UEFI skip OVMF absent)
+* Test software : **FAIL** (`[FAIL] httpie NOT found`)
+* Conclusion : `No space` RESOLU. Reste a corriger `test-software.sh` (httpie retire des paquets).
+
+=== Fichier non commité
+
+* `scripts/test-software.sh` — ligne `check_binary "httpie"` retiree en local (pas encore push)
+  ** A commit + push + relance workflow dans session 040
+
+'''
+
+== Taches realisees
+
+* [OK] Analyse logs CI/CD : `No space` confirme sur #25070508605
+* [OK] Hook cleanup chroot 080-cleanup-space.chroot
+* [OK] Reduction package-lists (14 paquets)
+* [OK] Commit + push 902a75f
+* [OK] Workflow dispatch #25079094412 relance
+* [OK] Verification : build ISO passe (espace suffisant)
+* [OK] Identification echec isoTestSoftware = httpie manquant (retire des paquets)
+* [OK] Fix local test-software.sh (non commité)
+
+'''
+
+== Builds ISO
+
+| Run | Commit | Resultat | Detail |
+|-----|--------|----------|--------|
+| 25068590605 | aad68e3 | FAIL | No space left on device |
+| 25070508605 | aad68e3 | FAIL | No space left on device (confirme) |
+| 25079094412 | 902a75f | PARTIEL | ISO OK + Verify OK + Boot OK + Software FAIL (httpie) |
+
+'''
+
+== Metriques
+
+| Fichiers modifiés | 3 (hook chroot, package-lists, test-software.sh local) |
+| Commits poussés | 1 (902a75f) |
+| Builds CI/CD | 1 relance, 1 partiel |
+| `No space` résolu | OUI |
+
+'''
+
+== Lecons apprises
+
+* Les runners GitHub Actions ont ~14 Go d'espace disque. Un chroot Xubuntu + stack complète (~6-8 Go avant squashfs) peut saturer l'espace temporaire.
+* Un hook de cleanup pre-squashfs est essentiel pour les gros chroots.
+* Retirer des paquets de `package-lists` sans mettre à jour `test-software.sh` = echec CI/CD.
+* Le patching XZ de `lb_binary_rootfs` est complexe et a ete rejete par l'utilisateur (strategie alternative : cleanup + reduction paquets suffit).
+
+'''
+
+== Prochaine session (040)
+
+* Commit + push du fix `test-software.sh` (retirer check httpie)
+* Relance workflow dispatch
+* Si vert complet → bump v0.1.7 + tag + release (SourceForge + Docker Hub)
+* EPIC 9 : VS Code + gh CLI dans /opt/
+* EPIC 5 : Polishment XFCE

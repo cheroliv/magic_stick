@@ -1,9 +1,10 @@
 = Historique des Sessions — Magic Stick
 
-_Derniere mise a jour_ : 2026-04-28 (session 038)
+_Derniere mise a jour_ : 2026-04-28 (session 039)
 
 |===
 | # | Date | Type | Sujet | Score
+| 039 | 28 avril 2026 | fix + ci/cd + debug | Fix build squashfs "No space" : hook cleanup chroot + 14 paquets retires + build ISO vert (6.6G) | 7/10
 | 038 | 28 avril 2026 | ci/cd + debug | Analyse build squashfs "No space left on device" + relance CI/CD | 6/10
 | 037 | 28 avril 2026 | fix + docs | Fix JetBrains Toolbox fallback 404 + EPIC 9 REVERSAL /opt/ | 7/10
 | 036 | 28 avril 2026 | fix + debug + docs | Debug graphify symlink absolu vs relatif + EPIC 9 (éditeurs locaux non root) | 7/10

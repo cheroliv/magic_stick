@@ -1,5 +1,46 @@
 = Archive des Taches Terminee — Avril 2026
 
+== Session 039 — Fix build squashfs "No space" + hook cleanup chroot + trim packages
+
+**Date** : 28 avril 2026
+**Type** : fix + ci/cd + debug
+**Score** : 7/10
+
+=== Contexte
+
+Suite session 038. Build ISO #25070508605 FAIL sur `No space left on device`. Mission : reduire la taille du chroot avant squashfs.
+
+=== Taches realisees
+
+* [OK] Nouveau hook `080-cleanup-space.chroot` : purge caches apt, headers noyau, dev libs, doc/man/info, locales inutiles, /tmp, logs
+* [OK] `tools.list.chroot` : 14 paquets retires (qemu-system-x86, qemu-utils, wireshark, xfsprogs, screen, flatpak, httpie, nload, etc.)
+* [OK] Commit `902a75f` push sur main
+* [OK] Build ISO #25079094412 : SUCCESS (18m 41s, ISO 6.6G) — `No space` RESOLU
+* [OK] Verify ISO : SUCCESS
+* [OK] Test boot : SUCCESS (BIOS OK, UEFI skip)
+* [OK] Identification isoTestSoftware FAIL = `httpie NOT found` (retire des paquets, check reste dans test-software.sh)
+* [OK] Fix local `test-software.sh` (non commit/push — session 040)
+
+=== Builds ISO
+
+| Run | Commit | Resultat |
+|-----|--------|----------|
+| 25068590605 | aad68e3 | FAIL — No space left on device |
+| 25070508605 | aad68e3 | FAIL — No space left on device |
+| 25079094412 | 902a75f | PARTIEL — ISO + Verify + Boot OK, Software FAIL (httpie) |
+
+=== Metriques
+
+| Fichiers modifies | 3 (hook chroot, package-lists, test-software.sh local) |
+| Commits poussés | 1 (902a75f) |
+
+=== Lecons apprises
+
+* Les runners GitHub Actions ont ~14 Go disque. Cleanup pre-squashfs = obligatoire pour gros chroots.
+* Retirer des paquets de package-lists sans mettre a jour test-software.sh = echec CI/CD.
+
+'''
+
 == Session 038 — Analyse build squashfs "No space left on device" + relance CI/CD
 
 **Date** : 28 avril 2026
