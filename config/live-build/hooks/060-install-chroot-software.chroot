@@ -541,9 +541,9 @@ exec /opt/graphify/bin/python -m graphify "$@"
 EOF
                 chmod +x "${GRAPHIFY_VENV}/bin/graphify"
             fi
-            ln -sf "${GRAPHIFY_VENV}/bin/graphify" /usr/local/bin/graphify 2>/dev/null || true
+            ln -sf "../../../opt/graphify/bin/graphify" /usr/local/bin/graphify
             echo "==> graphify installed"
-            graphify --version 2>/dev/null || true
+            graphify --version || true
         else
             echo "WARNING: graphify installation via venv pip failed" >&2
         fi
