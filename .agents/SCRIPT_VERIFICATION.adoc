@@ -1,6 +1,6 @@
 = Script Verification — Magic Stick
 
-_Derniere mise a jour_ : Session 039 (28 avril 2026) — Fix build squashfs No space + hook cleanup chroot + trim packages
+_Derniere mise a jour_ : Session 040 (28-29 avril 2026) — Fix test-software.sh + desactive chroot upgrades + free disk space CI/CD + post-build cleanup
 
 '''
 

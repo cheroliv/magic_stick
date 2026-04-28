@@ -2,9 +2,9 @@
 
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
-_Derniere mise a jour_ : 2026-04-28 (session 039)
-_Session en cours_ : 040 — Commit/push fix test-software.sh + relance workflow + bump v0.1.7 + EPIC 9 + EPIC 5
-_Session terminee_ : 039 (Fix build squashfs No space + hook cleanup chroot + trim packages)
+_Derniere mise a jour_ : 2026-04-29 (session 040)
+_Session en cours_ : 041 — Vérifier workflow #25082912712 + bump v0.1.7 + EPIC 9
+_Session terminee_ : 040 (Fix test-software.sh + chroot upgrades + free disk space CI/CD)
 
 '''
 

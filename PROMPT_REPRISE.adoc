@@ -1,87 +1,87 @@
-= Prompt de reprise — Session 040
+= Prompt de reprise — Session 041
 
 __
-**EPIC** : EPIC 2 (valider build v0.1.7) + EPIC 9 (VS Code/gh dans /opt/ — implementation) + EPIC 5 (XFCE polishment)
-**Statut** : Session 039 terminee — Fixes squashfs "No space" resolu, reste fix test-software.sh + bump v0.1.7
+**EPIC** : EPIC 2 (valider build v0.1.7) + EPIC 9 (VS Code/gh dans /opt/)
+**Statut** : Session 040 terminee — 4 commits fixes CI/CD, workflow #25082912712 EN COURS
 __
 
 '''
 
-== Session 039 — Resume
+== Session 040 — Résumé
 
-**Date** : 28 avril 2026
-**Resultat** :
-- Build ISO #25070508605 FAIL : `No space left on device` confirme (idem #25068590605)
-- Hook cleanup chroot `080-cleanup-space.chroot` cree + 14 paquets retires de `tools.list.chroot`
-- Commit `902a75f` push → build #25079094412 relance
-- Build ISO : **SUCCESS** (18m 41s, ISO 6.6G) — `No space` RESOLU
-- Verify ISO : SUCCESS (warnings connus)
-- Test boot : SUCCESS (BIOS OK, UEFI skip)
-- Test software : **FAIL** (`httpie NOT found` — retire des paquets mais check reste dans test-software.sh)
-- Fix local `test-software.sh` (retirer check httpie) — **NON COMMIT/PUSH**
+**Date** : 28–29 avril 2026
+**Résultat** :
+- Fix `test-software.sh` : retiré check `httpie` + doublon `lazygit` ✅
+- Désactivation chroot upgrades : écriture `config/chroot_upgrades` (lb config `--chroot-upgrades` inexistant) ✅
+- CI/CD free disk space : step ajoutée dans `build.yml` ✅
+- Post-build cleanup (`lb clean`) après génération ISO ✅
+- Hook cleanup : ajout `apt-get autoremove -y` ✅
+- Workflow #25082912712 : **EN COURS** (déclenché en fin de session 040)
 
 '''
 
-== Session 040 — Priorites
+== Session 041 — Priorités
 
-=== 1. Commit + push fix test-software.sh
+=== 1. Vérifier le résultat du workflow #25082912712
 
-* `git add scripts/test-software.sh`
-* `git commit -m "fix(test): remove httpie check (package removed from tools.list)"`
-* `git push origin main`
+* Attendre la fin du run (Build ISO → Verify ISO → Test boot → Test software → A/B mock)
+* Si **VERT** complet → passer au bump v0.1.7
+* Si **FAIL** sur `Test software` (`flatpak NOT found`) :
+  - Décision : réinstaller flatpak OU retirer le check test-software.sh
+  - Le problème est l'espace disque, pas le logiciel
+* Si **FAIL** sur `Build ISO` (`No space left`) :
+  - Analyser les logs pour voir si cleanup chroot fonctionne
+  - Vérifier si lb clean post-build a libéré assez d'espace
 
-=== 2. Relancer le workflow Build ISO
+=== 2. Si build complet VERT → Bump v0.1.7 + release
 
-* `gh workflow run "Build ISO" --ref main`
-* Monitorer le nouveau run (attendre isoTestSoftware au vert)
-
-=== 3. Si build complet vert → Bump v0.1.7 + livraisons
-
-* Bump VERSION a 0.1.7 + tag v0.1.7 + push tag
-* Declencher release workflow (ISO artifact + SourceForge + Docker Hub)
+* Modifier `VERSION` → `0.1.7`
+* `git tag v0.1.7 && git push origin v0.1.7`
+* Le tag déclenche automatiquement : upload artifact + SourceForge + Docker Hub
 * Monitorer tous les workflows
 
-=== 4. EPIC 9 — Implementation VS Code et gh CLI dans /opt/
+=== 3. EPIC 9 — Implementation VS Code et gh CLI dans /opt/
 
-* VS Code : hook chroot install tarball dans /opt/VSCode-linux-x64/
-  * Script /usr/local/bin/vscode-update.sh pour mise a jour
-  * Configs utilisateur : /etc/skel/.config/Code/User/settings.json
-  * Custom CSS : /etc/skel/.vscode-custom-css/custom.css
-  * Modele : cheroliv.com/blog/2026/0103
-* gh CLI : hook chroot install dans /opt/gh/ + symlink /usr/local/bin/gh
-  * Modele : binaire standalone depuis GitHub Releases (pattern xh/just existant)
-* Ajouter les checks dans scripts/test-software.sh
+* **VS Code** : hook chroot install tarball dans `/opt/VSCode-linux-x64/`
+  * Script `/usr/local/bin/vscode-update.sh` pour mise à jour
+  * Configs utilisateur : `/etc/skel/.config/Code/User/settings.json`
+  * Custom CSS : `/etc/skel/.vscode-custom-css/custom.css`
+  * Modèle : cheroliv.com/blog/2026/0103
+* **gh CLI** : hook chroot install dans `/opt/gh/` + symlink `/usr/local/bin/gh`
+  * Modèle : binaire standalone depuis GitHub Releases (pattern xh/just existant)
+* Ajouter les checks dans `scripts/test-software.sh`
 * Test ISO squashfs via CI/CD
 
-=== 5. EPIC 5 — Polishment XFCE (si build OK et temps disponible)
+=== 4. EPIC 5 — Polishment XFCE (si build OK et temps disponible)
 
-* Verifier menu XFCE dans l'ISO apres boot QEMU
-* Ajuster .directory/.desktop si necessaire
+* Vérifier menu XFCE dans l'ISO après boot QEMU
+* Ajuster .directory/.desktop si nécessaire
 
 '''
 
-== Backlog — Ce qui reste a faire
+== Backlog — Ce qui reste à faire
 
 ==== EPIC 2 : Build ISO
-* [ ] Fix isoTestSoftware (httpie) → commit + push + relance
+* [ ] Vérifier workflow #25082912712 (vert ou fail ?)
+* [ ] Fix éventuel flatpak (si test software fail)
 * [ ] Bump v0.1.7 + release
-* [ ] Tester le boot BIOS sur cle USB reelle
-* [ ] Valider le support UEFI sur hardware reel
-* [ ] Tester le boot UEFI sur cle USB reelle
+* [ ] Tester le boot BIOS sur clé USB réelle
+* [ ] Valider le support UEFI sur hardware réel
+* [ ] Tester le boot UEFI sur clé USB réelle
 
 ==== EPIC 4 : Logiciels
 * [ ] Tester que chaque logiciel fonctionne dans le live boot
 
-==== EPIC 9 : Editeurs de code dans /opt/
+==== EPIC 9 : Éditeurs de code dans /opt/
 * [ ] VS Code dans /opt/
 * [ ] gh CLI dans /opt/
 
 ==== EPIC 5 : Personnalisation XFCE
-* [x] Menu Applications personnalise
-* [ ] Theme et fond d'ecran
+* [x] Menu Applications personnalisé
+* [ ] Thème et fond d'écran
 * [ ] Raccourcis clavier
 * [ ] Panel XFCE
-* [ ] Scripts demarrage auto
+* [ ] Scripts démarrage auto
 
 ==== EPIC 8 : Dockerisation CLI
 * [ ] Build et validation image locale
@@ -92,16 +92,16 @@ __
 
 ==== EPIC 7 : Site de doc auto + IA release notes
 * [ ] Auto-updater site de doc
-* [ ] Generer notes de version IA
+* [ ] Générer notes de version IA
 
 '''
 
-== Regles
+== Règles
 
 * Jamais de commit sans permission
 * Pas de commandes destructrices sans permission
 * Racine de travail = magic_stick/
-* Zero sudo sur l'hote
+* Zero sudo sur l'hôte
 * INTERDICTION DE LOG LES TOKENS
 * Zero build local : GitHub Actions uniquement
 * SourceForge : rsync via SSH

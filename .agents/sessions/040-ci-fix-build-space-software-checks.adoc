@@ -1,0 +1,94 @@
+= Session 040 — CI Fix Build Space + Software Checks
+
+**Date** : 28–29 avril 2026
+**Type** : fix + ci/cd + debug
+**Sujet** : Fix test-software.sh (httpie/lazygit) + désactive chroot upgrades + free disk space CI/CD + post-build cleanup
+**Score** : 6/10
+
+'''
+
+== Contexte
+
+Session 039 avait résolu le `No space left on device` lors du squashfs avec un hook cleanup chroot + trim de 14 paquets.
+Mais le build CI/CD suivant (#25079094412) avait échoué au test software (`httpie NOT found`).
+Un 3e build (#25080604990) a à nouveau échoué sur `No space left on device`, montrant que le problème d'espace persiste entre les runs.
+
+== Objectifs de la session
+
+. Corriger `scripts/test-software.sh` : retirer le check `httpie` (package supprimé) et le doublon `lazygit`
+. Empêcher l'`apt-get upgrade` dans le chroot live-build pour réduire la taille du squashfs
+. Libérer l'espace disque du runner CI/CD avant le build ISO
+. Ajouter un cleanup post-build (`lb clean`) pour libérer `chroot/` et `binary/`
+. Relancer le workflow Build ISO et monitorer
+
+== Actions réalisées
+
+=== 1. Fix test-software.sh
+- Retiré `check_binary "httpie" "/usr/bin/http"` (package supprimé de `tools.list.chroot` en session 039)
+- Retiré le doublon `check_binary "lazygit" "/usr/local/bin/lazygit"`
+
+=== 2. Désactivation des chroot upgrades
+- Tentative avec `--chroot-upgrades false` dans `lb config` → échec (option non reconnue par `lb config` Ubuntu 24.04)
+- Correctif : écrire `"false"` dans `${BUILD_DIR}/config/chroot_upgrades` après `lb config`
+- Fichier modifié : `scripts/build-inner.sh`
+
+=== 3. Free disk space dans le runner CI/CD
+- Ajout d'une step `Free disk space` dans `.github/workflows/build.yml` (suppression `/usr/share/dotnet`, `/usr/local/lib/android`, `/opt/ghc`)
+- Fix syntaxe YML : ajout de `uses: actions/setup-java@v4` manquant après la step free disk space
+
+=== 4. Post-build cleanup
+- Ajout de `cd "${BUILD_DIR}" && lb clean` après la génération de l'ISO dans `scripts/build-inner.sh`
+- Hook `080-cleanup-space.chroot` : ajout de `apt-get autoremove -y` pour purger les dépendances orphelines après les upgrades
+
+=== 5. Workflow Build ISO
+- Commit + push des 4 correctifs
+- Relance du workflow Build ISO (#25082912712) — **EN COURS au moment de la fin de session**
+
+== Problèmes identifiés et non résolus
+
+=== flatpak absent du squashfs
+Le dernier build avant cette session (#25081831568) a réussi `Build ISO` + `Verify ISO` + `Test boot`, mais a échoué sur `Test software in ISO` avec :
+[source]
+----
+[FAIL] flatpak NOT found (tried: /usr/bin/flatpak)
+----
+`flatpak` a été retiré de `tools.list.chroot` en session 039 (dans le trim de 14 paquets), mais le check reste dans `test-software.sh`.
+
+**Décision utilisateur** : Ne pas retirer le check flatpak. Le problème n'est pas le software check, mais l'espace disque.
+
+=== Espace disque runner GitHub Actions
+Le runner `ubuntu-latest` a ~14-15 Go d'espace libre. Le build live-build utilise :
+- `chroot/` : ~7-8 Go
+- `binary/` : ~1-2 Go
+- `filesystem.squashfs` : ~6-7 Go
+- ISO finale : ~6-7 Go
+La step `Free disk space` ajoute ~5-6 Go supplémentaires.
+
+== Commit réalisés
+
+|===
+| Commit | Message
+| `b4f3a25` | `fix(build): desactive chroot-upgrades + post-build cleanup + retire check httpie`
+| `aeec7d3` | `fix(build): --chroot-upgrades n'existe pas dans lb config, utiliser config/chroot_upgrades`
+| `77d761f` | `ci(build): free disk space avant build ISO + fix syntaxe YML`
+| `21b9129` | `ci(build): ajoute free disk space + corrige YML java setup`
+|===
+
+== Leçons
+
+. Les options `lb config` diffèrent entre les versions Debian. `--chroot-upgrades` n'existe pas dans `live-build` Ubuntu 24.04 ; utiliser le fichier `config/chroot_upgrades`.
+. La step `Free disk space` classique des runners GitHub Actions ( suppression dotnet/android/ghc ) est nécessaire pour les builds ISO > 6 Go.
+. Le cleanup post-build (`lb clean`) est essentiel pour libérer l'espace avant les tests qui extraient le squashfs.
+
+== État du workflow CI/CD
+
+- Run #25082912712 : **EN COURS** (déclenché à la fin de la session)
+- À vérifier : Build ISO → Verify ISO → Test boot → Test software → A/B mock test
+
+== Prochaine session (041)
+
+. **Vérifier le résultat du workflow #25082912712**
+. Si `Test software` fail sur `flatpak` : décider si on réinstalle flatpak ou on retire le check
+. Si workflow vert complet → bump v0.1.7 + tag + release
+. EPIC 9 : VS Code + gh CLI dans `/opt/`
+. EPIC 5 : Polishment XFCE (si build OK et temps dispo)
