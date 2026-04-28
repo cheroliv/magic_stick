@@ -19,7 +19,7 @@ _Derniere mise a jour_ : Session 035 (28 avril 2026) — Fix SDKMAN x3 + graphif
 | scripts/update-system.sh | OK | OK | Partition A/B (setup-ab, update, status, verify, switch) + flag --yes + --dry-run | Session 022
 | scripts/install-software.sh | OK | OK | Post-install live (docker, ollama, sdkman) | Session 006
 | launch-open-webui.sh | OK | OK | Launcher Docker Open-WebUI sur port 3333 | Session 033
-| scripts/test-software.sh | OK | OK | Verification logiciels dans ISO squashfs (22 binaires + 3 config) | Session 033
+| scripts/test-software.sh | OK | OK | Verification logiciels dans ISO squashfs (22 binaires + 3 config) — **Fix resolution symlinks absolus casses session 036** | Session 036
 |===
 
 == Dockerfiles

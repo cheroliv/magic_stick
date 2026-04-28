@@ -1,0 +1,71 @@
+= Session 036 — Debug graphify symlink + EPIC 9 (éditeurs locaux non root)
+
+**Date** : 28 avril 2026
+**Type** : fix + debug + docs
+**Score** : ?/10
+
+'''
+
+== Contexte
+
+Suite session 035 (5 fixes chroot). Build ISO #25057217771 FAIL sur `graphify NOT found`. Session 035 avait déjà fixé le wrapper graphify (session 035), mais le build suivant (#25059534043) échouait encore. Analyse poussée des logs CI/CD pour identifier la cause racine réelle.
+
+'''
+
+== Taches realisees
+
+=== Debug graphify — Analyse des logs CI/CD
+
+* [OK] Vérification initiale : build #25059534043 FAIL graphify — même erreur malgré le fix de session 035
+* [OK] Lecture poussée des logs CI/CD (200+ lignes de `Build ISO` step)
+  * `pip install graphifyy` réussit (v0.5.4 installée avec 23 dépendances tree-sitter)
+  * `==> graphify installed` affiché dans les logs
+  * `graphify --version` n'affiche rien (silencieux)
+* [OK] Hypothèse absolu vs relatif : dans l'ISO, `/usr/local/bin/graphify` est un symlink absolu vers `/opt/graphify/bin/graphify`
+  * Le script `test-software.sh` extrait le squashfs dans `/tmp/tmp.XXX` et vérifie `[[ -e /tmp/tmp.XXX/usr/local/bin/graphify ]]`
+  * Le symlink absolu pointe vers `/opt/graphify/bin/graphify` (racine du conteneur de test), pas `/tmp/tmp.XXX/opt/graphify/bin/graphify`
+  * Le check `[[ -e ]]` retourne `false` car le symlink est cassé dans le contexte d'extraction
+* [OK] Fix hook chroot : passage de symlink absolu à relatif (`../../../opt/graphify/bin/graphify`)
+* [OK] Fix test-software.sh : `check_binary()` résout les symlinks absolus cassés en cherchant la cible dans `${SQUASH_DIR}`
+
+=== EPIC 9 — Editeurs de code locaux (non root)
+
+* [OK] Demande utilisateur : installer VS Code dans `/home/user/apps/` (pas `/opt/`) pour modification sans sudo
+* [OK] Investigation blog article cheroliv.com/2026/0103 : modèle d'installation locale VS Code
+* [OK] Ajout EPIC 9 dans `BACKLOG.adoc` et `PROMPT_REPRISE.adoc`
+  * VS Code : tarball dans `/etc/skel/apps/VSCode-linux-x64/` + script `vscode-update.sh`
+  * gh CLI : investigation installation locale `/home/user/apps/`
+
+=== Commits session
+
+| Commit | Fichier | Description |
+|--------|---------|-------------|
+| `6c86ecd` | `060-install-chroot-software.chroot` | Symlink relatif graphify |
+| `b02d929` | `scripts/test-software.sh` | `check_binary` résout symlinks absolus |
+| `6e014a5` | `BACKLOG.adoc` + `PROMPT_REPRISE.adoc` | EPIC 9 ajouté |
+
+'''
+
+== Metriques
+
+| Fichiers modifies | 3 (hook chroot, test-software.sh, 2 docs) |
+| Fichiers crees | 0 |
+| Fixes graphify | 2 (symlink relatif + test symlink resolution) |
+| EPICs ajoutes | 1 (EPIC 9) |
+
+'''
+
+== Lecons apprises
+
+* Les symlinks absolus dans un squashfs/extraction temporaire sont **cassés** car ils pointent vers la racine du système hôte, pas le répertoire d'extraction
+* `[[ -e symlink_cassé ]]` retourne `false` en bash — il faut soit utiliser `[[ -L ]]` pour vérifier l'existence du lien, soit résoudre la cible relativement
+* Le pattern d'installation locale `~/apps/` pour VS Code suit le même principe que l'installation `~/apps/gh` — binaires modifiables sans sudo
+
+'''
+
+== Prochaine session
+
+* Monitorer build ISO avec les fixes symlink (run #25064023377 en cours)
+* Si build OK : bump VERSION 0.1.7 + tag v0.1.7
+* Si build FAIL : continuer debug sur les logs CI/CD
+* Implémenter EPIC 9 (VS Code local dans skel) pour v0.1.8

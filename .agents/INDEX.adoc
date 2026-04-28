@@ -3,8 +3,8 @@
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
 _Derniere mise a jour_ : 2026-04-28
-_Session en cours_ : 036 — Monitor build v0.1.7 + livraison ISO SourceForge + Docker Hub + XFCE polishment
-_Session terminee_ : 035 (5 fixes chroot SDKMAN x3, graphify x1, JetBrains Toolbox x1 — build monitoring)
+_Session en cours_ : 037 — Monitor build v0.1.7 + livraison ISO SourceForge + EPIC 9 (VS Code local)
+_Session terminee_ : 036 (Debug graphify symlink absolu vs relatif + EPIC 9 editeurs locaux)
 
 '''
 

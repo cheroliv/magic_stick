@@ -1,48 +1,62 @@
-= Prompt de reprise — Session 036
+= Prompt de reprise — Session 037
 
 __
-**EPIC** : EPIC 2 (valider build v0.1.7) + EPIC 5 (XFCE menu polishment) + Open-WebUI
-**Statut** : Session 036 en cours — Build 6e5bec5 FAIL graphify (typo graphifyy). Fix commité (7db253f). Attente build.
+**EPIC** : EPIC 2 (valider build v0.1.7) + EPIC 9 (VS Code local non root) + EPIC 5 (XFCE polishment)
+**Statut** : Session 036 terminee — Debug graphify symlink absolu vs relatif + EPIC 9 ajoute
 __
 
 '''
 
-== Session 035 — Resume
+== Session 036 — Resume
 
 **Date** : 28 avril 2026
 **Resultat** :
-- 5 fixes commites sur 060-install-chroot-software.chroot (SDKMAN x3, graphify x1, Toolbox x1)
-- Build en cours (commit 6e5bec5) — monitoring pour isoTestSoftware OK
+- Analyse build #25057217771 + #25059534043 : graphify pip install réussit mais test échoue (symlink absolu cassé dans squashfs)
+- Fix symlink relatif `../../../opt/graphify/bin/graphify` dans hook chroot (commit `6c86ecd`)
+- Fix `scripts/test-software.sh` resolution symlinks absolus (commit `b02d929`)
+- EPIC 9 ajoute dans BACKLOG + PROMPT_REPRISE : VS Code local dans `/home/user/apps/` + gh CLI local
 '''
 
-== Session 036 — Priorites
+== Session 037 — Priorites
 
-=== 1. Monitorer build ISO (commit 6e5bec5)
+=== 1. Monitorer build ISO (run #25064023377)
 
 * Si vert : bump VERSION 0.1.7 + tag v0.1.7 + push tag + monitorer build complet
-* Si rouge : corriger les CHECKS restants, push, relancer
+* Si rouge : analyser les logs CI/CD, corriger les CHECKS restants
 
-=== 2. Livraisons (si build OK)
+=== 2. EPIC 9 — Editeurs de code locaux (non root)
+
+* VS Code : installation tarball dans `/etc/skel/apps/VSCode-linux-x64/` + script `vscode-update.sh`
+  * Modele : cheroliv.com/blog/2026/0103 (installation locale, patches CSS, product.json)
+  * Configs utilisateur : `/etc/skel/.config/Code/User/settings.json`
+  * Custom CSS : `/etc/skel/.vscode-custom-css/custom.css`
+* gh CLI : investigation installation locale `/home/user/apps/` (modele `~/apps/gh` actuel)
+
+=== 3. Livraisons (si build OK)
 
 * ISO SourceForge : rsync de `build/magic_stick_0.1.7.iso`
-* Image Docker Hub : push image magic-stick-cli (si CI/CD job present)
+* Image Docker Hub : push image magic-stick-cli
 
-=== 3. EPIC 5 — Polishment XFCE (si build OK)
+=== 4. EPIC 5 — Polishment XFCE (si build OK)
 
 * Verifier menu XFCE dans l'ISO apres boot QEMU
 * Ajuster .directory/.desktop si necessaire
 
-=== 4. Backlog — Ce qui reste a faire
+'''
+
+== Backlog — Ce qui reste a faire
 
 ==== EPIC 2 : Build ISO
 * [ ] Tester le boot BIOS sur cle USB reelle
 * [ ] Valider le support UEFI sur hardware reel
 * [ ] Tester le boot UEFI sur cle USB reelle
-* [ ] Auto-update du site de doc lors d'un deploiement (version + lien SourceForge)
-* [ ] Generer les notes de version (changelog/features) via IA lors d'un release
 
 ==== EPIC 4 : Logiciels
 * [ ] Tester que chaque logiciel fonctionne dans le live boot (Docker, Podman, Ollama, NVM, pnpm, Python, uv, SDKMAN+JDK25, ripgrep, fd, fzf, lazygit, xh, httpie, just, flatpak, JetBrains Toolbox, zsh, starship, opencode, graphify, ffmpeg)
+
+==== EPIC 9 : Editeurs de code locaux (non root)
+* [ ] VS Code : installation tarball dans /home/user/apps/ + vscode-update.sh + configs
+* [ ] gh CLI : investigation installation locale dans /home/user/apps/
 
 ==== EPIC 5 : Personnalisation XFCE
 * [x] Menu Applications personnalise (FAIT session 033)
@@ -51,19 +65,12 @@ __
 * [ ] Panel XFCE preconfigure (XML skel fait, a verifier)
 * [ ] Scripts de demarrage automatique
 
-==== EPIC 9 : Editeurs de code locaux (non root)
-* [ ] VS Code : installation tarball dans /home/user/apps/VSCode-linux-x64/ + script vscode-update.sh (modele cheroliv.com/blog/2026/0103)
-* [ ] gh CLI : investigation installation locale dans /home/user/apps/ (modele ~/apps actuel)
-
 ==== EPIC 8 : Dockerisation CLI
 * [ ] Build et validation de l'image en local (docker build, docker run -it)
 * [ ] CI/CD Docker Hub : reevaluer build.yml pour utiliser secrets.DOCKERHUB_TOKEN
 * [ ] Tester le push local : executer scripts/dockerhub-push.sh
 * [ ] Tester l'image comme conteneur de job GitHub Actions factice
 * [ ] Documenter l'usage dans le README
-
-==== CACHE-BUILD
-* [ ] Implementer le cache GitHub Actions pour les paquets live-build et les outils externes (Ollama, SDKMAN, NVM, etc.) — gain estime : 10-30 min par build
 
 ==== EPIC 7 : Site de doc auto + IA release notes
 * [ ] Auto-updater le site de doc lors d'un deploiement
@@ -83,3 +90,4 @@ __
 * **Boot test** : QEMU+VNC uniquement
 * **A/B test** : loopback device en Docker privileged uniquement
 * **FICHIERS PERSONNELS** : NE JAMAIS modifier `~/.gitconfig`, `~/.bashrc`, `~/.ssh/*`, etc.
+* **EDITEURS LOCAUX** : Toujours dans `/home/user/apps/` (non root), jamais dans `/opt/`
