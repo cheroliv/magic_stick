@@ -227,15 +227,37 @@ echo "==> Installing SDKMAN + JDK 25 Temurin"
 SDKMAN_DIR="/opt/sdkman"
 mkdir -p "${SDKMAN_DIR}"
 
-# Download and install SDKMAN as root (system-wide path)
+# Download and install SDKMAN to system-wide path.
+# WARNING: export before pipe may not propagate; always pass SDKMAN_DIR explicitly.
+_install_sdkman() {
+    local TMP_SCRIPT="/tmp/sdkman_install.sh"
+    curl -fsSL "https://get.sdkman.io" -o "${TMP_SCRIPT}" || {
+        echo "WARNING: failed to download SDKMAN installer" >&2
+        return 1
+    }
+    # Execute with explicit SDKMAN_DIR so it writes to /opt/sdkman
+    SDKMAN_DIR="/opt/sdkman" bash "${TMP_SCRIPT}" 2>/dev/null || {
+        echo "WARNING: SDKMAN install script failed" >&2
+    }
+    rm -f "${TMP_SCRIPT}"
+}
+
 if [ ! -d "${SDKMAN_DIR}/bin" ]; then
-    export SDKMAN_DIR
-    curl -s "https://get.sdkman.io" | bash 2>/dev/null || true
-    
+    _install_sdkman
+
+    # Fallback: if installer defaulted to /root/.sdkman, move it
+    if [ ! -f "${SDKMAN_DIR}/bin/sdkman-init.sh" ] && [ -d "/root/.sdkman/bin" ]; then
+        echo "==> Moving SDKMAN from /root/.sdkman to ${SDKMAN_DIR}"
+        cp -a "/root/.sdkman/." "${SDKMAN_DIR}/"
+        rm -rf "/root/.sdkman"
+    fi
+
     if [ -f "${SDKMAN_DIR}/bin/sdkman-init.sh" ]; then
         echo "==> SDKMAN installed to ${SDKMAN_DIR}"
     else
-        echo "WARNING: SDKMAN installation incomplete" >&2
+        echo "WARNING: SDKMAN installation incomplete or FAILED" >&2
+        ls -la "${SDKMAN_DIR}" >&2 || true
+        ls -la /root/.sdkman >&2 || true
     fi
 else
     echo "==> SDKMAN already present"
@@ -245,10 +267,10 @@ fi
 if [ -f "${SDKMAN_DIR}/bin/sdkman-init.sh" ]; then
     export SDKMAN_DIR
     . "${SDKMAN_DIR}/bin/sdkman-init.sh"
-    
+
     # Install JDK 25 Temurin (Eclipse Adoptium)
     sdk install java 25.0.3-tem 2>/dev/null || sdk install java 25-tem 2>/dev/null || echo "WARNING: JDK 25 Temurin install via SDKMAN failed" >&2
-    
+
     # Make SDKMAN available for default user 'magic'
     MAGIC_BASHRC="/home/magic/.bashrc"
     if [ -f "${MAGIC_BASHRC}" ]; then
@@ -259,13 +281,13 @@ if [ -f "${SDKMAN_DIR}/bin/sdkman-init.sh" ]; then
             echo "[ -s \"\${SDKMAN_DIR}/bin/sdkman-init.sh\" ] && . \"\${SDKMAN_DIR}/bin/sdkman-init.sh\"" >> "${MAGIC_BASHRC}"
         fi
     fi
-    
+
     # Make SDKMAN available system-wide via /etc/profile.d
     cat > /etc/profile.d/sdkman.sh << EOF
 export SDKMAN_DIR="${SDKMAN_DIR}"
 [ -s "\${SDKMAN_DIR}/bin/sdkman-init.sh" ] && . "\${SDKMAN_DIR}/bin/sdkman-init.sh"
 EOF
-    
+
     echo "==> SDKMAN + JDK 25 Temurin configured"
 else
     echo "WARNING: SDKMAN not available, skipping JDK 25 install" >&2
