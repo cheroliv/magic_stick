@@ -3,8 +3,8 @@
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
 _Derniere mise a jour_ : 2026-04-28
-_Session en cours_ : 033 — Valider build v0.1.7 + EPIC 5 XFCE menu + fond d'ecran
-_Session terminee_ : 032 (Secrets Docker Hub + fix pnpm path + build echec identifie)
+_Session en cours_ : 034 — Monitor build v0.1.7 + EPIC 5 XFCE polishment + Open-WebUI test
+_Session terminee_ : 033 (Fix uv + XFCE menu custom + Open-WebUI integration)
 
 '''
 
@@ -120,6 +120,33 @@ _Lecon Session 012_ : L'agent a tente `sudo mount` sur l'hote alors que toute op
 | 012 | 2026-04-25 | fix + feature | OpenCode PATH incomplet + article blog | `012-opencode-path-shell-fix.adoc` | 8.5/10
 | 011 | 2026-04-25 | debug | QEMU boot bloque sur initramfs (non resolu) | `011-qemu-initramfs-debug.adoc` | 4/10
 | 010 | 2026-04-25 | fix + feature | Premiere ISO generee avec succes (10 correctifs Ubuntu 24.04) | `010-first-iso-generated.adoc` | 8.5/10
+| 007 | 2026-04-26 | feature | Pipeline Gradle ISO + Ubiquity + CI/CD | `007-pipeline-gradle-iso.adoc` | 8.5/10
+| 033 | 2026-04-28 | fix + feature + ci/cd | Fix uv tarball (--strip-components-1) + XFCE menu custom + Open-WebUI port 3333 | `033-build-xfce-openwebui.adoc` | 8/10
+| 032 | 2026-04-28 | fix + ci/cd + backlog | Secrets Docker Hub + fix pnpm path + suppression tag v0.1.7 | `032-secrets-dockerhub-pnpm.adoc` | 7/10
+| 031 | 2026-04-28 | feature + ci/cd + fix | Docker Hub CLI local + fixes Dockerfile CLI | `031-dockerhub-cli-fixes.adoc` | 8/10
+| 030 | 2026-04-28 | fix + ci/cd + feature | Fix pnpm rate-limit + Docker Hub CI/CD + suppression menu Blog | `030-pnpm-dockerhub-cicd.adoc` | 7/10
+| 029 | 2026-04-28 | documentation + feature + ci/cd | Bump v0.1.6 + README/site maj + EPIC 5 XFCE configs + EPIC 8 Dockerfile CLI | `029-bump-xfce-dockerfile.adoc` | 8.5/10
+| 028 | 2026-04-27 | fix + ci/cd + feature | Finalisation release pipeline + Fix ISOLINUX .c32 + EPIC 5 XFCE priorise | `028-release-isolinux-xfce.adoc` | 8.5/10
+| 027 | 2026-04-27 | fix + ci/cd + diag | Validation pipeline release + 3 bugs CI identifies + 3 fixes locaux | `027-pipeline-bugs-fixes.adoc` | 6.5/10
+| 026 | 2026-04-27 | feature + ci/cd + tools | Version automatique depuis VERSION + release workflow + outils qemu/ripgrep | `026-auto-version-release-tools.adoc` | 9/10
+| 025 | 2026-04-27 | fix + tools + ci/cd | Correction binaires pnpm/uv/JetBrains + ajout opencode, graphify, ffmpeg | `025-binaries-fix-opencode.adoc` | 8/10
+| 024 | 2026-04-27 | fix + ci/cd + backlog | Fix squashfs > 4Go + test-software.sh CI/CD + nvm chroot | `024-squashfs-test-software.adoc` | 7.5/10
+| 023 | 2026-04-27 | feature + ci/cd + tools | zsh + oh-my-zsh + starship dans chroot + test logiciels ISO | `023-zsh-starship-iso-test.adoc` | 8/10
+| 022 | 2026-04-27 | feature + tools + backlog | EPIC 4 logiciels chroot (17 outils) + EPIC 6 --dry-run | `022-epic4-epic6-logiciels-dry-run.adoc` | 8.5/10
+| 021 | 2026-04-26 | feature + ci/cd | Mock test persistence survival CI/CD | `021-persistence-mock-test.adoc` | 8/10
+| 020 | 2026-04-26 | fix + ci/cd + docs | Skip isoTestAB CI/CD + mock test A/B + doc limitation runners | `020-skip-ab-test.adoc` | 8/10
+| 019 | 2026-04-26 | fix + feature + ci/cd | Correction Docker CMD + test-boot VNC + A/B CI/CD bloque | `019-docker-cmd-vnc-ab.adoc` | 8.0/10
+| 018 | 2026-04-26 | feature + fix + ci/cd | Docker VNC + test-ab-partition.sh + update-system.sh --yes + CI/CD | `018-docker-vnc-ab-partition-ci.adoc` | 8.0/10
+| 017 | 2026-04-26 | planification + docs | Repriorisation backlog + choix technique boot test (QEMU+VNC) | `017-backlog-repriorisation-boot-test.adoc` | 6/10
+| 016 | 2026-04-26 | fix + backlog | Debug pipeline SourceForge (base64 SSH key) + EPIC 7 | `016-debug-sourceforge-deploy.adoc` | 8/10
+| 015 | 2026-04-26 | refactor + feature + docs | Simplification CI/CD + Footer redesine + SourceForge | `015-simplify-cicd-footer-sourceforge.adoc` | 7/10
+| 014 | 2026-04-26 | feature + docs | SourceForge rsync CI/CD + READMEs a jour | `014-sourceforge-rsync-cicd.adoc` | 8/10
+| 013 | 2026-04-25 | fix + feature + docs | CI/CD GRUB fix + Release ISO v0.1.0 + site doc | `013-cicd-grub-fix-release-iso.adoc` | 8.5/10
+| 012 | 2026-04-25 | fix + feature | OpenCode PATH incomplet + article blog | `012-opencode-path-shell-fix.adoc` | 8.5/10
+| 011 | 2026-04-25 | debug | QEMU boot bloque sur initramfs (non resolu) | `011-qemu-initramfs-debug.adoc` | 4/10
+| 010 | 2026-04-25 | fix + feature | Premiere ISO generee avec succes (10 correctifs Ubuntu 24.04) | `010-first-iso-generated.adoc` | 8.5/10
+| 009 | 2026-04-24 | fix | Debug cpio premature end of archive | `009-cpio-debug.adoc` | 7.5/10
+| 008 | 2026-04-24 | fix + security | Debug CI/CD ISO (7/8 erreurs corriges, token leak fix) | `008-cicd-debug-tokens.adoc` | 7/10
 | 007 | 2026-04-26 | feature | Pipeline Gradle ISO + Ubiquity + CI/CD | `007-pipeline-gradle-iso.adoc` | 8.5/10
 | 006 | 2026-04-24 | feature | Audit et correction configs ISO live-build | `006-audit-configs-live-build.adoc` | 8.0/10
 | 005 | 2026-04-24 | feature + fix | Tests A11y/UI + Corrections contraste/navbar | `005-a11y-ui-tests.adoc` | 8.5/10

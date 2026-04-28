@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Ollama Chat
+Name[fr]=Ollama Chat
+Comment=Local LLM server and chat interface
+Comment[fr]=Serveur LLM local et interface de chat
+Exec=/usr/local/bin/ollama serve
+Icon=applications-science
+Terminal=true
+Categories=X-Magic-AI;AI;System;
+StartupNotify=true
+X-Desktop-File-Install-Version=0.26

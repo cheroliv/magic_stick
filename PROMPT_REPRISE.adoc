@@ -1,33 +1,34 @@
-= Prompt de reprise — Session 033
+= Prompt de reprise — Session 034
 
 __
-**EPIC** : EPIC 2 (valider build v0.1.7) + EPIC 5 (XFCE menu + fond d'ecran)
-**Statut** : Session 032 terminee — Fix pnpm path + secrets Docker Hub OK
+**EPIC** : EPIC 2 (valider build v0.1.7) + EPIC 5 (XFCE menu personnalise) + Open-WebUI
+**Statut** : Session 033 terminee — Fix uv + XFCE menu + Open-WebUI port 3333
 __
 
 '''
 
-== Session 032 — Resume
+== Session 033 — Resume
 
 **Date** : 28 avril 2026
 **Resultat** :
-- Secrets GitHub Actions `DOCKERHUB_USERNAME` et `DOCKERHUB_TOKEN` crees (stdin, jamais affiches)
-- Fix pnpm path : symlink dans hook chroot + fallback path dans test-software.sh
-- Tag v0.1.7 supprime (pointe sur ancien commit sans les fixes session 031)
-- Commit `8a0ef76` push sur main avec fix pnpm
+- Fix uv tarball : `--strip-components=1` dans hook 060 + fallback `/usr/bin/uv` dans test-software.sh
+- Menu XFCE personnalise : categories Magic Stick (Development, NetworkDiagnostics, ContainersVM, AIAssistants)
+- Open-WebUI integre : launcher script port 3333, .desktop dans menu AI Assistants
+- Build ISO en cours sur run #25043089739 (commit db9d179)
+- Wallpaper : decision de garder xubuntu-blue.png par defaut
 '''
 
-== Session 033 — Priorites
+== Session 034 — Priorites
 
-=== 1. Valider build main ISO au vert
+=== 1. Monitorer build ISO main (commit db9d179)
 
-* Wait build main sur commit `8a0ef76` (isoTestSoftware doivent passer)
-* Si vert : bump VERSION 0.1.7 + tag v0.1.7 + push + monitorer build complet
+* Wait build ISO vert sur main (isoTestSoftware doivent passer)
+* Si vert : bump VERSION 0.1.7 + tag v0.1.7 + push tag + monitorer build complet
 
-=== 2. EPIC 5 — Finalisation XFCE
+=== 2. EPIC 5 — Polishment XFCE (si build OK)
 
-* Menu Applications personnalise (xml de menu XFCE)
-* Fond d'ecran custom Magic Stick (generer image PNG 1920x1080)
+* Verifier que le menu XFCE dans l'ISO fonctionne correctement
+* Ajuster les .directory/.desktop si necessaire apres test
 
 === 3. Backlog
 

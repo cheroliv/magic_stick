@@ -1,0 +1,47 @@
+= Session 033 — Valider build v0.1.7 + EPIC 5 XFCE menu + Open-WebUI
+
+== Date
+28 avril 2026
+
+== Objectifs
+. Valider build ISO au vert sur main (fix uv tarball extraction)
+. EPIC 5 : Menu XFCE personnalise avec categories Magic Stick
+. Ajouter Open-WebUI dans le menu AI Assistants (port 3333)
+
+== Realisations
+
+=== Fix uv — Build ISO
+* Probleme : `uv` tarball s'extrayait dans un sous-repertoire, le binaire n'etait pas trouve
+* Fix : `--strip-components=1` dans `060-install-chroot-software.chroot` (ligne 201)
+* Fix test : fallback `/usr/bin/uv` dans `test-software.sh`
+* Pushed sur `main` (commit `db9d179`)
+* Build ISO en cours sur GitHub Actions (run #25043089739)
+
+=== EPIC 5 — XFCE Menu
+* Menu XFCE custom : `config/live-build/includes.chroot/etc/xdg/menus/xfce-applications.menu`
+* Categories personnalisees : Development, NetworkDiagnostics, ContainersVM, AIAssistants
+* Sous-menus : IDEsEditors, Terminals, VCS
+* Layout personalise avec separators
+
+=== Open-WebUI Integration
+* Script launcher : `/usr/local/bin/launch-open-webui.sh` (port 3333 expose, 8080 interne conteneur)
+* `.desktop` : `usr/share/applications/open-webui-magic.desktop` (categorie X-Magic-AI)
+* `.desktop` : `usr/share/applications/ollama-magic.desktop` (categorie X-Magic-AI)
+* Hook chroot : `docker pull ghcr.io/open-webui/open-webui:main` dans `060-install-chroot-software.chroot`
+
+== Fichiers modifies
+| Fichier | Changement
+| `config/live-build/hooks/060-install-chroot-software.chroot` | Fix uv tar --strip-components=1 ; ajout docker pull open-webui
+| `scripts/test-software.sh` | Fallback /usr/bin/uv
+| `config/live-build/includes.chroot/etc/xdg/menus/xfce-applications.menu` | Menu XFCE custom Magic Stick
+| `config/live-build/includes.chroot/usr/local/bin/launch-open-webui.sh` | Launcher Open-WebUI port 3333
+| `config/live-build/includes.chroot/usr/share/applications/open-webui-magic.desktop` | Menu AI Assistants
+| `config/live-build/includes.chroot/usr/share/applications/ollama-magic.desktop` | Menu AI Assistants
+
+== Score
+8/10
+
+== Non termine
+* Wallpaper PNG 1920x1080 (decide : garder xubuntu-blue.png par defaut)
+* Bump VERSION 0.1.7 + tag (depend du build ISO vert)
+* EPIC 7 (auto-doc + IA release notes) pas touche

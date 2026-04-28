@@ -1203,3 +1203,37 @@ Suite session 025. L'utilisateur a demande un mecanisme d'incrementation automat
 * EPIC 8 Dockerisation CLI
 
 
+
+== Session 033 — Fix uv + XFCE Menu Custom + Open-WebUI
+
+**Date** : 28 avril 2026
+**Type** : fix + feature + ci/cd
+**Score** : 8/10
+
+=== Contexte
+Suite session 032 (fix pnpm). Mission : valider build v0.1.7 + EPIC 5 XFCE menu + fond ecran. Build precedent (session 032) echouait sur `uv NOT found`.
+
+=== Taches realisees
+* [OK] Fix uv tarball extraction dans hook 060-install-chroot-software.chroot
+  * `--strip-components=1` ajoute au `tar -xzf` (meme pattern que les autres binaires GitHub)
+  * Le tarball `uv-x86_64-unknown-linux-gnu.tar.gz` contient un sous-repertoire racine
+* [OK] Fix test-software.sh — fallback `/usr/bin/uv` en plus de `/usr/local/bin/uv`
+* [OK] Pushed sur `main` (db9d179) — Build ISO en cours
+* [OK] Menu XFCE personnalise pour Magic Stick
+  * `etc/xdg/menus/xfce-applications.menu` : categories custom (Development, NetworkDiagnostics, ContainersVM, AIAssistants)
+  * `.directory` files pour les categories custom dans `usr/share/desktop-directories/`
+  * Layout : Magic Stick categories en premier, puis standards, puis Other/DesktopSettings
+* [OK] Open-WebUI integre dans le menu AI Assistants
+  * `launch-open-webui.sh` : Docker run avec port 3333 expose (8080 interne)
+  * `.desktop` Open-WebUI et Ollama avec category `X-Magic-AI`
+
+=== Decision EPIC 5
+* Wallpaper : decision utilisateur de garder `xubuntu-blue.png` par defaut (pas de PNG custom)
+
+=== Metriques
+| Fichiers modifies | 10 |
+| Fichiers ajoutes | 12 |
+
+=== Prochaine session
+* Monitor build ISO vert → bump VERSION 0.1.7 + tag v0.1.7
+* EPIC 5 polishment XFCE (verifier menu dans l'ISO)

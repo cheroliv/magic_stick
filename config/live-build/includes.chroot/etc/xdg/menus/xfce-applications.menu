@@ -1,0 +1,174 @@
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+    "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">
+
+<Menu>
+  <Name>Xfce</Name>
+  <DefaultAppDirs/>
+  <DefaultDirectoryDirs/>
+  <DefaultMergeDirs/>
+
+  <Include>
+    <Category>X-Xfce-Toplevel</Category>
+  </Include>
+
+  <Menu>
+    <Name>Development</Name>
+    <Directory>magic-dev.directory</Directory>
+    <Include>
+      <Category>Development</Category>
+    </Include>
+    <Exclude>
+      <Or>
+        <Category>Building</Category>
+        <Category>Debugger</Category>
+        <Category>IDE</Category>
+        <Category>GUIDesigner</Category>
+        <Category>Profiling</Category>
+        <Category>ProjectManagement</Category>
+        <Category>RevisionControl</Category>
+        <Category>Translation</Category>
+        <Category>WebDevelopment</Category>
+      </Or>
+    </Exclude>
+    <Menu>
+      <Name>IDEsEditors</Name>
+      <Directory>magic-ide.directory</Directory>
+      <Include>
+        <Or>
+          <Category>IDE</Category>
+          <Category>TextEditor</Category>
+        </Or>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Terminals</Name>
+      <Directory>magic-terminals.directory</Directory>
+      <Include>
+        <Category>SystemTerminalEmulator</Category>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>VCS</Name>
+      <Directory>magic-vcs.directory</Directory>
+      <Include>
+        <Category>RevisionControl</Category>
+      </Include>
+    </Menu>
+  </Menu>
+
+  <Menu>
+    <Name>NetworkDiagnostics</Name>
+    <Directory>magic-network.directory</Directory>
+    <Include>
+      <Category>Network</Category>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>ContainersVM</Name>
+    <Directory>magic-containers.directory</Directory>
+    <Include>
+      <Category>System</Category>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>AIAssistants</Name>
+    <Directory>magic-ai.directory</Directory>
+    <Include>
+      <Category>X-Magic-AI</Category>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Accessories</Name>
+    <Directory>xfce-accessories.directory</Directory>
+    <Include>
+      <Or>
+        <Category>Accessibility</Category>
+        <Category>Core</Category>
+        <Category>Legacy</Category>
+        <Category>Utility</Category>
+      </Or>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>AudioVideo</Name>
+    <Directory>xfce-multimedia.directory</Directory>
+    <Include>
+      <Or>
+        <Category>Audio</Category>
+        <Category>Video</Category>
+        <Category>AudioVideo</Category>
+      </Or>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Graphics</Name>
+    <Directory>xfce-graphics.directory</Directory>
+    <Include>
+      <Or>
+        <Category>Graphics</Category>
+        <Category>Scanning</Category>
+      </Or>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Internet</Name>
+    <Directory>xfce-network.directory</Directory>
+    <Include>
+      <Category>Network</Category>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Office</Name>
+    <Directory>xfce-office.directory</Directory>
+    <Include>
+      <Category>Office</Category>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>System</Name>
+    <Directory>xfce-system.directory</Directory>
+    <Include>
+      <Or>
+        <Category>Emulator</Category>
+        <Category>System</Category>
+      </Or>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Other</Name>
+    <Directory>xfce-other.directory</Directory>
+    <OnlyUnallocated/>
+    <Include>
+      <All/>
+    </Include>
+  </Menu>
+
+  <Layout>
+    <Menuname>Development</Menuname>
+    <Menuname>NetworkDiagnostics</Menuname>
+    <Menuname>ContainersVM</Menuname>
+    <Menuname>AIAssistants</Menuname>
+    <Separator/>
+    <Menuname>Accessories</Menuname>
+    <Menuname>AudioVideo</Menuname>
+    <Menuname>Graphics</Menuname>
+    <Menuname>Internet</Menuname>
+    <Menuname>Office</Menuname>
+    <Menuname>System</Menuname>
+    <Separator/>
+    <Menuname>Other</Menuname>
+    <Separator/>
+    <Merge type="all"/>
+    <Separator/>
+    <Menuname>DesktopSettings</Menuname>
+  </Layout>
+</Menu>

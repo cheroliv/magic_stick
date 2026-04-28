@@ -1,6 +1,6 @@
 = Script Verification — Magic Stick
 
-_Derniere mise a jour_ : Session 032 (28 avril 2026) — Fix pnpm path (symlink chroot + fallback test-software.sh)
+_Derniere mise a jour_ : Session 033 (28 avril 2026) — Fix uv tarball extraction (--strip-components-1) + XFCE menu custom + Open-WebUI launcher
 
 '''
 
@@ -18,7 +18,8 @@ _Derniere mise a jour_ : Session 032 (28 avril 2026) — Fix pnpm path (symlink 
 | scripts/test-ab-partition.sh | OK | OK | Test suite A/B partition avec loopback device | Session 018
 | scripts/update-system.sh | OK | OK | Partition A/B (setup-ab, update, status, verify, switch) + flag --yes + --dry-run | Session 022
 | scripts/install-software.sh | OK | OK | Post-install live (docker, ollama, sdkman) | Session 006
-| scripts/test-software.sh | OK | OK | Verification logiciels dans ISO squashfs (22 binaires + 3 config) | Session 025
+| launch-open-webui.sh | OK | OK | Launcher Docker Open-WebUI sur port 3333 | Session 033
+| scripts/test-software.sh | OK | OK | Verification logiciels dans ISO squashfs (22 binaires + 3 config) | Session 033
 |===
 
 == Dockerfiles
@@ -63,8 +64,8 @@ _Derniere mise a jour_ : Session 032 (28 avril 2026) — Fix pnpm path (symlink 
 | 030-setup-persistence.chroot | OK | OK | Casper.conf pour persistance | Session 006
 | 040-post-install-tweaks.chroot | OK | OK | NetworkManager, keyboard FR, services | Session 006
 | 050-setup-ubiquity.chroot | OK | OK | Raccourci Bureau + config ubiquity-dm | Session 007
-| 060-install-chroot-software.chroot | OK | OK | Installation logiciels chroot (Docker, Podman, Ollama, NVM, pnpm v10.33.2 via nvm/npm + symlink /usr/local/bin/pnpm *corrigé session 032*, Python 3.14.4, uv, SDKMAN+JDK25, ripgrep, fd, fzf, lazygit, xh, httpie, just, flatpak, JetBrains Toolbox, zsh, oh-my-zsh, starship, opencode, graphify, ffmpeg) | Session 032 |
-| 070-configure-xfce.chroot | OK | OK | Personnalisation XFCE : copie skel XML, xsettings Greybird+PaPirus, fix ownership | Session 029 |
+| 060-install-chroot-software.chroot | OK | OK | Installation logiciels chroot (Docker, Podman, Ollama, NVM, pnpm v10.33.2 via nvm/npm + symlink /usr/local/bin/pnpm *corrigé session 032*, Python 3.14.4, **uv tar --strip-components-1 *corrigé session 033***, SDKMAN+JDK25, ripgrep, fd, fzf, lazygit, xh, httpie, just, flatpak, JetBrains Toolbox, zsh, oh-my-zsh, starship, opencode, graphify, ffmpeg, **docker pull open-webui *session 033***) | Session 033 |
+| 070-configure-xfce.chroot | OK | OK | Personnalisation XFCE : copie skel XML, xsettings Greybird+PaPirus, fix ownership + **XFCE menu custom categories Magic Stick *session 033*** | Session 033 |
 | 990-add-efi-support.binary | OK | OK | Support UEFI (grub-mkimage, shim, grub.cfg) | Session 013
 |===
 

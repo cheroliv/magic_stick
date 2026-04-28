@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Open-WebUI
+Name[fr]=Open-WebUI
+Comment=ChatGPT-like interface for local LLMs via Ollama (Port 3333)
+Comment[fr]=Interface ChatGPT-like pour LLMs locaux via Ollama (Port 3333)
+Exec=/usr/local/bin/launch-open-webui.sh
+Icon=applications-internet
+Terminal=true
+Categories=X-Magic-AI;AI;System;
+StartupNotify=true
+StartupWMClass=Open-WebUI
+X-Desktop-File-Install-Version=0.26

@@ -4,6 +4,7 @@ _Derniere mise a jour_ : 2026-04-28
 
 |===
 | # | Date | Type | Sujet | Score
+| 033 | 28 avril 2026 | fix + feature + ci/cd | Fix uv tarball (--strip-components-1) + fallback /usr/bin/uv + XFCE menu custom (categories Magic Stick) + Open-WebUI launcher port 3333 + .desktop AI Assistants | 8/10
 | 032 | 28 avril 2026 | fix + ci/cd + backlog | Secrets GitHub Docker Hub (stdin sans log) + fix pnpm path (symlink chroot + fallback test-software.sh) + suppression tag v0.1.7 | 7/10
 | 031 | 28 avril 2026 | feature + ci/cd + fix | Docker Hub CLI local + fixes Dockerfile CLI (zstd, zip, $HOME, pnpm, xh) + credentials isolation + tasks Gradle | 8.0/10
 | 030 | 28 avril 2026 | fix + ci/cd + feature | Fix pnpm rate-limit + Docker Hub CI/CD + suppression menu Blog + proc. fin session | -/10
