@@ -533,6 +533,14 @@ else
     if [ -f "${GRAPHIFY_VENV}/bin/pip" ]; then
         "${GRAPHIFY_VENV}/bin/pip" install --upgrade pip 2>/dev/null || true
         if "${GRAPHIFY_VENV}/bin/pip" install graphifyy 2>/dev/null; then
+            # Ensure graphify CLI exists (pip entry point varies by version)
+            if [ ! -f "${GRAPHIFY_VENV}/bin/graphify" ]; then
+                cat > "${GRAPHIFY_VENV}/bin/graphify" << 'EOF'
+#!/usr/bin/env bash
+exec /opt/graphify/bin/python -m graphify "$@"
+EOF
+                chmod +x "${GRAPHIFY_VENV}/bin/graphify"
+            fi
             ln -sf "${GRAPHIFY_VENV}/bin/graphify" /usr/local/bin/graphify 2>/dev/null || true
             echo "==> graphify installed"
             graphify --version 2>/dev/null || true
@@ -551,11 +559,20 @@ JETBRAINS_TOOLBOX_DIR="/opt/jetbrains-toolbox"
 if [ -f "${JETBRAINS_TOOLBOX_DIR}/jetbrains-toolbox" ]; then
     echo "==> JetBrains Toolbox App already present"
 else
-    # Hardcode fallback version + architecture
-    TB_VERSION="2.6.1.38687"
-    TB_ARCH_NAME="tar.gz"
+    # Fetch the latest version dynamically from JetBrains API
+    TB_JSON="$(curl -fsSL 'https://data.services.jetbrains.com/products/releases?code=TBA&latest=true&type=release' 2>/dev/null || echo '')"
+    if [ -n "${TB_JSON}" ]; then
+        TB_VERSION="$(echo "${TB_JSON}" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get("TBA",[{}])[0].get("version",""))' 2>/dev/null)"
+        TB_LINK="$(echo "${TB_JSON}" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get("TBA",[{}])[0].get("downloads",{}).get("linux",{}).get("link",""))' 2>/dev/null)"
+        if [ -n "${TB_LINK}" ] && [ "${TB_LINK}" != "None" ]; then
+            TB_URL="${TB_LINK}"
+        fi
+    fi
+    # Fallback if API call failed
+    if [ -z "${TB_URL}" ]; then
+        TB_URL="https://download.jetbrains.com/toolbox/jetbrains-toolbox-latest.tar.gz"
+    fi
 
-    TB_URL="https://download.jetbrains.com/toolbox/jetbrains-toolbox-${TB_VERSION}.${TB_ARCH_NAME}"
     TB_TMP="/tmp/jetbrains-toolbox-install"
     mkdir -p "${TB_TMP}"
 
@@ -566,24 +583,9 @@ else
 
         # Make jetbrains-toolbox available globally
         ln -sf "${JETBRAINS_TOOLBOX_DIR}/jetbrains-toolbox" /usr/local/bin/jetbrains-toolbox 2>/dev/null || true
-
-        # Create desktop entry for XFCE
-        mkdir -p /usr/share/applications
-        cat > /usr/share/applications/jetbrains-toolbox.desktop << 'EOF'
-[Desktop Entry]
-Name=JetBrains Toolbox
-Comment=JetBrains Toolbox App
-Exec=/opt/jetbrains-toolbox/jetbrains-toolbox
-Icon=/opt/jetbrains-toolbox/toolbox.svg
-Type=Application
-Categories=Development;IDE;
-Terminal=false
-StartupNotify=true
-EOF
-
         echo "==> JetBrains Toolbox App installed"
     else
-        echo "WARNING: Failed to download JetBrains Toolbox App" >&2
+        echo "WARNING: Failed to download JetBrains Toolbox App from ${TB_URL}" >&2
     fi
 fi
 
