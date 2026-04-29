@@ -1,0 +1,81 @@
+= Session 050 — EPIC 11 Pinning versions chroot + refactoring
+
+**Date** : 29 avril 2026
+**Type** : refactor + security
+**Score** : 8/10
+
+== Contexte
+
+Suite session 049 (release v0.1.13 VERT COMPLET). Session 050 démarre l'EPIC 11 (pinning versions chroot) priorisé dans BACKLOG.
+
+== Taches realisees
+
+=== EPIC 11 — Pinning versions chroot + refactoring
+
+* [OK] `scripts/lib/versions.sh` cree — centralise toutes les versions des outils externes (uv, nvm, pnpm, ripgrep, fd, lazygit, just, xh, opencode, ghcli, fzf). Versions verifiees sur GitHub releases (corrections : uv 0.11.8, nvm v0.40.4, ghcli v2.92.0, fzf v0.72.0).
+* [OK] `scripts/lib/arch.sh` cree — factorise `get_arch_suffix()` avec formats rust/musl/lazygit/gh/opencode/vscode/generic. Supprime 8 blocs `case "$(uname -m)"` dupliques.
+* [OK] Refactor `config/live-build/hooks/060-install-chroot-software.chroot` :
+  - Sourcing `versions.sh` + `arch.sh` via `includes.chroot/usr/local/lib/magic-stick/`
+  - Suppression de tous les appels API `/releases/latest` (ripgrep, fd, lazygit, just, xh, opencode, gh CLI). Passage de 12 occurences a 0.
+  - Factorisation des blocs `case "$(uname -m)"` via `get_arch_suffix()`
+  - Syntaxe validee : `bash -n OK`
+* [OK] Copie des libs dans `config/live-build/includes.chroot` pour inclusion dans le chroot live-build
+* [OK] Mise a jour `PROMPT_REPRISE.adoc` — EPIC 11 partiellement complete
+* [OK] Mise a jour `BACKLOG.adoc` — 4 taches EPIC 11 marquees [x]
+
+=== Versions verifiees (GitHub releases)
+
+| Outil | Version | Statut verification |
+|-------|---------|---------------------|
+| uv | 0.11.8 | OK (latest = 0.11.8) |
+| nvm | v0.40.4 | OK (latest = v0.40.4) |
+| ripgrep | 14.1.1 | OK |
+| fd | v10.2.0 | OK |
+| lazygit | v0.61.1 | OK (teste sur GitHub) |
+| just | 1.50.0 | OK |
+| xh | v0.25.3 | OK |
+| opencode | 0.0.55 | OK (teste sur GitHub) |
+| gh CLI | v2.92.0 | OK (latest = v2.92.0) |
+| fzf | v0.72.0 | OK (latest = v0.72.0) |
+
+== Reste a faire (EPIC 11)
+
+* Docker Hub `Dockerfile` synchronisation avec `versions.sh` pour eviter duplication
+* CI/CD validation reproductibilite (deux builds successifs avec meme versions produisent meme contenu binaire)
+
+== Fichiers modifies/crees
+
+| Fichier | Action |
+|---------|--------|
+| `scripts/lib/versions.sh` | **Cree** |
+| `scripts/lib/arch.sh` | **Cree** |
+| `config/live-build/includes.chroot/usr/local/lib/magic-stick/versions.sh` | **Cree** |
+| `config/live-build/includes.chroot/usr/local/lib/magic-stick/arch.sh` | **Cree** |
+| `config/live-build/hooks/060-install-chroot-software.chroot` | Modifie (0 `/releases/latest`, +sourcing libs, -duplication blocs case arch) |
+| `docker/magic-stick-cli/Dockerfile` | Modifie (nvm v0.40.3 -> v0.40.4) |
+| `PROMPT_REPRISE.adoc` | Mis a jour |
+| `BACKLOG.adoc` | Mis a jour |
+
+== Syntaxe validee
+
+| Fichier | Validation |
+|---------|------------|
+| `scripts/lib/versions.sh` | `bash -n` OK |
+| `scripts/lib/arch.sh` | `bash -n` OK |
+| `060-install-chroot-software.chroot` | `bash -n` OK |
+| `docker/magic-stick-cli/Dockerfile` | `bash -n` OK |
+
+== Metriques
+
+| Metrique | Valeur |
+|----------|--------|
+| Fichiers crees | 4 |
+| Fichiers modifies | 4 |
+| `/releases/latest` supprimes | 7 |
+| Blocs `case "$(uname -m)"` factorises | 8 -> 1 (via `get_arch_suffix`) |
+| Versions verifiees sur GitHub | 10/10 |
+| Scripts `bash -n` valides | 4/4 |
+
+== Checkpoint — Statut final session
+
+4 taches EPIC 11 realisees sur 6. Session incomplete (reproductibilite CI/CD et Docker Hub pas demarres). Prochaine session continue EPIC 11.

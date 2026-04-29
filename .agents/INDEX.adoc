@@ -2,9 +2,9 @@
 
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
-_Derniere mise a jour_ : 2026-04-29 (session 049)
-_Session en cours_ : 050 — EPIC 11 (pinning versions chroot) + tests boot hardware
-_Session terminee_ : 049 (Release v0.1.13 VERT COMPLET ISO + Docker Hub + SourceForge, fix checksums lazygit + just, EPIC 11 backlog)
+_Derniere mise a jour_ : 2026-04-29 (session 050)
+_Session en cours_ : 051 — EPIC 11 (pinning versions chroot) + tests boot hardware
+_Session terminee_ : 050 (EPIC 11 pinning versions chroot : versions.sh + arch.sh + refactor 060-install-chroot-software.chroot, 0 /releases/latest, 8 blocs case factorises)
 _Session precedente_ : 048 (EPIC 5 XFCE autostart + fix Docker Hub lazygit casse. ISO v0.1.12 vert complet)
 _Session precedente_ : 047 (EPIC 5 XFCE polishment + EPIC 10 backlog. Tag v0.1.12, build CI/CD en cours)
 _Session precedente_ : 045 (Fix Dockerfile EPIC 8 URLs releases + extraction robuste xh/just, bump v0.1.11, Docker Hub VERT)

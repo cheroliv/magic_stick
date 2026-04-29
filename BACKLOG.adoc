@@ -221,15 +221,15 @@ __
 
 ==== Problemes identifies
 
-* [ ] **Pinning versions chroot** : Remplacer tous les `curl https://api.github.com/repos/.../releases/latest` dans `060-install-chroot-software.chroot` par des versions fixes (ARG/variables). Outils concernes : ripgrep, fd, fzf, lazygit, xh, just, opencode, uv, starship, SDKMAN, graphify.
-* [ ] **Centraliser get_arch_suffix()** : Factoriser les 5+ blocs `case "$(uname -m)"` dupliques dans chaque installation binaire en une unique fonction `get_arch_suffix()` ou un sourcing de `scripts/lib/arch.sh`.
+* [x] **Pinning versions chroot** : Remplacer tous les `curl https://api.github.com/repos/.../releases/latest` dans `060-install-chroot-software.chroot` par des versions fixes (ARG/variables). Outils concernes : ripgrep, fd, fzf, lazygit, xh, just, opencode, uv, starship, SDKMAN, graphify.
+* [x] **Centraliser get_arch_suffix()** : Factoriser les 5+ blocs `case "$(uname -m)"` dupliques dans chaque installation binaire en une unique fonction `get_arch_suffix()` ou un sourcing de `scripts/lib/arch.sh`.
 * [ ] **Traps robustes pour montages temporaires** : Ajouter `trap ... EXIT` dans `update-system.sh`, `build-inner.sh` (montages loop ISO), et tout script utilisant `mktemp -d` + `mount` pour garantir le demontage et le cleanup meme en cas d'erreur.
 * [ ] **Checksums binaires chroot** : Le Dockerfile a deja des checksums lazygit/just, mais pas les hooks chroot. Verrouiller les SHA256 des binaires critiques comme le Dockerfile.
 
 ==== Taches
 
-* [ ] Creer un fichier `config/versions.env` ou `scripts/lib/versions.sh` centralisant TOUTES les versions des outils externes (eviter la duplication Dockerfile vs chroot).
-* [ ] Refactoriser `060-install-chroot-software.chroot` pour sourcer `versions.sh` et supprimer tous les appels API `latest`.
+* [x] Creer un fichier `config/versions.env` ou `scripts/lib/versions.sh` centralisant TOUTES les versions des outils externes (eviter la duplication Dockerfile vs chroot).
+* [x] Refactoriser `060-install-chroot-software.chroot` pour sourcer `versions.sh` et supprimer tous les appels API `latest`.
 * [ ] Extraire `scripts/lib/arch.sh` avec `get_arch_suffix()` et l'utiliser dans chroot + Dockerfile.
 * [ ] Ajouter des traps `EXIT` dans `update-system.sh` (fonction `extract_iso_to_partition` et `copy_iso_grub`).
 * [ ] Ajouter des traps `EXIT` dans `build-inner.sh` pour le nettoyage des montages loop ISO.

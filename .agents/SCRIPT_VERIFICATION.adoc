@@ -1,6 +1,6 @@
 = Script Verification — Magic Stick
 
-_Derniere mise a jour_ : Session 048 (29 avril 2026) — EPIC 5 autostart XFCE (`magic-stick-welcome.sh` + `.desktop`)
+_Derniere mise a jour_ : Session 050 (29 avril 2026) — EPIC 11 versions.sh + arch.sh + refactor chroot (0 /releases/latest, 8 blocs case factorises)
 '''
 
 == Scripts du Projet
@@ -69,7 +69,7 @@ _Derniere mise a jour_ : Session 048 (29 avril 2026) — EPIC 5 autostart XFCE (
 | 030-setup-persistence.chroot | OK | OK | Casper.conf pour persistance | Session 006
 | 040-post-install-tweaks.chroot | OK | OK | NetworkManager, keyboard FR, services | Session 006
 | 050-setup-ubiquity.chroot | OK | OK | Raccourci Bureau + config ubiquity-dm | Session 007
-| 060-install-chroot-software.chroot | OK | OK | Installation logiciels chroot (Docker, Podman, Ollama, NVM, pnpm v10.33.2 via nvm/npm + symlink /usr/local/bin/pnpm *corrigé session 032*, Python 3.14.4, **uv tar --strip-components-1 *corrigé session 033***, SDKMAN+JDK25, ripgrep, fd, fzf, lazygit, xh, httpie, just, flatpak, **JetBrains Toolbox *API dynamique + fallback statique 3.4.3.81140 session 037***, zsh, oh-my-zsh, starship, opencode, **graphify *venv wrapper session 035***, ffmpeg, **docker pull open-webui *session 033***, **VS Code *session 042***, **gh CLI *session 042***) | Session 044 |
+| 060-install-chroot-software.chroot | OK | OK | Installation logiciels chroot (Docker, Podman, Ollama, NVM, pnpm, Python 3.14.4, uv, SDKMAN+JDK25, ripgrep, fd, fzf, lazygit, xh, httpie, just, flatpak, JetBrains Toolbox, zsh, oh-my-zsh, starship, opencode, graphify, ffmpeg, VS Code, gh CLI). **EPIC 11 : versions pinnées via versions.sh, arch factorisé via arch.sh, 0 /releases/latest** | Session 050 |
 | 070-configure-xfce.chroot | OK | OK | Personnalisation XFCE : copie skel XML, xsettings Greybird+PaPirus, fix ownership + **XFCE menu custom categories Magic Stick *session 033*** | Session 033 |
 | 080-cleanup-space.chroot | OK | OK | Purge pre-squashfs (apt clean, headers, dev libs, doc/man, locales, /tmp) | Session 042 |
 | 990-add-efi-support.binary | OK | OK | Support UEFI (grub-mkimage, shim, grub.cfg) | Session 013

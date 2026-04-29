@@ -1,5 +1,30 @@
 = Archive des Taches Terminee — Avril 2026
 
+== Session 050 — EPIC 11 Pinning versions chroot + refactoring
+
+**Date** : 29 avril 2026
+**Type** : refactor + security
+**Score** : 8/10
+
+=== Taches
+* [OK] `scripts/lib/versions.sh` centralise les versions (uv, nvm, ripgrep, fd, lazygit, just, xh, opencode, ghcli, fzf). Versions verifiees sur GitHub releases.
+* [OK] `scripts/lib/arch.sh` factorise `get_arch_suffix()` (formats rust/musl/lazygit/gh/opencode/vscode/generic)
+* [OK] `060-install-chroot-software.chroot` refactorise : sourcing libs + suppression de tous les `/releases/latest` (0 match) + factorisation des blocs `case "$(uname -m)"` (8 -> 1)
+* [OK] Copie libs dans `includes.chroot/usr/local/lib/magic-stick/`
+* [OK] Versions corrigees : uv 0.11.8, nvm v0.40.4, ghcli v2.92.0, fzf v0.72.0
+* [OK] Dockerfile nvm v0.40.3 -> v0.40.4
+* [OK] Syntaxe `bash -n` OK sur 4 scripts
+
+=== Fichiers
+| `scripts/lib/versions.sh` | Cree |
+| `scripts/lib/arch.sh` | Cree |
+| `includes.chroot/usr/local/lib/magic-stick/versions.sh` | Cree |
+| `includes.chroot/usr/local/lib/magic-stick/arch.sh` | Cree |
+| `060-install-chroot-software.chroot` | Modifie |
+| `docker/magic-stick-cli/Dockerfile` | Modifie |
+| `PROMPT_REPRISE.adoc` | Mis a jour |
+| `BACKLOG.adoc` | Mis a jour |
+
 == Session 048 — EPIC 5 XFCE Autostart + Fix Docker Hub lazygit
 
 **Date** : 29 avril 2026

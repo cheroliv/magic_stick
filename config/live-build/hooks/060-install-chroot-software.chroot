@@ -6,6 +6,28 @@
 
 echo "==> Installing extra software inside chroot (Docker, Podman, Ollama, NVM, pnpm, Python 3.14.4, uv, just, SDKMAN + JDK 25 Temurin)"
 
+# Source version pinning and arch helpers (shipped via includes.chroot)
+if [ -f /usr/local/lib/magic-stick/versions.sh ]; then
+    . /usr/local/lib/magic-stick/versions.sh
+else
+    echo "WARNING: versions.sh not found, falling back to inline defaults" >&2
+    UV_VERSION="0.11.8"
+    NVM_VERSION="v0.40.4"
+    PNPM_VERSION="10.33.2"
+    RIPGREP_VERSION="14.1.1"
+    FD_VERSION="v10.2.0"
+    LAZYGIT_VERSION="v0.61.1"
+    JUST_VERSION="1.50.0"
+    XH_VERSION="v0.25.3"
+    OPENCODE_VERSION="0.0.55"
+    GHCLI_VERSION="v2.75.0"
+    FZF_VERSION="v0.60.3"
+fi
+
+if [ -f /usr/local/lib/magic-stick/arch.sh ]; then
+    . /usr/local/lib/magic-stick/arch.sh
+fi
+
 # Wrapper nmcli: maintainer scripts de network-manager appellent nmcli/LibNM dans le chroot
 # sans D-Bus. Ils plantent avec "Could not create NMClient object".
 # Utilisation de dpkg-divert pour eviter que apt-get ne re-installe le vrai nmcli.
@@ -174,48 +196,26 @@ fi
 python3 --version 2>/dev/null || true
 
 ### uv Python package manager ###
-echo "==> Installing uv Python package manager"
-UV_VERSION="0.11.8"
-
+echo "==> Installing uv Python package manager (v${UV_VERSION})"
 if ! command -v uv >/dev/null 2>&1; then
-    # Check architecture
-    ARCH="$(uname -m)"
-    case "${ARCH}" in
-        x86_64)
-            UV_ARCH="x86_64-unknown-linux-gnu"
-            ;;
-        aarch64)
-            UV_ARCH="aarch64-unknown-linux-gnu"
-            ;;
-        *)
-            echo "WARNING: Unsupported architecture ${ARCH} for uv prebuilt, skipping" >&2
-            UV_ARCH=""
-            ;;
-    esac
-
+    UV_ARCH="" && UV_ARCH="$(get_arch_suffix rust)" || true
     if [ -n "${UV_ARCH}" ]; then
         UV_URL="https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/uv-${UV_ARCH}.tar.gz"
         UV_TMP="/tmp/uv-install"
         mkdir -p "${UV_TMP}"
         if curl -fsSL "${UV_URL}" -o "${UV_TMP}/uv.tar.gz"; then
             tar -xzf "${UV_TMP}/uv.tar.gz" -C "${UV_TMP}" --strip-components=1
-            if [ -f "${UV_TMP}/uv" ]; then
-                install -m0755 "${UV_TMP}/uv" /usr/local/bin/uv 2>/dev/null || true
-            fi
-            if [ -f "${UV_TMP}/uvx" ]; then
-                install -m0755 "${UV_TMP}/uvx" /usr/local/bin/uvx 2>/dev/null || true
-            fi
+            [ -f "${UV_TMP}/uv" ]  && install -m0755 "${UV_TMP}/uv"  /usr/local/bin/uv  2>/dev/null || true
+            [ -f "${UV_TMP}/uvx" ] && install -m0755 "${UV_TMP}/uvx" /usr/local/bin/uvx 2>/dev/null || true
             rm -rf "${UV_TMP}"
         fi
-
-        if command -v uv >/dev/null 2>&1; then
-            echo "==> uv installed"
-            uv --version
-        else
-            # Fallback: install via pip/pipx
-            echo "WARNING: uv prebuilt failed, trying pip install" >&2
-            pip3 install uv 2>/dev/null || true
-        fi
+    fi
+    if command -v uv >/dev/null 2>&1; then
+        echo "==> uv installed"
+        uv --version
+    else
+        echo "WARNING: uv prebuilt failed, trying pip install" >&2
+        pip3 install uv 2>/dev/null || true
     fi
 else
     echo "==> uv already present"
@@ -313,15 +313,9 @@ if ! command -v rg > /dev/null 2>&1; then
         echo "==> ripgrep (rg) installed"
     else
         # Fallback: install from GitHub release
-        RG_VERSION="$(curl -fsSL https://api.github.com/repos/BurntSushi/ripgrep/releases/latest 2> /dev/null | grep '"tag_name":' | cut -d'"' -f4 || echo "14.1.1")"
-        RG_ARCH="$(uname -m)"
-        case "${RG_ARCH}" in
-            x86_64) RG_TARGET="x86_64-unknown-linux-musl" ;;
-            aarch64) RG_TARGET="aarch64-unknown-linux-musl" ;;
-            *) RG_TARGET="" ;;
-        esac
-        if [ -n "${RG_TARGET}" ]; then
-            RG_URL="https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-${RG_TARGET}.tar.gz"
+        RG_ARCH="" && RG_ARCH="$(get_arch_suffix musl)" || true
+        if [ -n "${RG_ARCH}" ]; then
+            RG_URL="https://github.com/BurntSushi/ripgrep/releases/download/${RIPGREP_VERSION}/ripgrep-${RIPGREP_VERSION}-${RG_ARCH}.tar.gz"
             RG_TMP="/tmp/rg-install"
             mkdir -p "${RG_TMP}"
             curl -fsSL "${RG_URL}" -o "${RG_TMP}/rg.tar.gz"
@@ -345,15 +339,9 @@ if ! command -v fdfind > /dev/null 2>&1 && ! command -v fd > /dev/null 2>&1; the
         echo "==> fd already present"
     else
         # Fallback: install from GitHub release
-        FD_VERSION="$(curl -fsSL https://api.github.com/repos/sharkdp/fd/releases/latest 2> /dev/null | grep '"tag_name":' | cut -d'"' -f4 || echo "v10.2.0")"
-        FD_ARCH="$(uname -m)"
-        case "${FD_ARCH}" in
-            x86_64) FD_TARGET="x86_64-unknown-linux-gnu" ;;
-            aarch64) FD_TARGET="aarch64-unknown-linux-gnu" ;;
-            *) FD_TARGET="" ;;
-        esac
-        if [ -n "${FD_TARGET}" ]; then
-            FD_URL="https://github.com/sharkdp/fd/releases/download/${FD_VERSION}/fd-${FD_VERSION}-${FD_TARGET}.tar.gz"
+        FD_ARCH="" && FD_ARCH="$(get_arch_suffix rust)" || true
+        if [ -n "${FD_ARCH}" ]; then
+            FD_URL="https://github.com/sharkdp/fd/releases/download/${FD_VERSION}/fd-${FD_VERSION#v}-${FD_ARCH}.tar.gz"
             FD_TMP="/tmp/fd-install"
             mkdir -p "${FD_TMP}"
             curl -fsSL "${FD_URL}" -o "${FD_TMP}/fd.tar.gz"
@@ -396,15 +384,9 @@ fi
 echo "==> Installing lazygit"
 if ! command -v lazygit > /dev/null 2>&1; then
     # Install from GitHub release
-    LAZYGIT_VERSION="$(curl -fsSL https://api.github.com/repos/jesseduffield/lazygit/releases/latest 2> /dev/null | grep '"tag_name":' | cut -d'"' -f4 || echo "v0.49.0")"
-    LAZYGIT_ARCH="$(uname -m)"
-    case "${LAZYGIT_ARCH}" in
-        x86_64) LAZYGIT_TARGET="Linux_x86_64" ;;
-        aarch64) LAZYGIT_TARGET="Linux_arm64" ;;
-        *) LAZYGIT_TARGET="" ;;
-    esac
-    if [ -n "${LAZYGIT_TARGET}" ]; then
-        LAZYGIT_URL="https://github.com/jesseduffield/lazygit/releases/download/${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION#v}_${LAZYGIT_TARGET}.tar.gz"
+    LAZYGIT_ARCH="" && LAZYGIT_ARCH="$(get_arch_suffix lazygit)" || true
+    if [ -n "${LAZYGIT_ARCH}" ]; then
+        LAZYGIT_URL="https://github.com/jesseduffield/lazygit/releases/download/${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION#v}_${LAZYGIT_ARCH}.tar.gz"
         LAZYGIT_TMP="/tmp/lazygit-install"
         mkdir -p "${LAZYGIT_TMP}"
         curl -fsSL "${LAZYGIT_URL}" -o "${LAZYGIT_TMP}/lazygit.tar.gz"
@@ -427,15 +409,9 @@ fi
 ### just — command runner ###
 echo "==> Installing just command runner"
 if ! command -v just > /dev/null 2>&1; then
-    JUST_VERSION="$(curl -fsSL https://api.github.com/repos/casey/just/releases/latest 2> /dev/null | grep '"tag_name":' | cut -d'"' -f4 || echo "1.39.0")"
-    JUST_ARCH="$(uname -m)"
-    case "${JUST_ARCH}" in
-        x86_64) JUST_TARGET="x86_64-unknown-linux-musl" ;;
-        aarch64) JUST_TARGET="aarch64-unknown-linux-musl" ;;
-        *) JUST_TARGET="" ;;
-    esac
-    if [ -n "${JUST_TARGET}" ]; then
-        JUST_URL="https://github.com/casey/just/releases/download/${JUST_VERSION}/just-${JUST_VERSION}-${JUST_TARGET}.tar.gz"
+    JUST_ARCH="" && JUST_ARCH="$(get_arch_suffix just)" || true
+    if [ -n "${JUST_ARCH}" ]; then
+        JUST_URL="https://github.com/casey/just/releases/download/${JUST_VERSION}/just-${JUST_VERSION#v}-${JUST_ARCH}.tar.gz"
         JUST_TMP="/tmp/just-install"
         mkdir -p "${JUST_TMP}"
         curl -fsSL "${JUST_URL}" -o "${JUST_TMP}/just.tar.gz"
@@ -458,15 +434,9 @@ fi
 ### xh — faster HTTPie ###
 echo "==> Installing xh"
 if ! command -v xh > /dev/null 2>&1; then
-    XH_VERSION="$(curl -fsSL https://api.github.com/repos/ducaale/xh/releases/latest 2> /dev/null | grep '"tag_name":' | cut -d'"' -f4 || echo "v0.25.3")"
-    XH_ARCH="$(uname -m)"
-    case "${XH_ARCH}" in
-        x86_64) XH_TARGET="x86_64-unknown-linux-musl" ;;
-        aarch64) XH_TARGET="aarch64-unknown-linux-musl" ;;
-        *) XH_TARGET="" ;;
-    esac
-    if [ -n "${XH_TARGET}" ]; then
-        XH_URL="https://github.com/ducaale/xh/releases/download/${XH_VERSION}/xh-${XH_VERSION}-${XH_TARGET}.tar.gz"
+    XH_ARCH="" && XH_ARCH="$(get_arch_suffix musl)" || true
+    if [ -n "${XH_ARCH}" ]; then
+        XH_URL="https://github.com/ducaale/xh/releases/download/${XH_VERSION}/xh-${XH_VERSION#v}-${XH_ARCH}.tar.gz"
         XH_TMP="/tmp/xh-install"
         mkdir -p "${XH_TMP}"
         curl -fsSL "${XH_URL}" -o "${XH_TMP}/xh.tar.gz"
@@ -489,16 +459,9 @@ fi
 ### opencode — AI coding agent terminal ###
 echo "==> Installing opencode"
 if ! command -v opencode >/dev/null 2>&1; then
-    OPEN_ARCH="$(uname -m)"
-    case "${OPEN_ARCH}" in
-        x86_64) OPEN_ARCH="x86_64" ;;
-        aarch64) OPEN_ARCH="arm64" ;;
-        *) OPEN_ARCH="" ;;
-    esac
+    OPEN_ARCH="" && OPEN_ARCH="$(get_arch_suffix opencode)" || true
     if [ -n "${OPEN_ARCH}" ]; then
-        # Fetch latest release tag (strip leading v)
-        OPEN_TAG="$(curl -fsSL https://api.github.com/repos/opencode-ai/opencode/releases/latest 2> /dev/null | grep '"tag_name":' | cut -d'"' -f4 | sed 's/^v//' || echo "0.0.55")"
-        OPEN_URL="https://github.com/opencode-ai/opencode/releases/download/v${OPEN_TAG}/opencode-linux-${OPEN_ARCH}.tar.gz"
+        OPEN_URL="https://github.com/opencode-ai/opencode/releases/download/v${OPENCODE_VERSION}/opencode-linux-${OPEN_ARCH}.tar.gz"
         OPEN_TMP="/tmp/opencode-install"
         mkdir -p "${OPEN_TMP}"
         if curl -fsSL "${OPEN_URL}" -o "${OPEN_TMP}/opencode.tar.gz"; then
@@ -704,18 +667,10 @@ GH_DIR="/opt/gh"
 if [ -f "${GH_DIR}/bin/gh" ]; then
     echo "==> gh CLI already present"
 else
-    GH_VERSION="$(curl -fsSL https://api.github.com/repos/cli/cli/releases/latest 2>/dev/null | grep '"tag_name":' | cut -d'"' -f4 | sed 's/^v//')"
-    if [ -z "${GH_VERSION}" ]; then
-        GH_VERSION="2.72.0"
-    fi
-    GH_ARCH="$(uname -m)"
-    case "${GH_ARCH}" in
-        x86_64) GH_ARCH="amd64" ;;
-        aarch64) GH_ARCH="arm64" ;;
-        *) GH_ARCH="" ;;
-    esac
-    if [ -n "${GH_ARCH}" ]; then
-        GH_URL="https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_${GH_ARCH}.tar.gz"
+    GHCLI_ARCH="" && GHCLI_ARCH="$(get_arch_suffix gh)" || true
+    if [ -n "${GHCLI_ARCH}" ]; then
+        GHCLI_TAG="${GHCLI_VERSION#v}"
+        GH_URL="https://github.com/cli/cli/releases/download/${GHCLI_VERSION}/gh_${GHCLI_TAG}_linux_${GHCLI_ARCH}.tar.gz"
         GH_TMP="/tmp/gh-install"
         mkdir -p "${GH_TMP}"
         if curl -fsSL "${GH_URL}" -o "${GH_TMP}/gh.tar.gz"; then

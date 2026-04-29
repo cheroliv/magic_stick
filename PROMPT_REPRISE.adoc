@@ -1,38 +1,40 @@
-= Prompt de reprise — Session 050
+= Prompt de reprise — Session 051
 
 __
-**EPIC** : EPIC 11 (pinning versions chroot) + tests boot hardware
-**Statut** : Session 049 terminee — Release v0.1.13 VERT COMPLET (ISO + Docker Hub + SourceForge), EPIC 5 autostart XFCE en production
+**EPIC** : EPIC 11 (pinning versions chroot) suite + EPIC 5 tests boot hardware
+**Statut** : Session 050 terminee — EPIC 11 partiellement realise (versions.sh + arch.sh + chroot refactorise, 0 `/releases/latest`), version Docker Hub incomplete
 __
 
 '''
 
-== Session 049 — Resume
+== Session 050 — Resume
 
-- Release v0.1.13 : ISO + Docker Hub + SourceForge VERT COMPLET (31m ISO, 24m Docker)
-- Fix Dockerfile : checksums lazygit + just avec noms de fichiers correspondants
-- Permissions exceptionnelles : commit, push, delete/recreate tag v0.1.13
-- EPIC 11 ajoute au BACKLOG (revue Copilot) : pinning versions chroot, factorisation arch, traps
+- EPIC 11 partiellement realise :
+  * `scripts/lib/versions.sh` cree et verifie sur GitHub (10/10 versions OK)
+  * `scripts/lib/arch.sh` cree avec `get_arch_suffix()`
+  * `060-install-chroot-software.chroot` refactorise : sourcing libs, suppression de tous les `/releases/latest` (0 match restant), factorisation des blocs `case "$(uname -m)"`
+  * Versions corrigees en cours de session : uv 0.11.8, nvm v0.40.4, ghcli v2.92.0, fzf v0.72.0
+  * Dockerfile nvm v0.40.3 -> v0.40.4 mis a jour
+  * Syntaxe validee sur les 4 scripts (`bash -n` OK)
+- CI/CD NON lance (pas de build ISO, pas de validation reproductibilite)
 
-== Plan Session 050 — Priorites
+== Plan Session 051 — Priorites
 
-=== 1. EPIC 11 — Pinning versions chroot + refactoring
+=== 1. EPIC 11 suite — Reproductibilite + Docker Hub
 
-* [ ] `scripts/lib/versions.sh` : centraliser toutes les versions des outils externes
-* [ ] Refactor `060-install-chroot-software.chroot` : sourcer versions.sh, supprimer les `/releases/latest`
-* [ ] Extraire `scripts/lib/arch.sh` avec `get_arch_suffix()` pour chroot + Dockerfile
-* [ ] Valider la reproductibilite (deux builds produisent les memes versions)
+* [ ] Valider reproductibilite via CI/CD (push & attendre build ISO, verifier que versions.sh est bien inclus dans le chroot)
+* [ ] Synchroniser `docker/magic-stick-cli/Dockerfile` ARG avec `versions.sh` pour eviter duplication
+* [ ] Documenter la convergence chroot/Dockerfile dans AGENT.adoc ou README
 
-=== 2. EPIC 5 — Validation boot hardware
+=== 2. EPIC 5 — Validation boot hardware (si utilisateur a flashe)
 
-* [ ] Flasher v0.1.13 sur cle USB reelle
-* [ ] Test boot BIOS sur cle USB reelle
+* [ ] Test boot BIOS sur cle USB reelle (attend action utilisateur)
 * [ ] Test boot UEFI sur cle USB reelle
-* [ ] Valider autostart XFCE (magic-stick-welcome.sh affiche au boot)
+* [ ] Valider autostart XFCE (`magic-stick-welcome.sh` affiche au boot)
 
-=== 3. EPIC 3 / EPIC 6
+=== 3. EPIC 3 / EPIC 6 (si temps)
 
-* [ ] Valider update-system.sh avec trap en production
+* [ ] Valider `update-system.sh` avec trap en production sur cle USB
 * [ ] Tester rollback A/B sur cle USB
 
 == Regles

@@ -97,7 +97,7 @@ ENV PATH="/root/.pyenv/shims:/root/.pyenv/bin:/root/.local/bin:$PATH"
 # === NVM + Node.js + pnpm ===
 ENV NVM_DIR="/root/.nvm"
 ENV NODE_VERSION=22
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash \
     && . "$NVM_DIR/nvm.sh" \
     && nvm install ${NODE_VERSION} \
     && nvm use ${NODE_VERSION} \
