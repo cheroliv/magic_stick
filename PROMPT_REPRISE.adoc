@@ -1,111 +1,45 @@
-= Prompt de reprise — Session 041
+= Prompt de reprise — Session 042
 
 __
 **EPIC** : EPIC 2 (valider build v0.1.7) + EPIC 9 (VS Code/gh dans /opt/)
-**Statut** : Session 040 terminee — 4 commits fixes CI/CD, workflow #25082912712 EN COURS
+**Statut** : Session 041 terminee — fixes flatpak + JetBrains deployes, fix ffmpeg (apt-mark) non pousse
 __
 
 '''
 
-== Session 040 — Résumé
+== Session 041 — Résumé
 
-**Date** : 28–29 avril 2026
-**Résultat** :
-- Fix `test-software.sh` : retiré check `httpie` + doublon `lazygit` ✅
-- Désactivation chroot upgrades : écriture `config/chroot_upgrades` (lb config `--chroot-upgrades` inexistant) ✅
-- CI/CD free disk space : step ajoutée dans `build.yml` ✅
-- Post-build cleanup (`lb clean`) après génération ISO ✅
-- Hook cleanup : ajout `apt-get autoremove -y` ✅
-- Workflow #25082912712 : **EN COURS** (déclenché en fin de session 040)
+- Fix flatpak : remis dans `tools.list.chroot` (run #25084062829)
+- Fix JetBrains Toolbox : symlink `bin/jetbrains-toolbox` (run #25085436100)
+- Nouveau FAIL : ffmpeg supprime par `apt-get autoremove`
+- Fix ffmpeg : `apt-mark manual ffmpeg flatpak` dans `080-cleanup-space.chroot`
 
-'''
+== Session 042 — Priorites
 
-== Session 041 — Priorités
+=== 1. Relancer workflow avec fix ffmpeg
 
-=== 1. Vérifier le résultat du workflow #25082912712
+* Commit/push le fix `080-cleanup-space.chroot` (apt-mark manual)
+* `gh workflow run build.yml`, attendre vert complet
 
-* Attendre la fin du run (Build ISO → Verify ISO → Test boot → Test software → A/B mock)
-* Si **VERT** complet → passer au bump v0.1.7
-* Si **FAIL** sur `Test software` (`flatpak NOT found`) :
-  - Décision : réinstaller flatpak OU retirer le check test-software.sh
-  - Le problème est l'espace disque, pas le logiciel
-* Si **FAIL** sur `Build ISO` (`No space left`) :
-  - Analyser les logs pour voir si cleanup chroot fonctionne
-  - Vérifier si lb clean post-build a libéré assez d'espace
+=== 2. Si VERT complet → Bump v0.1.7 + release
 
-=== 2. Si build complet VERT → Bump v0.1.7 + release
+* Modifier `VERSION` → `0.1.7`, `git tag v0.1.7 && git push origin v0.1.7`
+* Monitorer : upload artifact + SourceForge + Docker Hub
 
-* Modifier `VERSION` → `0.1.7`
-* `git tag v0.1.7 && git push origin v0.1.7`
-* Le tag déclenche automatiquement : upload artifact + SourceForge + Docker Hub
-* Monitorer tous les workflows
+=== 3. EPIC 9 — VS Code + gh CLI dans /opt/
 
-=== 3. EPIC 9 — Implementation VS Code et gh CLI dans /opt/
+* VS Code : tarball dans `/opt/VSCode-linux-x64/` + script update
+* gh CLI : binaire GitHub Releases dans `/opt/gh/` + symlink
+* Ajouter checks dans `test-software.sh`, valider CI/CD
 
-* **VS Code** : hook chroot install tarball dans `/opt/VSCode-linux-x64/`
-  * Script `/usr/local/bin/vscode-update.sh` pour mise à jour
-  * Configs utilisateur : `/etc/skel/.config/Code/User/settings.json`
-  * Custom CSS : `/etc/skel/.vscode-custom-css/custom.css`
-  * Modèle : cheroliv.com/blog/2026/0103
-* **gh CLI** : hook chroot install dans `/opt/gh/` + symlink `/usr/local/bin/gh`
-  * Modèle : binaire standalone depuis GitHub Releases (pattern xh/just existant)
-* Ajouter les checks dans `scripts/test-software.sh`
-* Test ISO squashfs via CI/CD
+=== 4. EPIC 5 (si temps) — Polishment XFCE
 
-=== 4. EPIC 5 — Polishment XFCE (si build OK et temps disponible)
+* Verifier menu XFCE apres boot QEMU
 
-* Vérifier menu XFCE dans l'ISO après boot QEMU
-* Ajuster .directory/.desktop si nécessaire
-
-'''
-
-== Backlog — Ce qui reste à faire
-
-==== EPIC 2 : Build ISO
-* [ ] Vérifier workflow #25082912712 (vert ou fail ?)
-* [ ] Fix éventuel flatpak (si test software fail)
-* [ ] Bump v0.1.7 + release
-* [ ] Tester le boot BIOS sur clé USB réelle
-* [ ] Valider le support UEFI sur hardware réel
-* [ ] Tester le boot UEFI sur clé USB réelle
-
-==== EPIC 4 : Logiciels
-* [ ] Tester que chaque logiciel fonctionne dans le live boot
-
-==== EPIC 9 : Éditeurs de code dans /opt/
-* [ ] VS Code dans /opt/
-* [ ] gh CLI dans /opt/
-
-==== EPIC 5 : Personnalisation XFCE
-* [x] Menu Applications personnalisé
-* [ ] Thème et fond d'écran
-* [ ] Raccourcis clavier
-* [ ] Panel XFCE
-* [ ] Scripts démarrage auto
-
-==== EPIC 8 : Dockerisation CLI
-* [ ] Build et validation image locale
-* [ ] CI/CD Docker Hub
-* [ ] Tester push local
-* [ ] Tester comme conteneur de job
-* [ ] Documenter dans README
-
-==== EPIC 7 : Site de doc auto + IA release notes
-* [ ] Auto-updater site de doc
-* [ ] Générer notes de version IA
-
-'''
-
-== Règles
+== Regles
 
 * Jamais de commit sans permission
-* Pas de commandes destructrices sans permission
 * Racine de travail = magic_stick/
-* Zero sudo sur l'hôte
+* Zero sudo, zero build local (CI/CD uniquement)
 * INTERDICTION DE LOG LES TOKENS
-* Zero build local : GitHub Actions uniquement
-* SourceForge : rsync via SSH
-* Boot test : QEMU+VNC
-* A/B test : loopback device en Docker privileged
-* FICHIERS PERSONNELS : NE JAMAIS modifier ~/.gitconfig, ~/.bashrc, ~/.ssh/*, etc.
-* EDITEURS : Dans /opt/
+* FICHIERS PERSONNELS : NE JAMAIS modifier ~/.*

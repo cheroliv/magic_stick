@@ -2,9 +2,10 @@
 
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
-_Derniere mise a jour_ : 2026-04-29 (session 040)
-_Session en cours_ : 041 — Vérifier workflow #25082912712 + bump v0.1.7 + EPIC 9
-_Session terminee_ : 040 (Fix test-software.sh + chroot upgrades + free disk space CI/CD)
+_Derniere mise a jour_ : 2026-04-29 (session 041)
+_Session en cours_ : 042 — Relancer workflow (fix ffmpeg apt-mark) + bump v0.1.7 + EPIC 9
+_Session terminee_ : 041 (Fix chaine CI/CD : flatpak + JetBrains Toolbox symlink + ffmpeg apt-mark)
+_Session precedente_ : 040 (Fix test-software.sh + chroot upgrades + free disk space CI/CD)
 
 '''
 

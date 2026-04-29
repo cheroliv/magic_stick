@@ -4,6 +4,7 @@ _Derniere mise a jour_ : 2026-04-29 (session 040)
 
 |===
 | # | Date | Type | Sujet | Score
+| 041 | 29 avril 2026 | fix + ci/cd + debug | Fix chaine post-session 040 : flatpak remis, JetBrains Toolbox symlink bin/, ffmpeg apt-mark manual — 2 runs CI/CD | 6/10
 | 040 | 28 avril 2026 | fix + ci/cd + debug | Fix test-software.sh (httpie/lazygit) + desactive chroot upgrades + free disk space CI/CD + post-build cleanup — workflow #25082912712 EN COURS | 6/10
 | 039 | 28 avril 2026 | fix + ci/cd + debug | Fix build squashfs "No space" : hook cleanup chroot + 14 paquets retires + build ISO vert (6.6G) | 7/10
 | 038 | 28 avril 2026 | ci/cd + debug | Analyse build squashfs "No space left on device" + relance CI/CD | 6/10

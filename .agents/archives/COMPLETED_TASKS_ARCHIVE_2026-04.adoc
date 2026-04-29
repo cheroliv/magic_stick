@@ -1,5 +1,30 @@
 = Archive des Taches Terminee — Avril 2026
 
+== Session 041 — Fix chaine CI/CD post-session 040
+
+**Date** : 29 avril 2026
+**Type** : fix + ci/cd + debug
+**Score** : 6/10
+
+=== Taches realisees
+
+* [OK] Remettre `flatpak` dans `tools.list.chroot` (retire par erreur session 039)
+* [OK] Corriger symlink JetBrains Toolbox : `${TB_DIR}/jetbrains-toolbox` → `${TB_DIR}/bin/jetbrains-toolbox` (tar --strip-components-1)
+* [OK] Corriger check test-software.sh fallback JetBrains Toolbox path
+* [OK] Fix ffmpeg : `apt-mark manual ffmpeg flatpak` dans `080-cleanup-space.chroot` (protection contre autoremove)
+* [OK] Lecon session 041 ajoutee dans INDEX.adoc
+
+=== Builds ISO
+
+| Run | Commit | Resultat |
+|-----|--------|----------|
+| 25084062829 | 2478e35 | PARTIEL — flatpak OK, JetBrains FAIL |
+| 25085436100 | bab5070 | PARTIEL — flatpak + JetBrains OK, ffmpeg FAIL |
+| (prochain) | EN ATTENTE | A relancer avec fix ffmpeg |
+
+
+'''
+
 == Session 040 — Fix test-software.sh + CI/CD chroot upgrades + free disk space
 
 **Date** : 28 avril 2026

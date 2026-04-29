@@ -1,0 +1,69 @@
+= Session 041 — Fix CI/CD chaine post-session 040 (flatpak + JetBrains Toolbox + ffmpeg)
+
+**Date** : 29 avril 2026
+**Type** : fix + ci/cd + debug
+**Score** : 6/10
+
+== Contexte
+
+Suite session 040. Workflow #25082912712 FAIL sur `flatpak NOT found` (retiré en session 039 par erreur). Objectif : réparer et obtenir un workflow vert complet.
+
+== Tâches réalisées
+
+* [OK] Remettre `flatpak` dans `config/live-build/package-lists/tools.list.chroot` (+1 ligne)
+* [OK] Corriger symlink JetBrains Toolbox : `${JETBRAINS_TOOLBOX_DIR}/jetbrains-toolbox` → `${JETBRAINS_TOOLBOX_DIR}/bin/jetbrains-toolbox` (tar --strip-components laisse le binaire dans un sous-dossier `bin/`)
+* [OK] Corriger fallback `test-software.sh` : `/opt/jetbrains-toolbox/jetbrains-toolbox` → `/opt/jetbrains-toolbox/bin/jetbrains-toolbox`
+* [OK] Protection `ffmpeg` dans `080-cleanup-space.chroot` : `apt-mark manual ffmpeg flatpak` avant `apt-get autoremove -y` (évite suppression automatique)
+* [OK] Leçon session 041 ajoutée dans `.agents/INDEX.adoc`
+
+== Builds ISO
+
+| Run | Commit | Résultat |
+|-----|--------|----------|
+| #25084062829 | 2478e35 | PARTIEL — Build ISO + Verify + Boot OK, Software FAIL (JetBrains Toolbox NOT found) |
+| #25085436100 | bab5070 | PARTIEL — Build ISO + Verify + Boot OK, Software FAIL (ffmpeg NOT found), JetBrains OK |
+
+== Analyse des échecs successifs
+
+=== Run #25084062829 (commit 2478e35 + flatpak)
+- `flatpak` ✅ trouvé — remise réussie
+- `jetbrains-toolbox` ❌ NOT FOUND — cause racine identifiée : `tar --strip-components=1` place le binaire dans `bin/jetbrains-toolbox` au lieu de `jetbrains-toolbox`
+- Le hook affichait "installed" sans vérifier que le symlink était valide
+- `ln -sf "${TB_DIR}/jetbrains-toolbox" /usr/local/bin/...` pointait sur un fichier inexistant
+
+=== Run #25085436100 (commit bab5070 + fix TB symlink)
+- `flatpak` ✅ pass
+- `jetbrains-toolbox` ✅ pass — correction bin/ confirmée
+- `ffmpeg` ❌ NOT FOUND — `apt-get autoremove -y` supprime ffmpeg car marqué comme dépendance automatique
+
+== Fichiers modifiés
+
+| Fichier | Modification |
+|---------|-------------|
+| `config/live-build/package-lists/tools.list.chroot` | +flatpak |
+| `config/live-build/hooks/060-install-chroot-software.chroot` | symlink bin/jetbrains-toolbox |
+| `scripts/test-software.sh` | fallback path bin/jetbrains-toolbox |
+| `config/live-build/hooks/080-cleanup-space.chroot` | apt-mark manual ffmpeg flatpak |
+| `.agents/INDEX.adoc` | Leçon session 041 |
+
+== Métriques
+
+| Indicateur | Valeur |
+|------------|--------|
+| Fichiers modifiés | 5 |
+| Commits poussés | 2 (2478e35, bab5070) |
+| Workflows lancés | 2 |
+| Fixes corrigés en session | 3/4 (flatpak, TB, → ffmpeg en attente) |
+| Temps cumulé builds CI/CD | ~47 min |
+
+== Leçons apprises
+
+1. **Tar --strip-components et chemin final** : `tar -xzf file.tar.gz --strip-components=1` ne signifie PAS que le binaire se retrouve à la racine. Si l'archive contient `dir/bin/foo`, le résultat est `bin/foo`. Toujours vérifier le path réel avant de créer un symlink.
+2. **Hook chroot "installed" ≠ fonctionnel** : Afficher `echo "installed"` ne vérifie pas la validité du symlink ni de l'exécutabilité. Ajouter `test -x /usr/local/bin/xxx` ou `readlink -e` dans le hook.
+3. **apt-get autoremove est dangereux** : Tout paquet demandé explicitement dans `package-lists` mais installé comme dépendance d'un autre paquet peut être supprimé par autoremove. Protéger avec `apt-mark manual`.
+
+== Prochaine session (042)
+
+- Relancer le workflow avec le fix `apt-mark manual ffmpeg flatpak`
+- Si vert complet → bump v0.1.7 + release
+- Si autre FAIL → analyser avant toute autre action

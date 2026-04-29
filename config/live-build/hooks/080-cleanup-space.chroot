@@ -21,6 +21,8 @@ done
 for _pkg in $(dpkg -l 'build-essential' 2>/dev/null | awk '/^ii/ {print $2}'); do
     dpkg --purge "${_pkg}" 2>/dev/null || true
 done
+# Marquer les outils utilisateur comme 'manual' pour qu'autoremove ne les supprime pas
+apt-mark manual ffmpeg flatpak 2>/dev/null || true
 apt-get autoremove -y 2>/dev/null || true
 
 # 4) Locales: garder fr_FR et en_US uniquement

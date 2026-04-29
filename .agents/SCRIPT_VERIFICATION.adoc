@@ -1,6 +1,6 @@
 = Script Verification — Magic Stick
 
-_Derniere mise a jour_ : Session 040 (28-29 avril 2026) — Fix test-software.sh + desactive chroot upgrades + free disk space CI/CD + post-build cleanup
+_Derniere mise a jour_ : Session 041 (29 avril 2026) — Fix flatpak + JetBrains Toolbox symlink bin/ + ffmpeg apt-mark manual dans 080-cleanup-space.chroot
 
 '''
 
