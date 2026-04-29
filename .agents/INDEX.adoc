@@ -2,10 +2,10 @@
 
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
-_Derniere mise a jour_ : 2026-04-29 (session 044)
-_Session en cours_ : 045 — EPIC 5 XFCE + EPIC 3 A/B
-_Session terminee_ : 044 (Fix Dockerfile EPIC 8, bump v0.1.8, docs ISO + Docker CLI)
-_Session precedente_ : 043 (Monitorer build v0.1.7 post-tag, build #25091043201 vert 22m22s)
+_Derniere mise a jour_ : 2026-04-29 (session 045)
+_Session en cours_ : 046 — EPIC 8 (Docker CLI fix + verrouillage versions) + EPIC 5 (XFCE polishment)
+_Session terminee_ : 045 (Fix Dockerfile EPIC 8 URLs releases + extraction robuste xh/just, bump v0.1.11, Docker Hub VERT)
+_Session precedente_ : 044 (Fix Dockerfile EPIC 8 grep -Po, bump v0.1.8, docs ISO + Docker CLI)
 _Session precedente_ : 041 (Fix chaine CI/CD : flatpak + JetBrains Toolbox symlink + ffmpeg apt-mark)
 
 '''
@@ -129,6 +129,7 @@ _Lecon Session 041_ : Apres extraction d'un tar avec `--strip-components`, le bi
 |===
 | # | Date | Type | Sujet | Fichier | Score
 | 043 | 2026-04-29 | ci/cd + monitoring | Monitorer build v0.1.7 post-tag (#25091043201 vert 22m22s), prep EPIC 8 | `043-monitor-build-v0.1.7-epic8-prep.adoc` | 7/10
+| 045 | 2026-04-29 | fix + ci/cd | Fix Dockerfile EPIC 8 URLs releases + extraction robuste xh/just via find, bump v0.1.11. Docker Hub SUCCESS | `045-fix-dockerfile-extraction-v0.1.11.adoc` | 7/10
 | 044 | 2026-04-29 | fix + docs + ci/cd | Fix Dockerfile EPIC 8 (grep -Po → jq), bump v0.1.8, mise à jour docs ISO + page Docker CLI | `044-fix-dockerfile-epic8-docs-v0.1.8.adoc` | 8/10
 | 042 | 2026-04-29 | fix + feature + ci/cd | Fix ffmpeg newline, EPIC 9 VS Code + gh CLI dans /opt/, bump v0.1.7 | `042-fix-ffmpeg-epic9-bump-v0.1.7.adoc` | 7.5/10
 | 041 | 2026-04-29 | fix + ci/cd + debug | Fix chaine CI/CD post-session 040 (flatpak, JetBrains Toolbox bin/, ffmpeg apt-mark) | `041-fix-cicd-flatpak-jetbrains-ffmpeg.adoc` | 6/10
@@ -198,7 +199,7 @@ _Lecon Session 041_ : Apres extraction d'un tar avec `--strip-components`, le bi
 | EPIC 5 : Personnalisation XFCE | 80% (4 configs XML skel, hook chroot 070, packages PaPirus/Greybird/plugins, panel/raccourcis/session/desktop, Blog nav retire) | -/10 | MOYENNE
 | EPIC 6 : Script de mise a jour systeme A/B | 85% (update-system.sh complet + flag --yes + tests CI/CD) | -/10 | HAUTE
 | EPIC 7 : Site de doc auto + IA release notes | 0% | -/10 | BASSE
-| EPIC 8 : Dockerisation CLI | 75% (Dockerfile CLI fixe, job Docker Hub CI/CD en cours #25092264723) | -/10 | MOYENNE
+| EPIC 8 : Dockerisation CLI | 90% (Dockerfile CLI fixe, Docker Hub SUCCESS v0.1.11, ISO EN COURS) | -/10 | MOYENNE
 |===
 
 '''

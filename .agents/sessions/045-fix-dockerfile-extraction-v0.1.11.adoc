@@ -1,0 +1,53 @@
+= Session 045 — Fix Dockerfile EPIC 8 (URLs releases + extraction robuste) + bump v0.1.11
+
+**Date** : 29 avril 2026
+**Type** : fix + ci/cd
+**Score** : 7/10
+
+== Contexte
+
+Suite session 044 (fix `grep -Po` → jq dans Dockerfile, bump v0.1.8). Build CI #25092264723 FAIL Docker Hub (urls `latest/download` retournent page HTML au lieu des binaires).
+
+== Taches realisees
+
+* [OK] Diagnostic cause racine : urls GitHub `latest/download/{asset}` retournent 302 → page HTML (pas le binaire)
+* [OK] Fix URLs : `latest/download` → `releases/download/v${VERSION}/`
+* [OK] Fix extraction xh/just : archives avec répertoire racine → `find` + `cp` dans `/usr/local/bin` (plus robuste que `--strip-components`)
+* [OK] Bump VERSION 0.1.8 → 0.1.11 (0.1.9/0.1.10 intermédiaires FAIL)
+* [OK] Commit + push main (02c340b)
+* [OK] Delete tag v0.1.10 + recreate v0.1.11
+* [OK] Docker Hub build SUCCESS (#25101027494, ~12 min)
+* [OK] Test Docker image (ollama, python3, uv, xh, java) : SUCCESS
+
+== Revue Copilot reçue
+
+Analyse detaillee avec 7 recommandations prioritaires :
+1. Trap pour démontage dans `update-system.sh` (ligne 456)
+2. Verrouiller versions GitHub releases (ARG fixes au lieu de `latest`)
+3. Checksums/signatures binaires
+4. Externaliser patches live-build
+5. Validation chemins `build-inner.sh`
+6. Documentation variables d'environnement
+7. Tests unitaires fonctions critiques
+
+== Plan session 046
+
+1. Monitorer build ISO v0.1.11 (EN COURS, ~20 min restantes)
+2. Appliquer fixes revue Copilot (trap, versions fixes, checksums)
+3. EPIC 5 XFCE polishment
+
+== Metriques
+
+| Metrique | Valeur |
+|----------|--------|
+| Fichiers modifies | 2 (Dockerfile, VERSION) |
+| Commits pousses | 2 (9700a4a, 02c340b) |
+| Tags cree/supprime | v0.1.11 cree, v0.1.10 supprime |
+| Docker Hub | SUCCESS (cheroliv/magic-stick-cli:0.1.11) |
+| Build ISO | EN COURS (#25101027494) |
+
+== Lecons apprises
+
+* `latest/download` GitHub = page HTML (redirect 302) → utiliser API releases pour version exacte + `releases/download/v${VERSION}/`
+* Archives tar.gz avec répertoire racine : `--strip-components` échoue si le binaire est dans un sous-répertoire. `find` + `cp` est le plus robuste.
+* Toujours tester le build Docker local avant de push tag (évite les boucles v0.1.9/v0.1.10/v0.1.11)

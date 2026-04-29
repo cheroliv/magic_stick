@@ -29,8 +29,8 @@ _Derniere mise a jour_ : Session 041 (29 avril 2026) — Fix flatpak + JetBrains
 | Dockerfile (builder ISO) | Ajout novnc, tigervnc-standalone-server, tigervnc-viewer, websockify, x11vnc | OK (Session 018)
 | Dockerfile (builder ISO) | Suppression ENTRYPOINT ["bash"] (conflit docker run args) | OK (Session 018)
 | docker/magic-stick-cli/Dockerfile | Fixes (zstd, zip, $HOME /root, pnpm 10.33.2, xh asset tar.gz) | OK (Session 031)
-| docker/magic-stick-cli/Dockerfile | **Fix grep -Po → jq + sed (lazygit, xh, just)** | OK (Session 044)
-|===
+| docker/magic-stick-cli/Dockerfile | Fix URLs `latest/download` → `releases/download/v${VERSION}` + extraction robuste xh/just via `find` + `cp` | OK (Session 045)
+| docker/magic-stick-cli/Dockerfile | Fix `grep -Po` → jq + sed (lazygit, xh, just) | OK (Session 044)
 
 == Tasks Gradle (groupes iso + docker)
 

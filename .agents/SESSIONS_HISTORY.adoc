@@ -1,9 +1,10 @@
 = Historique des Sessions — Magic Stick
 
-_Derniere mise a jour_ : 2026-04-29 (session 044)
+_Derniere mise a jour_ : 2026-04-29 (session 045)
 
 |===
 | # | Date | Type | Sujet | Score
+| 045 | 29 avril 2026 | fix + ci/cd | Fix Dockerfile EPIC 8 (urls `latest/download` → `releases/download/vX`, extraction robuste via `find` pour xh/just), bump v0.1.11. Docker Hub SUCCESS, ISO EN COURS | 7/10
 | 044 | 29 avril 2026 | fix + docs + ci/cd | Fix Dockerfile EPIC 8 (grep -Po → jq), bump v0.1.8, mise a jour docs ISO + page Docker CLI | 8/10
 | 043 | 29 avril 2026 | ci/cd + monitoring | Monitorer build v0.1.7 post-tag (#25091043201 vert 22m22s), prep EPIC 8 fix Docker Hub | 7/10
 | 042 | 29 avril 2026 | fix + feature + ci/cd | Fix ffmpeg (newline final), EPIC 9 VS Code + gh CLI dans /opt/, bump v0.1.7 | 7.5/10
@@ -12,9 +13,9 @@ _Derniere mise a jour_ : 2026-04-29 (session 044)
 | 039 | 28 avril 2026 | fix + ci/cd + debug | Fix build squashfs "No space" : hook cleanup chroot + 14 paquets retires + build ISO vert (6.6G) | 7/10
 | 038 | 28 avril 2026 | ci/cd + debug | Analyse build squashfs "No space left on device" + relance CI/CD | 6/10
 | 037 | 28 avril 2026 | fix + docs | Fix JetBrains Toolbox fallback 404 + EPIC 9 REVERSAL /opt/ | 7/10
-| 036 | 28 avril 2026 | fix + debug + docs | Debug graphify symlink absolu vs relatif + EPIC 9 (éditeurs locaux non root) | 7/10
+| 036 | 28 avril 2026 | fix + debug + docs | Debug graphify symlink absolu vs relatif + EPIC 9 (editeurs locaux non root) | 7/10
 | 035 | 28 avril 2026 | fix + ci/cd + debug | 5 fixes chroot (SDKMAN x3, graphify x1, JetBrains Toolbox x1) — build ISO monitoring | 7/10
-| 034 | 28 avril 2026 | governance + ci/cd | Propagation leçon fichiers personnels (~/.gitconfig) dans 4 projets .agents + build ISO monitoring | 7/10
+| 034 | 28 avril 2026 | governance + ci/cd | Propagation lecon fichiers personnels (~/.gitconfig) dans 4 projets .agents + build ISO monitoring | 7/10
 | 033 | 28 avril 2026 | fix + feature + ci/cd | Fix uv tarball (--strip-components-1) + fallback /usr/bin/uv + XFCE menu custom (categories Magic Stick) + Open-WebUI launcher port 3333 + .desktop AI Assistants | 8/10
 | 032 | 28 avril 2026 | fix + ci/cd + backlog | Secrets GitHub Docker Hub (stdin sans log) + fix pnpm path (symlink chroot + fallback test-software.sh) + suppression tag v0.1.7 | 7/10
 | 031 | 28 avril 2026 | feature + ci/cd + fix | Docker Hub CLI local + fixes Dockerfile CLI (zstd, zip, $HOME, pnpm, xh) + credentials isolation + tasks Gradle | 8.0/10
@@ -22,7 +23,7 @@ _Derniere mise a jour_ : 2026-04-29 (session 044)
 | 029 | 28 avril 2026 | documentation + feature + ci/cd | Bump v0.1.6 + README/site maj + EPIC 5 XFCE configs + EPIC 8 Dockerfile CLI | 8.5/10
 | 028 | 2026-04-27 | fix + ci/cd + feature | Finalisation release pipeline (workflow_call) + Fix ISOLINUX .c32 (cp au lieu de ln -s) + EPIC 5 XFCE priorise | 8.5/10
 | 027 | 2026-04-27 | fix + ci/cd + diag | Validation pipeline release (declenche bump v0.1.4) + 3 bugs identifies en CI (ISOLINUX .c32 absents, pnpm absent, build.yml non trigger sur tag) + 3 fixes locaux | 6.5/10
-| 026 | 2026-04-27 | feature + ci/cd + tools | Version automatique depuis VERSION + release workflow (bump semver auto) + outils qemu/ripgrep | 9/10
+| 026 | 2026-04-27 | feature + ci/cd + tools | Version automatique depuis VERSION + release workflow + outils qemu/ripgrep | 9/10
 | 025 | 2026-04-27 | fix + tools + ci/cd | Correction binaires pnpm/uv/JetBrains + ajout opencode, graphify, ffmpeg — test-software.sh | 8.0/10
 | 024 | 2026-04-27 | fix + ci/cd + backlog | Fix squashfs > 4Go (iso-level 3 xorriso) + test-software.sh CI/CD (unsquashfs casper/) + nvm chroot git clone + backlog CACHE-BUILD | 7.5/10
 | 023 | 2026-04-27 | feature + ci/cd + tools | zsh + oh-my-zsh + starship dans chroot + test logiciels ISO squashfs (isoTestSoftware Gradle task + CI/CD) | 8.0/10
