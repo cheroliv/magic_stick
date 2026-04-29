@@ -154,6 +154,8 @@ check_binary "jetbrains-toolbox" "/usr/local/bin/jetbrains-toolbox" "/opt/jetbra
 check_binary "zsh" "/usr/bin/zsh"
 check_binary "starship" "/usr/bin/starship" "/usr/local/bin/starship"
 check_binary "ffmpeg" "/usr/bin/ffmpeg"
+check_binary "code" "/usr/local/bin/code"
+check_binary "gh" "/usr/local/bin/gh"
 
 echo ""
 echo ">>> User configuration:"

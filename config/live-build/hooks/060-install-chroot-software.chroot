@@ -664,4 +664,72 @@ fi
 echo "==> Installing additional network tools"
 apt-get install -y nmap iperf3 wireshark tcpdump ethtool iftop nload bmon || true
 
+### VS Code — tarball dans /opt/VSCode-linux-x64/ ###
+echo "==> Installing VS Code"
+VSCODE_DIR="/opt/VSCode-linux-x64"
+if [ -f "${VSCODE_DIR}/bin/code" ]; then
+    echo "==> VS Code already present"
+else
+    VSCODE_TMP="/tmp/vscode-install"
+    mkdir -p "${VSCODE_TMP}"
+    VSCODE_URL="https://update.code.visualstudio.com/latest/linux-x64/stable"
+    if curl -fsSL "${VSCODE_URL}" -o "${VSCODE_TMP}/vscode.tar.gz"; then
+        mkdir -p "${VSCODE_DIR}"
+        tar -xzf "${VSCODE_TMP}/vscode.tar.gz" -C "${VSCODE_DIR}" --strip-components=1
+        rm -rf "${VSCODE_TMP}"
+        # Symlink global
+        ln -sf "${VSCODE_DIR}/bin/code" /usr/local/bin/code 2>/dev/null || true
+        # Desktop entry pour XFCE
+        mkdir -p /usr/share/applications
+        cat > /usr/share/applications/code.desktop << 'DESKTOPEOF'
+[Desktop Entry]
+Name=Visual Studio Code
+Comment=Code Editing. Redefined.
+Exec=/opt/VSCode-linux-x64/bin/code --no-sandbox %F
+Icon=/opt/VSCode-linux-x64/resources/app/resources/linux/code.png
+Type=Application
+StartupNotify=true
+Categories=Utility;TextEditor;Development;IDE;
+MimeType=text/plain;inode/directory;
+DESKTOPEOF
+        echo "==> VS Code installed"
+    else
+        echo "WARNING: Failed to download VS Code" >&2
+    fi
+fi
+
+### gh CLI — binaire GitHub Releases dans /opt/gh/ ###
+echo "==> Installing gh CLI"
+GH_DIR="/opt/gh"
+if [ -f "${GH_DIR}/bin/gh" ]; then
+    echo "==> gh CLI already present"
+else
+    GH_VERSION="$(curl -fsSL https://api.github.com/repos/cli/cli/releases/latest 2>/dev/null | grep '"tag_name":' | cut -d'"' -f4 | sed 's/^v//')"
+    if [ -z "${GH_VERSION}" ]; then
+        GH_VERSION="2.72.0"
+    fi
+    GH_ARCH="$(uname -m)"
+    case "${GH_ARCH}" in
+        x86_64) GH_ARCH="amd64" ;;
+        aarch64) GH_ARCH="arm64" ;;
+        *) GH_ARCH="" ;;
+    esac
+    if [ -n "${GH_ARCH}" ]; then
+        GH_URL="https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_${GH_ARCH}.tar.gz"
+        GH_TMP="/tmp/gh-install"
+        mkdir -p "${GH_TMP}"
+        if curl -fsSL "${GH_URL}" -o "${GH_TMP}/gh.tar.gz"; then
+            mkdir -p "${GH_DIR}"
+            tar -xzf "${GH_TMP}/gh.tar.gz" -C "${GH_DIR}" --strip-components=1
+            rm -rf "${GH_TMP}"
+            ln -sf "${GH_DIR}/bin/gh" /usr/local/bin/gh 2>/dev/null || true
+            echo "==> gh CLI installed"
+        else
+            echo "WARNING: Failed to download gh CLI" >&2
+        fi
+    else
+        echo "WARNING: Unsupported architecture for gh CLI prebuilt" >&2
+    fi
+fi
+
 echo "==> Extra software installation complete (non-critical failures ignored)"
