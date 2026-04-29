@@ -2,10 +2,10 @@
 
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
-_Derniere mise a jour_ : 2026-04-29 (session 047)
-_Session en cours_ : 048 — A definir (monitoring build v0.1.12 et suites)
-_Session terminee_ : 047 (EPIC 5 XFCE polishment + EPIC 10 backlog. Tag v0.1.12, build CI/CD en cours)
-_Session precedente_ : 046 (Fixes revue Copilot : verrouillage versions, checksums, trap, patches externalises. ISO v0.1.11 vert complet + Docker Hub)
+_Derniere mise a jour_ : 2026-04-29 (session 048)
+_Session en cours_ : 049 — A definir (bump v0.1.13 + suites)
+_Session terminee_ : 048 (EPIC 5 XFCE autostart + fix Docker Hub lazygit casse. ISO v0.1.12 vert complet)
+_Session precedente_ : 047 (EPIC 5 XFCE polishment + EPIC 10 backlog. Tag v0.1.12, build CI/CD en cours)
 _Session precedente_ : 045 (Fix Dockerfile EPIC 8 URLs releases + extraction robuste xh/just, bump v0.1.11, Docker Hub VERT)
 _Session precedente_ : 041 (Fix chaine CI/CD : flatpak + JetBrains Toolbox symlink + ffmpeg apt-mark)
 
@@ -197,7 +197,7 @@ _Lecon Session 041_ : Apres extraction d'un tar avec `--strip-components`, le bi
 | EPIC 3 : Partition A/B + Persistence | 80% (schema GPT OK, GRUB A/B OK, trap démontage ajouté, test-ab-partition.sh en CI/CD) | -/10 | HAUTE
 | EPIC 4 : Logiciels (Ollama, Docker, SDKMAN, zsh, starship) | 95% (18 logiciels + zsh/oh-my-zsh/starship dans chroot, test logiciels ISO squashfs en CI/CD) | 8/10 | MOYENNE
 | EPIC 9 : Editeurs de code /opt/ | 80% (VS Code: + gh CLI dans /opt/, desktop entry XFCE, tests CI/CD) | -/10 | MOYENNE
-| EPIC 5 : Personnalisation XFCE | 80% (4 configs XML skel, hook chroot 070, packages PaPirus/Greybird/plugins, panel/raccourcis/session/desktop, Blog nav retire) | -/10 | MOYENNE
+| EPIC 5 : Personnalisation XFCE | 100% (autostart welcome script + desktop + zenity, 4 configs XML skel, hook chroot 070, packages PaPirus/Greybird/plugins, panel/raccourcis/session/desktop) | -/10 | MOYENNE
 | EPIC 6 : Script de mise a jour systeme A/B | 90% (update-system.sh complet + flag --yes + trap démontage + tests CI/CD) | -/10 | HAUTE
 | EPIC 7 : Site de doc auto + IA release notes | 0% | -/10 | BASSE
 | EPIC 8 : Dockerisation CLI | 100% (Docker Hub + ISO v0.1.11 verts, versions verrouillées, checksums) | 8/10 | MOYENNE

@@ -1,39 +1,38 @@
-= Prompt de reprise — Session 048
+= Prompt de reprise — Session 049
 
 __
-**EPIC** : A definir (monitoring build v0.1.12 + suites)
-**Statut** : Session 047 terminee — EPIC 5 XFCE Polishment OK, tag v0.1.12 pousse, build CI/CD en cours
+**EPIC** : A definir (bump v0.1.13 + suites)
+**Statut** : Session 048 terminee — EPIC 5 complet (autostart XFCE + fix Docker Hub lazygit), ISO v0.1.12 vert, en attente de release
 __
 
 '''
 
-== Session 047 — Resume
+== Session 048 — Resume
 
-- Commit + push fixes Copilot + EPIC 5 (`ce64526`, `b8e962d`)
-- Bump VERSION 0.1.11 → 0.1.12, tag v0.1.12 pousse
-- EPIC 5 — XFCE Polishment OK :
-  ** Wallpaper custom 1920x1080 genere (bleu/astro)
-  ** .desktop opencode (AI Assistants)
-  ** Fix desktop-directories dans /usr/share/desktop-directories/
-  ** xfce4-desktop.xml mis a jour pour fond Magic Stick
-- EPIC 10 — Applications Docker supplémentaires ajoutees au BACKLOG (BASSE)
-- Build CI/CD v0.1.12 triggered automatiquement (monitoring en cours)
+- Monitor build v0.1.12 : ISO VERT COMPLET (31m, SourceForge OK)
+- Fix Docker Hub : casse `Linux` vs `linux` dans lazygit checksum (Dockerfile)
+- EPIC 5 — Scripts de demarrage automatique XFCE :
+  ** `magic-stick-welcome.sh` : script zenity info avec version + raccourcis + lien doc
+  ** `magic-stick-welcome.desktop` : autostart XFCE global (`/etc/xdg/autostart/`)
+  ** Hook `070-configure-xfce.chroot` : copie desktop autostart + chmod welcome script
+  ** `zenity` ajoute dans `desktop.list.chroot`
 
-== Plan Session 048 — Priorites
+== Plan Session 049 — Priorites
 
-=== 1. Monitorer build v0.1.12
+=== 1. Release v0.1.13
 
-* [ ] Attendre le vert complet (ISO + Verify + Boot + Software + SourceForge + Docker Hub)
-* [ ] Si ISO vert : valider EPIC 5 en production
-* [ ] Si ISO FAIL : diagnostic logs, fix, bump v0.1.13
+* [ ] Bump VERSION 0.1.12 → 0.1.13
+* [ ] Commit + push fixes EPIC 5 + Docker Hub
+* [ ] Tag v0.1.13 → build CI/CD
+* [ ] Monitorer vert complet (ISO + Docker Hub)
 
-=== 2. EPIC 5 — Suite XFCE
+=== 2. EPIC 5 — Validation
 
-* [ ] Scripts de demarrage automatique XFCE (dernier item EPIC 5)
+* [ ] Valider autostart XFCE en production (build vert)
 * [ ] Test boot BIOS sur cle USB reelle
 * [ ] Test boot UEFI sur cle USB reelle
 
-=== 3. EPIC 6 / EPIC 3
+=== 3. EPIC 3 / EPIC 6
 
 * [ ] Valider update-system.sh avec trap en production
 * [ ] Tester rollback A/B sur cle USB

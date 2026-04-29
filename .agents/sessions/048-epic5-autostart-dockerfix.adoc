@@ -1,0 +1,53 @@
+= Session 048 — EPIC 5 XFCE Autostart + Fix Dockerfile lazygit
+
+**Date** : 29 avril 2026
+**Type** : feature + fix + ci/cd
+**Score** : 8/10
+
+== Contexte
+
+Suite session 047 (EPIC 5 XFCE polishment + tag v0.1.12). Mission : monitorer build v0.1.12, finaliser EPIC 5 (dernier item : scripts demarrage auto), corriger le build Docker Hub.
+
+== Taches realisees
+
+* [OK] Monitorer build v0.1.12 : ISO VERT COMPLET (31m, SourceForge OK)
+* [OK] Diagnostic build Docker Hub FAIL : casse `Linux` vs `linux` dans lazygit checksum (Dockerfile)
+* [OK] Fix Dockerfile CLI : `lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz` → `lazygit_${LAZYGIT_VERSION}_linux_x86_64.tar.gz`
+* [OK] EPIC 5 — Scripts de demarrage automatique XFCE :
+  * `magic-stick-welcome.sh` : script zenity info avec version + raccourcis + lien doc
+  * `magic-stick-welcome.desktop` : autostart XFCE global (`/etc/xdg/autostart/`)
+  * Hook `070-configure-xfce.chroot` : copie desktop autostart + chmod welcome script
+* [OK] Ajout `zenity` dans `desktop.list.chroot`
+* [OK] Syntaxe bash validee (`bash -n`)
+
+== Builds
+
+| Run | Resultat |
+|-----|----------|
+| #25111032862 (v0.1.12) | **ISO VERT** — Build + Verify + Boot + Software + SourceForge OK. Docker Hub FAIL (lazygit casse) |
+
+== Fichiers modifies
+
+| Fichier | Action |
+|---------|--------|
+| `docker/magic-stick-cli/Dockerfile` | Fix casse lazygit `Linux` → `linux` |
+| `config/live-build/includes.chroot/usr/local/bin/magic-stick-welcome.sh` | Créé |
+| `config/live-build/includes.chroot/etc/xdg/autostart/magic-stick-welcome.desktop` | Créé |
+| `config/live-build/hooks/070-configure-xfce.chroot` | Modifié (copie autostart + chmod) |
+| `config/live-build/package-lists/desktop.list.chroot` | Ajout `zenity` |
+
+== Metriques
+
+| Metrique | Valeur |
+|----------|--------|
+| Fichiers créés | 2 |
+| Fichiers modifiés | 3 |
+| Scripts validés | 2/2 |
+| Bugs corrigés | 1 (Docker Hub lazygit casse) |
+| EPIC 5 progression | 100% (5/5 taches) |
+
+== Prochaine session
+
+* Bumper v0.1.13 (inclut fix Docker Hub + EPIC 5 final)
+* EPIC 3 : Tester rollback A/B sur cle USB
+* EPIC 9 : VS Code dans /opt/

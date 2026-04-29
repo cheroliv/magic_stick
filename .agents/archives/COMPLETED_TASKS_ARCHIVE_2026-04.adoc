@@ -1,5 +1,40 @@
 = Archive des Taches Terminee — Avril 2026
 
+== Session 048 — EPIC 5 XFCE Autostart + Fix Docker Hub lazygit
+
+**Date** : 29 avril 2026
+**Type** : feature + fix + ci/cd
+**Score** : 8/10
+
+=== Contexte
+Suite session 047 (EPIC 5 polishment + tag v0.1.12). Mission : monitorer build v0.1.12, finaliser EPIC 5 (autostart), corriger build Docker Hub.
+
+=== Taches realisees
+* [OK] Monitorer build v0.1.12 : ISO VERT COMPLET (31m, SourceForge OK)
+* [OK] Fix Docker Hub : casse `Linux` vs `linux` dans lazygit checksum (Dockerfile)
+* [OK] EPIC 5 — Autostart XFCE :
+  ** `magic-stick-welcome.sh` : script zenity info avec version + raccourcis + lien doc
+  ** `magic-stick-welcome.desktop` : autostart XFCE global (`/etc/xdg/autostart/`)
+  ** Hook `070-configure-xfce.chroot` : copie desktop autostart + chmod welcome script
+* [OK] Ajout `zenity` dans `desktop.list.chroot`
+* [OK] Syntaxe bash validee (`bash -n`)
+
+=== Fichiers modifies
+| Fichier | Action |
+| `docker/magic-stick-cli/Dockerfile` | Fix casse lazygit `Linux` → `linux` |
+| `config/live-build/includes.chroot/usr/local/bin/magic-stick-welcome.sh` | Créé |
+| `config/live-build/includes.chroot/etc/xdg/autostart/magic-stick-welcome.desktop` | Créé |
+| `config/live-build/hooks/070-configure-xfce.chroot` | Modifié (autostart + chmod) |
+| `config/live-build/package-lists/desktop.list.chroot` | Ajout `zenity` |
+
+=== Builds
+| Run | Resultat |
+| #25111032862 (v0.1.12) | **ISO VERT** — Build + Verify + Boot + Software + SourceForge OK. Docker Hub FAIL (lazygit casse) |
+
+=== Prochaine session
+* Bumper VERSION → v0.1.13 (fix Docker Hub + EPIC 5 final en CI/CD)
+* EPIC 3 : Tester rollback A/B sur cle USB
+
 == Session 047 — EPIC 5 XFCE Polishment + EPIC 10 Backlog
 
 **Date** : 29 avril 2026

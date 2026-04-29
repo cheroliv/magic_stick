@@ -93,6 +93,17 @@ if [ ! -f "${XSETTINGS_FILE}" ]; then
 XSET
 fi
 
+# Ensure welcome script is executable
+if [ -f /usr/local/bin/magic-stick-welcome.sh ]; then
+    chmod +x /usr/local/bin/magic-stick-welcome.sh
+fi
+
+# Copy autostart .desktop to user config
+if [ -f /etc/xdg/autostart/magic-stick-welcome.desktop ]; then
+    cp /etc/xdg/autostart/magic-stick-welcome.desktop \
+       "${USER_HOME}/.config/autostart/"
+fi
+
 # Fix ownership
 chown -R "${USERNAME}:${USERNAME}" "${USER_HOME}/.config"
 

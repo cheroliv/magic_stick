@@ -1,7 +1,6 @@
 = Script Verification — Magic Stick
 
-_Derniere mise a jour_ : Session 046 (29 avril 2026) — Verrouillage versions Dockerfile (ARG), checksums binaires, `trap` démontage update-system.sh, externalisation patches live-build patch-syslinux.py + patch-iso.py
-
+_Derniere mise a jour_ : Session 048 (29 avril 2026) — EPIC 5 autostart XFCE (`magic-stick-welcome.sh` + `.desktop`)
 '''
 
 == Scripts du Projet

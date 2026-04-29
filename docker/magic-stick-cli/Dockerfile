@@ -116,9 +116,9 @@ ENV JAVA_HOME="$SDKMAN_DIR/candidates/java/current"
 
 # === Lazygit ===
 ARG LAZYGIT_VERSION=0.61.1
-RUN curl -fsSL -o lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" \
+RUN curl -fsSL -o lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_linux_x86_64.tar.gz" \
     && curl -fsSL -o checksums.txt "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/checksums.txt" \
-    && grep "lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" checksums.txt | sha256sum -c - \
+    && grep "lazygit_${LAZYGIT_VERSION}_linux_x86_64.tar.gz" checksums.txt | sha256sum -c - \
     && tar xf lazygit.tar.gz -C /usr/local/bin lazygit \
     && rm lazygit.tar.gz checksums.txt
 
