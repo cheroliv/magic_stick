@@ -23,7 +23,7 @@ Pour le guide complet avec balenaEtcher et dd, consultez link:flash-guide.html[G
 avec **balenaEtcher** (recommande) :
 
 . Telechargez https://balena.io/etcher[balenaEtcher]
-. **Flash from file** → selectionnez `magic_stick_0.1.6.iso`
+. **Flash from file** → selectionnez `magic_stick_0.1.8.iso`
 . **Select target** → votre cle USB
 . **Flash!**
 
@@ -35,7 +35,7 @@ ou avec **dd** (Linux) :
 lsblk
 
 # Flasher (REMPLACEZ /dev/sdX par votre device)
-sudo dd if=magic_stick_0.1.6.iso of=/dev/sdX bs=4M status=progress && sync
+sudo dd if=magic_stick_0.1.8.iso of=/dev/sdX bs=4M status=progress && sync
 ----
 
 [WARNING]

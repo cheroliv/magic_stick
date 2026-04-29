@@ -1,0 +1,47 @@
+title=Image Docker CLI
+date=2026-04-29
+type=page
+status=published
+~~~~~~
+
+== Image Docker CLI
+
+L'image `cheroliv/magic-stick-cli` reproduit la stack logicielle CLI du chroot live-build (sans interface graphique). Cible : jobs CI/CD et Ollama Cloud.
+
+=== Pull
+
+[source,bash]
+----
+docker pull cheroliv/magic-stick-cli:latest
+----
+
+=== Stack incluse
+
+[cols="1,2"]
+|===
+| Categorie | Logiciels
+
+| Conteneurisation | Docker CE client, Docker Compose, Podman
+| IA locale | Ollama
+| Java | SDKMAN + JDK 25 Temurin
+| JavaScript/Node | NVM, Node.js, pnpm
+| Python | Python 3.14.4, uv
+| Reseau | nmap, iperf3, traceroute, dnsutils
+| Recherche | ripgrep, fd, fzf
+| Git | lazygit
+| HTTP/REST | xh, httpie
+| Task runner | just
+| Shell | zsh + oh-my-zsh, starship
+|===
+
+=== Contraintes de securite
+
+* **Aucune cle SSH, aucun token** dans l'image
+* **Injection au runtime** via variables d'environnement ou secrets CI/CD
+* Zero donnee personnelle dans les layers Docker
+
+=== Voir aussi
+
+* link:quick-start.html[Guide de demarrage rapide]
+* link:scripts.html[Documentation des scripts]
+* https://hub.docker.com/r/cheroliv/magic-stick-cli[Docker Hub]

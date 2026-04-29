@@ -32,7 +32,7 @@ balenaEtcher est un outil graphique simple pour flasher une ISO sur une cle USB.
 ==== Etape 2 : Flasher l'ISO
 
 . Cliquez sur **"Flash from file"**
-. Selectionnez le fichier `magic_stick_0.1.6.iso`
+. Selectionnez le fichier `magic_stick_0.1.8.iso`
 . Cliquez sur **"Select target"** et choisissez votre cle USB
 . Cliquez sur **"Flash!"**
 . Attendez la fin de l'operation (verification comprise)
@@ -72,7 +72,7 @@ Reperez votre cle USB (par exemple `/dev/sdb`). **Verifiez bien le device** : un
 
 [source,bash]
 ----
-sudo dd if=magic_stick_0.1.6.iso of=/dev/sdX bs=4M status=progress && sync
+sudo dd if=magic_stick_0.1.8.iso of=/dev/sdX bs=4M status=progress && sync
 ----
 
 Remplacez `/dev/sdX` par le device de votre cle USB.
@@ -122,7 +122,7 @@ Avant de flasher, vous pouvez verifier l'integrite de l'ISO :
 [source,bash]
 ----
 #Verifier le checksum SHA256
-sha256sum magic_stick_0.1.6.iso
+sha256sum magic_stick_0.1.8.iso
 ----
 
 Comparez le resultat avec le fichier `.sha256` fourni sur SourceForge.

@@ -39,7 +39,7 @@ sudo scripts/build.sh [OPTIONS]
 . Initialise la configuration live-build dans `build/`
 . Copie les fichiers de configuration depuis `config/live-build/`
 . Lance le build de l'ISO (30-60 minutes)
-. Renomme l'ISO en `build/magic_stick_0.1.6.iso`
+. Renomme l'ISO en `build/magic_stick_0.1.8.iso`
 
 ==== Configuration live-build
 

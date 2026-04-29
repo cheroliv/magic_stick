@@ -2,18 +2,18 @@
 
 _Environnement portable standardise sur cle USB bootable_
 
-image:https://img.shields.io/badge/version-0.1.6-blue[Version 0.1.6]
+image:https://img.shields.io/badge/version-0.1.8-blue[Version 0.1.8]
 image:https://img.shields.io/badge/base-Xubuntu%2024.04-orange[Base Xubuntu 24.04]
 image:https://img.shields.io/badge/licence-Apache%202.0-green[Licence Apache 2.0]
 
-**image:https://img.shields.io/badge/⬇_Telecharger_ISO-v0.1.6-brightgreen[Telecharger v0.1.6]**
+**image:https://img.shields.io/badge/⬇_Telecharger_ISO-v0.1.8-brightgreen[Telecharger v0.1.8]**
 
 * https://sourceforge.net/projects/magic-stick/files/[SourceForge] — ISO brute
 
 IMPORTANT: Flasher l'ISO directement :
 [source,bash]
 ----
-sudo dd if=magic_stick_0.1.6.iso of=/dev/sdX bs=4M status=progress && sync
+sudo dd if=magic_stick_0.1.8.iso of=/dev/sdX bs=4M status=progress && sync
 ----
 
 '''
@@ -216,7 +216,7 @@ La partition Persistence utilise `persistence.conf` avec `/ union` pour sauvegar
 | ✅ Termine
 
 | EPIC 2 : Build ISO Xubuntu de base
-| ✅ Termine — https://sourceforge.net/projects/magic-stick/files/[Telecharger v0.1.6]
+| ✅ Termine — https://sourceforge.net/projects/magic-stick/files/[Telecharger v0.1.8]
 
 | EPIC 3 : Partition A/B + Persistence
 | ✅ Termine
@@ -225,11 +225,25 @@ La partition Persistence utilise `persistence.conf` avec `/ union` pour sauvegar
 | ✅ Termine
 
 | EPIC 5 : Personnalisation XFCE
-| 🔄 En cours
+| ✅ Termine
 
 | EPIC 6 : Script de mise a jour A/B
 | ✅ Termine
+
+| EPIC 8 : Docker CLI image
+| ✅ Termine
 |===
+
+== Image Docker CLI
+
+Une image Docker `cheroliv/magic-stick-cli` est disponible sur Docker Hub. Elle reproduit la stack logicielle CLI du chroot (sans GUI) pour les jobs CI/CD et Ollama Cloud.
+
+[source,bash]
+----
+docker pull cheroliv/magic-stick-cli:latest
+----
+
+Voir link:docker-cli.html[Image Docker CLI] pour les details.
 
 '''
 
