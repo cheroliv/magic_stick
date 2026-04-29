@@ -1,0 +1,56 @@
+= Session 047 — EPIC 5 XFCE Polishment + EPIC 10 Backlog
+
+**Date** : 29 avril 2026
+**Type** : feature + backlog
+**Score** : 8/10
+
+== Contexte
+
+Suite session 046 (fixes Copilot + ISO v0.1.11 vert complet). Mission : commit + push des fixes, EPIC 5 XFCE polishment, validation build post-fixes.
+
+== Taches realisees
+
+=== Commit + push
+
+* [OK] Commit fixes Copilot + EPIC 5 (`ce64526`)
+* [OK] Bump VERSION 0.1.11 → 0.1.12 (`b8e962d`)
+* [OK] Tag + push `v0.1.12`
+* [OK] Build CI/CD #TBD triggered automatiquement
+
+=== EPIC 5 — XFCE Polishment
+
+| Fichier | Changement |
+|---|---|
+| `xfce4-desktop.xml` | Fond d'ecran → `/usr/share/backgrounds/magic-stick/magic-stick-default.png` |
+| `magic-stick-default.png` | Wallpaper genere 1920x1080 (bleu/astro, version v0.1.11) |
+| `opencode-magic.desktop` | Menu AI Assistants → agent Opencode (via xfce4-terminal) |
+| `magic-*.directory` | Copies dans `/usr/share/desktop-directories/` (fix affichage menu) |
+
+* Aucun secret/token dans les nouveaux fichiers
+
+=== EPIC 10 — Applications Docker Supplementaires
+
+* Section ajoutee au BACKLOG (`architectures`, `services envisages`, `taches techniques`)
+
+== Fichiers modifies
+
+| Fichier | Action |
+|---|---|
+| `VERSION` | 0.1.11 → 0.1.12 |
+| `xfce4-desktop.xml` | Wallpaper custom |
+| `magic-stick-default.png` | **Créé** |
+| `opencode-magic.desktop` | **Créé** |
+| `magic-*.directory` | **Créés** (7 fichiers) |
+| `BACKLOG.adoc` | EPIC 5 + EPIC 10 |
+
+== Builds
+
+| Run | Commit | Resultat |
+|---|---|---|
+| #TBD (v0.1.12) | `b8e962d` | Monitoring en cours |
+
+== Prochaine session
+
+* Monitorer build v0.1.12 jusqu'au vert complet
+* EPIC 5 (suite) : Scripts de demarrage automatique XFCE
+* EPIC 2 : Tester boot BIOS/UEFI sur cle USB reelle

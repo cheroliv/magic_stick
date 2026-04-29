@@ -1,5 +1,37 @@
 = Archive des Taches Terminee — Avril 2026
 
+== Session 047 — EPIC 5 XFCE Polishment + EPIC 10 Backlog
+
+**Date** : 29 avril 2026
+**Type** : feature + backlog
+**Score** : 8/10
+
+=== Contexte
+Suite session 046 (fixes Copilot + ISO v0.1.11 vert complet). Mission : commit + push des fixes, EPIC 5 XFCE polishment, validation build post-fixes.
+
+=== Taches realisees
+* [OK] Commit fixes Copilot + EPIC 5 (`ce64526`)
+* [OK] Bump VERSION 0.1.11 → 0.1.12 (`b8e962d`)
+* [OK] Tag + push `v0.1.12` → build CI/CD triggered
+* [OK] Wallpaper custom 1920x1080 genere (bleu/astro)
+* [OK] .desktop opencode (AI Assistants)
+* [OK] Fix desktop-directories copies dans `/usr/share/desktop-directories/`
+* [OK] EPIC 10 apps Docker ajoute au BACKLOG
+
+=== Fichiers modifies
+| Fichier | Action |
+| `VERSION` | 0.1.11 → 0.1.12 |
+| `xfce4-desktop.xml` | Wallpaper custom |
+| `magic-stick-default.png` | Créé |
+| `opencode-magic.desktop` | Créé |
+| `magic-*.directory` | Créés (7 fichiers) |
+| `BACKLOG.adoc` | EPIC 5 + EPIC 10 |
+
+=== Prochaine session
+* Monitorer build v0.1.12 jusqu'au vert complet
+* EPIC 5 (suite) : Scripts de demarrage automatique XFCE
+* EPIC 2 : Tester boot BIOS/UEFI sur cle USB reelle
+
 == Session 046 — Fixes revue Copilot + ISO v0.1.11 vert complet
 
 **Date** : 29 avril 2026

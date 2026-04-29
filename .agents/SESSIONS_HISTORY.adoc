@@ -1,9 +1,10 @@
 = Historique des Sessions — Magic Stick
 
-_Derniere mise a jour_ : 2026-04-29 (session 046)
+_Derniere mise a jour_ : 2026-04-29 (session 047)
 
 |===
 | # | Date | Type | Sujet | Score
+| 047 | 29 avril 2026 | feature + backlog | EPIC 5 XFCE polishment (wallpaper, .desktop opencode, fix desktop-directories), bump v0.1.12, EPIC 10 apps Docker backlog | 8/10
 | 046 | 29 avril 2026 | fix + security + ci/cd | Fixes revue Copilot : verrouillage versions (ARG), checksums binaires, trap démontage dans update-system.sh, externalisation patches live-build. ISO v0.1.11 vert complet | 8/10
 | 045 | 29 avril 2026 | fix + ci/cd | Fix Dockerfile EPIC 8 (urls `latest/download` → `releases/download/vX`, extraction robuste via `find` pour xh/just), bump v0.1.11. Docker Hub SUCCESS, ISO EN COURS | 7/10
 | 044 | 29 avril 2026 | fix + docs + ci/cd | Fix Dockerfile EPIC 8 (grep -Po → jq), bump v0.1.8, mise a jour docs ISO + page Docker CLI | 8/10

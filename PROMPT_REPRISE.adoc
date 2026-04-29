@@ -1,44 +1,42 @@
-= Prompt de reprise — Session 047
+= Prompt de reprise — Session 048
 
 __
-**EPIC** : EPIC 5 (XFCE polishment) + validation build ISO post-fixes Copilot
-**Statut** : Session 046 terminee — ISO v0.1.11 VERT, fixes Copilot appliques, non commites
+**EPIC** : A definir (monitoring build v0.1.12 + suites)
+**Statut** : Session 047 terminee — EPIC 5 XFCE Polishment OK, tag v0.1.12 pousse, build CI/CD en cours
 __
 
 '''
 
-== Session 046 — Resume
+== Session 047 — Resume
 
-- Build ISO v0.1.11 (#25101027494) **VERT COMPLET** (Build + Verify + Boot + Software + SourceForge + Docker Hub)
-- EPIC 8 validé complet (DOCKER CLI + ISO)
-- Fixes revue Copilot :
-  ** Verrouillage versions GitHub releases (ARG LAZYGIT/XH/JUST_VERSION)
-  ** Checksums binaires lazygit + just (xh sans checksum)
-  ** `trap` démontage sur 6 fonctions dans `update-system.sh`
-  ** Externalisation patches live-build → `patch-syslinux.py` + `patch-iso.py`
-  ** Validation chemins syslinux avec `if [ -f ]` au lieu de `cp` brut
-- Syntaxe validee sur tous les fichiers modifies
-- **Modifications non commitées** (attendre permission utilisateur)
+- Commit + push fixes Copilot + EPIC 5 (`ce64526`, `b8e962d`)
+- Bump VERSION 0.1.11 → 0.1.12, tag v0.1.12 pousse
+- EPIC 5 — XFCE Polishment OK :
+  ** Wallpaper custom 1920x1080 genere (bleu/astro)
+  ** .desktop opencode (AI Assistants)
+  ** Fix desktop-directories dans /usr/share/desktop-directories/
+  ** xfce4-desktop.xml mis a jour pour fond Magic Stick
+- EPIC 10 — Applications Docker supplémentaires ajoutees au BACKLOG (BASSE)
+- Build CI/CD v0.1.12 triggered automatiquement (monitoring en cours)
 
-== Plan Session 047 — Priorites
+== Plan Session 048 — Priorites
 
-=== 1. Commit + push des fixes Copilot
+=== 1. Monitorer build v0.1.12
 
-* Attendre permission explicite de l'utilisateur
-* Bump VERSION si necessaire
-* Tag v* si build CI/CD valide
+* [ ] Attendre le vert complet (ISO + Verify + Boot + Software + SourceForge + Docker Hub)
+* [ ] Si ISO vert : valider EPIC 5 en production
+* [ ] Si ISO FAIL : diagnostic logs, fix, bump v0.1.13
 
-=== 2. EPIC 5 — XFCE polishment
+=== 2. EPIC 5 — Suite XFCE
 
-* [ ] Verifier menu XFCE apres boot QEMU
-* [ ] Verifier les .desktop entries (VS Code:, Open-WebUI, AI Assistants)
-* [ ] Fond d'ecran custom si non present
-* [ ] Panel XFCE preconfigure
+* [ ] Scripts de demarrage automatique XFCE (dernier item EPIC 5)
+* [ ] Test boot BIOS sur cle USB reelle
+* [ ] Test boot UEFI sur cle USB reelle
 
-=== 3. Validation build post-fixes
+=== 3. EPIC 6 / EPIC 3
 
-* [ ] Monitorer build ISO avec `build-inner.sh` modifie (patches externalises)
-* [ ] Monitorer build ISO avec `update-system.sh` modifie (trap démontage)
+* [ ] Valider update-system.sh avec trap en production
+* [ ] Tester rollback A/B sur cle USB
 
 == Regles
 
