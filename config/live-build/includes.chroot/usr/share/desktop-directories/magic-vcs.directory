@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Version Control
+Name[fr]=Gestion de versions
+Comment=Git and version control tools
+Comment[fr]=Git et outils de gestion de versions
+Icon=folder-git
+Type=Directory

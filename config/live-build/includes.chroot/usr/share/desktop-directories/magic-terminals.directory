@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Terminals
+Name[fr]=Terminaux
+Comment=Terminal emulators
+Comment[fr]=Emulateurs de terminal
+Icon=utilities-terminal
+Type=Directory

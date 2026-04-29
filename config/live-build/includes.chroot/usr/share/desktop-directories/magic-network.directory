@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Network Diagnostics
+Name[fr]=Diagnostics Reseau
+Comment=Network analysis and diagnostic tools
+Comment[fr]=Outils d'analyse et diagnostic reseau
+Icon=network-workgroup
+Type=Directory

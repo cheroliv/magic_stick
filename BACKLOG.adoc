@@ -99,11 +99,11 @@ __
 
 ==== Taches
 
-* [ ] Theme et fond d'ecran custom
-* [ ] Raccourcis clavier standardises
-* [ ] Panel XFCE preconfigure
+* [x] Theme et fond d'ecran custom
+* [x] Raccourcis clavier standardises
+* [x] Panel XFCE preconfigure
 * [ ] Scripts de demarrage automatique
-* [ ] Menu Applications personnalise
+* [x] Menu Applications personnalise
 
 === EPIC 9 : Editeurs de code (dans /opt/)
 
@@ -179,8 +179,38 @@ __
 * [ ] Tester l'authentification Ollama Cloud depuis le conteneur avec une cle injectee.
 * [ ] Documenter l'usage dans le README (exemple de `Dockerfile`, `docker-compose.yml`, et workflow YAML, distinction avec le systeme live).
 
-'''
+=== EPIC 10 : Applications Docker supplémentaires
 
-== Issues
+**Statut** : A FAIRE
+**Priorite** : BASSE
+**Contexte** : Applications web/services auto-hébergées packagées en Docker pour enrichir le Magic Stick. Demande utilisateur session 047.
+
+==== Architecture
+
+* Chaque service = un sous-dossier `docker/apps/<nom>/` avec son `docker-compose.yml`
+* Volume de données persistant dans la partition Persistence (bind mount `/mnt/persistence/docker-apps/`)
+* Reverse proxy optionnel (Traefik ou Nginx Proxy Manager) pour gérer les ports
+* Réseau Docker partagé `magic-stick-apps`
+
+==== Services envisagés
+
+* [ ] **BigBlueButton** — Visioconférence open source (https://github.com/bigbluebutton/docker)
+* [ ] **Rahoot** — Clone Kahoot! open source (https://github.com/Ralex91/Rahoot)
+* [ ] **Formbricks** — Formulaires et enquêtes (https://github.com/formbricks/formbricks)
+* [ ] **Grist** — Tableur open source type Airtable (https://github.com/gristlabs/grist-core#using-grist)
+* [ ] **Cal.com DIY** — Planification de rendez-vous (https://github.com/calcom/cal.diy)
+* [ ] **Nextcloud** — Cloud personnel (https://github.com/nextcloud/docker)
+* [ ] **Rclone** — Synchronisation cloud (https://hub.docker.com/r/rclone/rclone)
+* [ ] **Stalwart** — Serveur mail (https://github.com/stalwartlabs/stalwart)
+
+==== Taches technique
+
+* [ ] Creer `docker/apps/` avec une structure standardisée (docker-compose + .env.example + README)
+* [ ] Choisir et configurer le reverse proxy (Traefik ou NPM)
+* [ ] Script `scripts/start-apps.sh` pour lancer/stopper l'ensemble des services
+* [ ] Integration dans l'installateur live-build (hook chroot : installation de Docker Compose)
+* [ ] Documentation d'architecture dans `AGENT.adoc`
+
+'''
 
 * [ ] **CACHE-BUILD** : Accélérer le build CI/CD via cache GitHub Actions pour les paquets live-build (`build/cache/packages.*`) et les outls externes installés via curl (Ollama, SDKMAN, NVM, etc.). Gain estimé : 10-30 min par build.

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Containers and VMs
+Name[fr]=Conteneurs et VMs
+Comment=Docker, Podman and virtualization tools
+Comment[fr]=Docker, Podman et outils de virtualisation
+Icon=applications-system
+Type=Directory

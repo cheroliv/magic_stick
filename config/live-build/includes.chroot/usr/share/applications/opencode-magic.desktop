@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opencode Agent
+Name[fr]=Agent Opencode
+Comment=AI coding agent terminal interface
+Comment[fr]=Agent de codage IA en terminal
+Exec=xfce4-terminal -e opencode
+Icon=utilities-terminal
+Terminal=false
+Categories=X-Magic-AI;AI;Development;
+StartupNotify=true
+X-Desktop-File-Install-Version=0.26
