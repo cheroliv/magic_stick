@@ -6,7 +6,7 @@ FROM ubuntu:24.04
 
 LABEL maintainer="cheroliv"
 LABEL description="Magic Stick CLI — Stack portable pour jobs CI/CD et Ollama Cloud"
-LABEL version="0.1.9"
+LABEL version="0.1.11"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -56,7 +56,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libsqlite3-dev \
     llvm \
     libncursesw5-dev \
-    xz-utils \
     tk-dev \
     libxml2-dev \
     libxmlsec1-dev \
@@ -71,7 +70,7 @@ RUN curl -fsSL https://ollama.com/install.sh | sh
 RUN install -m 0755 -d /etc/apt/keyrings \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc \
     && chmod a+r /etc/apt/keyrings/docker.asc \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" > /etc/apt/sources.list.d/docker.list \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" > /etc/apt/sources.list.d/docker.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends docker-ce-cli docker-buildx-plugin docker-compose-plugin \
     && rm -rf /var/lib/apt/lists/*
@@ -111,7 +110,7 @@ ENV PATH="$SDKMAN_DIR/candidates/java/current/bin:$PATH"
 ENV JAVA_HOME="$SDKMAN_DIR/candidates/java/current"
 
 # === Lazygit ===
-RUN LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | jq -r '.tag_name' | sed 's/^v//') \
+RUN LAZYGIT_VERSION=$(curl -s https://api.github.com/repos/jesseduffield/lazygit/releases/latest | jq -r '.tag_name' | sed 's/^v//') \
     && curl -fsSL -o lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" \
     && tar xf lazygit.tar.gz -C /usr/local/bin lazygit \
     && rm lazygit.tar.gz
@@ -119,8 +118,9 @@ RUN LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygi
 # === xh (HTTPie-like) ===
 RUN XH_VERSION=$(curl -s https://api.github.com/repos/ducaale/xh/releases/latest | jq -r '.tag_name' | sed 's/^v//') \
     && curl -fsSL -o xh.tar.gz "https://github.com/ducaale/xh/releases/download/v${XH_VERSION}/xh-v${XH_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
-    && tar xf xh.tar.gz -C /usr/local/bin xh \
-    && rm xh.tar.gz
+    && mkdir -p /tmp/xh-extract && tar xf xh.tar.gz -C /tmp/xh-extract \
+    && find /tmp/xh-extract -type f -name xh -exec cp {} /usr/local/bin/xh \; \
+    && rm -rf xh.tar.gz /tmp/xh-extract
 
 # === HTTPie ===
 RUN uv pip install --system httpie
@@ -128,8 +128,9 @@ RUN uv pip install --system httpie
 # === just ===
 RUN JUST_VERSION=$(curl -s https://api.github.com/repos/casey/just/releases/latest | jq -r '.tag_name') \
     && curl -fsSL -o just.tar.gz "https://github.com/casey/just/releases/download/${JUST_VERSION}/just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
-    && tar xf just.tar.gz -C /usr/local/bin just \
-    && rm just.tar.gz
+    && mkdir -p /tmp/just-extract && tar xf just.tar.gz -C /tmp/just-extract \
+    && find /tmp/just-extract -type f -name just -exec cp {} /usr/local/bin/just \; \
+    && rm -rf just.tar.gz /tmp/just-extract
 
 # === starship ===
 RUN curl -sS https://starship.rs/install.sh | sh -s -- -y
