@@ -1,0 +1,27 @@
+= Session 061 — EPIC 13 Plateformes de jeu (Heroic, Prism, RetroArch, Itch.io)
+
+_Date_ : 2026-05-01
+_Type_ : backlog
+_Sujet_ : Ajout EPIC 13 plateformes de jeu gaming Flatpak dans BACKLOG.adoc
+_Score_ : 7/10
+
+== Contexte
+
+Demande utilisateur : ajouter des plateformes de jeu dans le chroot Magic Stick a cote de Roblox (EPIC 12). Killer feature : cle USB bootable gaming zero-install.
+
+== Plateformes ajoutees
+
+* **Heroic Games Launcher** : Epic Games + GOG, Flatpak `com.heroicgameslauncher.hgl`
+* **Prism Launcher** : Minecraft Java, Flatpak `org.prismlauncher.PrismLauncher`
+* **RetroArch** : Emulateur tout-en-un, Flatpak `org.libretro.RetroArch`
+* **Itch.io** : Jeux independants, Flatpak `io.itch.itch`
+
+Toutes les 4 en Flatpak Flathub, legeres, stables sur Linux.
+
+== Actions
+
+. Ajout EPIC 13 dans `BACKLOG.adoc` (LAZY) — structure complete avec Flatpak IDs, taches
+
+== Fichiers modifies
+
+* `BACKLOG.adoc` : ajout EPIC 13 (Heroic + Prism + RetroArch + Itch)

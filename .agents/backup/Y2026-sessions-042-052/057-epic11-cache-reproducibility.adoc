@@ -1,0 +1,63 @@
+= Session 057 — EPIC 11 : Cache Build + Validation Reproducibilité
+
+**Date** : 01 mai 2026
+**Type** : feat + ci/cd
+**Score** : 8/10
+**Commit** : ca1bed6
+
+== Contexte
+
+Session 056 terminee : CI/CD VERT 0 warning. Deux taches EPIC 11 restantes :
+1. CACHE-BUILD : accelerer le build CI/CD via cache pour telechargements externes
+2. Validation reproductibilite : verifier que deux builds avec meme `versions.sh` = contenu identique
+
+== Taches realisees
+
+=== Cache-BUILD (3 strates)
+
+**Strate 1 — Cache GitHub Actions `build/cache/`** :
+- `.github/workflows/build.yml` : cache key etendu avec `scripts/lib/versions.sh` (changement de version → invalidation cache)
+- Key : `lb-cache-v2-${{ runner.os }}-${{ hashFiles('package-lists/**', 'VERSION', 'versions.sh') }}`
+
+**Strate 2 — Cache Docker builder layers** :
+- `.github/workflows/build.yml` : `docker/build-push-action` avec `cache-from: type=gha,scope=builder` + `cache-to: type=gha,scope=builder,mode=max`
+- `build.gradle.kts` : `dockerBuild` devient no-op si l'image existe (`docker image inspect`)
+
+**Strate 3 — Cache downloads externes** :
+- `scripts/build-inner.sh` : stage/collect `build/cache/downloads/` vers/depuis le chroot avant/apres `lb build`
+- `060-install-chroot-software.chroot` : fonction `dl_cached()` utilisee par tous les telechargements :
+  - UV, ripgrep, fd, lazygit, just, xh, opencode, JetBrains Toolbox, VS Code, gh CLI
+  - Si fichier present dans `/tmp/dl-cache/`, copie locale (skip curl)
+  - Sinon curl + copie dans le cache pour le prochain build
+
+Gain estime : 10-30 minutes par build.
+
+=== Validation reproductibilite
+
+- `scripts/test-software.sh` : nouvelle section `Reproducibility`
+  - Source `scripts/lib/versions.sh` pour obtenir les versions pinees
+  - Verifie que les versions installees dans le squashfs correpondent
+  - Methode `binary-grep` : `strings` le binaire + `grep -qF` la version
+  - Accepte aussi la version sans prefixe `v` (ex: `v0.61.1` ou `0.61.1`)
+  - Outils en `"latest"` (VS Code, SDKMAN, starship) : marques `[SKIP]` jusqu'a pinning futur
+  - 14 outils verifies (ripgrep, fd, fzf, lazygit, just, xh, opencode, uv, gh, nvm, jetbrains, starship, sdkman, vscode)
+
+== Fichiers modifies
+
+| Fichier | Changement |
+| `.github/workflows/build.yml` | Cache `build/cache` etendu + Docker builder via `docker/build-push-action` |
+| `build.gradle.kts` | `dockerBuild` no-op si image existante |
+| `scripts/build-inner.sh` | Stage/collect cache downloads chroot |
+| `config/live-build/hooks/060-install-chroot-software.chroot` | `dl_cached()` sur tous les telechargements curl |
+| `scripts/test-software.sh` | Section `Reproducibility` (source + verify 14 outils) |
+| `BACKLOG.adoc` | 2 taches EPIC 11 marquees [x], EPIC 11 a 100% |
+
+== Etat EPIC 11
+
+**Statut final** : TERMINE (100%)
+- [x] Pinning versions chroot (versions.sh centralise)
+- [x] Factorisation arch.sh + get_arch_suffix()
+- [x] Traps robustes (update-system.sh + build-inner.sh)
+- [x] Checksums binaires (lazygit + just)
+- [x] CACHE-BUILD (3 strates : packages + downloads + Docker layers)
+- [x] Validation reproductibilite (test-software.sh verify versions)

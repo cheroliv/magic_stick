@@ -1,35 +1,36 @@
-= Prompt de reprise — Session 062
+= Prompt de reprise — Session 063
 
 __
-**Contexte** : Session 061 — EPIC 13 plateformes de jeu ajoutees. BACKLOG enrichi de 2 EPICs gaming.
-**Statut** : EPIC 12 (Roblox) + EPIC 13 (Heroic, Prism, RetroArch, Itch) dans BACKLOG
+**Contexte** : Session 062 — EPIC 4 smoke tests CI/CD + EPIC 9 editeurs /opt/ TERMINE
+**Statut** : isoTestSmoke integre dans CI/CD, vscode-update.sh cree, EPIC 9 termine
 __
 
 '''
 
-== Session 061 — Resume
+== Session 062 — Resume
 
-- Ajout EPIC 13 (Heroic Games Launcher + Prism Launcher + RetroArch + Itch.io) dans BACKLOG.adoc — Flatpak Flathub
-- Killer feature : cle USB bootable gaming zero-install (Roblox + Epic Games + Minecraft + emulateurs + indie)
+- EPIC 4 : isoTestSmoke ajoute dans build.yml CI/CD + aggregate tasks Gradle
+- EPIC 9 : deja implemente (VS Code + gh CLI dans hook chroot). vscode-update.sh cree pour mises a jour live session
+- BACKLOG : EPIC 4 smoke [x], EPIC 9 → TERMINE
 
-== Plan Session 062 — Priorités
+== Plan Session 063 — Priorites
 
-=== Option A : Appliquer l'audit contexte (recommande)
+=== Option A : EPIC 8 Docker Hub finition (recommande)
 
-- Reduire AGENT.adoc a ~200 lignes (regles compactes, source unique de verite)
-- Reduire INDEX.adoc a ~100 lignes (index pur, pas de regles)
-- Deplacer anti-patterns et conventions en LAZY
-- Resultat cible : 803 → ~436 lignes EAGER (-46%)
+- [ ] CI/CD Docker Hub : utiliser `secrets.DOCKERHUB_TOKEN` dans build.yml ou documenter pattern local
+- [ ] Creer docker-compose.yml de test local optionnel
+- [ ] Tester push local via dockerhub-push.sh
+- [ ] Tester image comme conteneur de job GitHub Actions factice
+- [ ] Documenter usage dans README
 
-=== Option B : EPIC 4 finition
+=== Option B : EPIC 2/EPIC 7 — Doc auto + release notes
 
-- [ ] Lancer smoke tests en CI/CD : `./gradlew isoTestSmoke` dans build.yml
-- [ ] Tester en live boot reel sur cle USB
+- [ ] Auto-update doc site lors d'un deploiement
+- [ ] Generer release notes via IA
 
-=== Option C : EPIC 9 — Editeurs /opt/
+=== Option C : Audit contexte (toujours pertinent)
 
-- [ ] VS Code : tarball dans /opt/VSCode-linux-x64/ + script update
-- [ ] gh CLI : /opt/gh/ + symlink
+- Reduire les fichiers EAGER (AGENT.adoc ~200, INDEX.adoc ~100)
 
 == Regles
 

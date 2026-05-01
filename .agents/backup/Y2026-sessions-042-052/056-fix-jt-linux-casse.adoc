@@ -1,0 +1,96 @@
+= Session 056 — Fix checksums lazygit casse Linux_x86_64 vs linux_x86_64
+
+**Date** : 01 mai 2026
+**Type** : fix + ci/cd
+**Score** : 8/10
+
+'''
+
+== Contexte
+
+Suite session 055 (gouvernance agent 5 projets). Les builds checksums de session 054 
+persistaient avec un warning lazygit. Mission : corriger et obtenir CI/CD 0 warning.
+
+'''
+
+== Objectifs
+
+. Push fixes checksums (commit `5b4d838`) → monitorer CI/CD
+. Identifier la cause racine du warning lazygit persistant
+. Fix + push + validation CI/CD
+
+'''
+
+== Realisations
+
+=== 1. Push fix session 054 + monitorer
+
+* Commit `5b4d838` (`fix(chroot): checksums lazygit/just — comparaison manuelle au lieu de sha256sum -c`) push sur main
+* Build #25191201213 : SUCCESS complet, mais WARNING lazygit persiste
+  - just : `Checksums matched!` ✅
+  - lazygit : `WARNING: lazygit checksum verification failed` ❌
+
+=== 2. Diagnostic cause racine
+
+* `arch.sh` `get_arch_suffix lazygit` → `Linux_x86_64` (L majuscule)
+* `checksums.txt` sur GitHub Releases → `linux_x86_64` (l minuscule)
+* `grep` dans le hook chroot est **case-sensitive** → ne matche pas → `EXPECTED` = ""
+* `[ "" = "hash" ]` → FAIL
+
+=== 3. Fix — `grep -i` case-insensitive
+
+[source,diff]
+----
+- && LAZYGIT_EXPECTED=$(grep "lazygit_${LAZYGIT_VERSION#v}_${LAZYGIT_ARCH}.tar.gz" ...
++ && LAZYGIT_EXPECTED=$(grep -i "lazygit_${LAZYGIT_VERSION#v}_${LAZYGIT_ARCH}.tar.gz" ...
+----
+
+* Commit `442b0ba` push
+* Build #25195816231 : **SUCCESS 0 warning**
+  - lazygit checksum : plus aucun WARNING
+  - ISO + Verify + Boot + Software + Mock A/B : tout vert
+  - just checksum : deja OK
+
+'''
+
+== Builds
+
+| Run | Resultat | Checksums |
+|-----|----------|-----------|
+| 25191201213 (5b4d838) | VERT | just OK, lazygit WARNING (casse) |
+| 25195816231 (442b0ba) | VERT 0 WARNING | lazygit + just OK |
+
+'''
+
+== Fichiers modifies
+
+| Fichier | Action |
+| `config/live-build/hooks/060-install-chroot-software.chroot` | `grep` → `grep -i` (1 caractere) |
+
+'''
+
+== Metriques
+
+| Metrique | Valeur |
+|----------|--------|
+| Commits pousses | 2 (5b4d838, 442b0ba) |
+| Builds CI/CD | 2 |
+| Warnings checksums resolus | 2/2 (just + lazygit) |
+| Fichiers modifies | 1 |
+
+'''
+
+== Lecons
+
+* Les fichiers checksums GitHub Releases (`checksums.txt` lazygit) utilisent une casse differente
+  des noms d'archives generes par `arch.sh`. `grep` doit etre `-i` pour etre robuste.
+* La verification en 2 etapes (EXPECTED / ACTUAL) expose clairement le mismatch via le log
+  "WARNING" → permet un diagnostic rapide.
+
+'''
+
+== Prochaine session (057)
+
+* EPIC 11 : Validation reproductibilite CI/CD (2 builds consecutifs = meme contenu)
+* EPIC 2 : Boot BIOS/UEFI sur cle USB reelle (si cle disponible)
+* CACHE-BUILD : verification cache packages live-build fonctionnel

@@ -138,8 +138,8 @@ tasks.register<org.gradle.api.tasks.Exec>("isoTestSoftware") {
 
 tasks.register("isoTest") {
     group = "iso"
-    description = "Verify + boot test the built ISO"
-    dependsOn("isoVerify", "isoTestBoot")
+    description = "Verify + boot test + smoke test the built ISO"
+    dependsOn("isoVerify", "isoTestBoot", "isoTestSmoke")
 }
 
 tasks.register("isoPipeline") {
@@ -208,8 +208,8 @@ tasks.register<org.gradle.api.tasks.Exec>("isoTestVNC") {
 
 tasks.register("isoTestFull") {
     group = "iso"
-    description = "Full test suite: verify + boot + A/B partition + software"
-    dependsOn("isoVerify", "isoTestSoftware")
+    description = "Full test suite: verify + boot + A/B partition + software + smoke"
+    dependsOn("isoVerify", "isoTestSoftware", "isoTestSmoke")
     finalizedBy("isoTestBoot")
 }
 

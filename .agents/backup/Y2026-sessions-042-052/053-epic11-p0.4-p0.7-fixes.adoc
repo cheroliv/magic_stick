@@ -1,0 +1,62 @@
+= Session 053 — EPIC 11 validation CI/CD + tâches P0.4-P0.7
+
+**Date** : 30 avril 2026
+**Type** : fix + security + ci/cd + backlog
+**Score** : 8/10
+
+== Contexte
+
+Suite session 052 (audit contexte + split encyclopédique). Mission : monitorer build CI/CD post-commits 050-052, puis exécuter les tâches P0.4-P0.7 en attente.
+
+== Actions
+
+=== 1. Monitoring CI/CD — Diagnostic bug xh
+
+* [OK] Build 050 (#25130410341) : FAIL — `xh NOT found` dans isoTestSoftware
+* [OK] Build 051 (#25172752215) : FAIL — idem
+* [OK] Build 052 (#25178806387) : FAIL — idem (22m)
+* [OK] Cause racine : URL tarball xh incorrecte dans 060-install-chroot-software.chroot
+  ** URL construite : `xh-0.25.3-x86_64-unknown-linux-musl.tar.gz` (`${XH_VERSION#v}` enlève le v)
+  ** URL réelle : `xh-v0.25.3-x86_64-unknown-linux-musl.tar.gz` (avec le v)
+* [OK] Fix : `${XH_VERSION#v}` → `${XH_VERSION}`
+* [OK] Docker Hub : SKIPPED sur les 3 builds (pas de tag, attendu)
+
+=== 2. P0.4 — Mise à jour BACKLOG.adoc
+
+* [OK] Date mise à jour : Session 053 (30 avril 2026)
+* [OK] EPIC 11 statut : A FAIRE → EN COURS
+* [OK] arch.sh marqué [x] créé (session 050)
+* [OK] Tâche obsolete (233 arch.sh) nettoyée
+
+=== 3. P0.5 — Traps EXIT dans update-system.sh et build-inner.sh
+
+* [OK] Audit update-system.sh : traps déjà présents dans 7 fonctions (read_grub_default, cmd_status, cmd_setup_ab, install_grub, extract_iso_to_partition, switch_grub_default, cmd_verify). Chaînage correct.
+* [OK] copy_iso_grub : n'existe pas dans le code (référence théorique BACKLOG obsolète)
+* [OK] Audit build-inner.sh : pas de montage loop ISO direct, mais ajout trap EXIT global
+
+=== 4. P0.6 — Checksums SHA256 binaires hooks chroot
+
+* [OK] lazygit : ajout vérification checksums.txt (comme Dockerfile)
+* [OK] just : ajout vérification SHA256SUMS (comme Dockerfile) + fix URL (`${JUST_VERSION#v}` → `${JUST_VERSION}`)
+* [OK] Syntaxe bash validée (`bash -n`)
+
+=== 5. P0.7 — CACHE-BUILD accélération CI/CD
+
+* [OK] build.gradle.kts : `PURGE=false` par défaut (ne détruit plus le cache à chaque build)
+* [OK] build.yml : `actions/cache@v3` pour `build/cache/` (paquets deb live-build)
+  ** Clé : `lb-cache-${{ runner.os }}-${{ hashFiles('config/live-build/package-lists/**', 'VERSION') }}`
+
+== Fichiers modifiés
+
+| Fichier | Action |
+| `config/live-build/hooks/060-install-chroot-software.chroot` | Fix URL xh + just, checksums SHA256 lazygit/just |
+| `scripts/build-inner.sh` | Ajout trap EXIT global |
+| `BACKLOG.adoc` | EPIC 11 → EN COURS, arch.sh [x], tâches obsolètes nettoyées |
+| `build.gradle.kts` | PURGE=false par défaut |
+| `.github/workflows/build.yml` | actions/cache@v3 pour build/cache |
+
+== Prochaine session
+
+* Monitorer build CI/CD post-fix xh (build 050-053)
+* Vérifier si ISO v0.1.13 est vert complet (ISO + Docker Hub)
+* EPIC 5 : Tester boot BIOS/UEFI sur clé USB réelle (si flashé)

@@ -130,7 +130,7 @@ _Lecon Session 041_ : Apres extraction d'un tar avec `--strip-components`, le bi
 == Sessions Recentees
 
 |===
-
+| # | Date | Type | Sujet | Fichier | Score
 | 062 | 2026-05-01 | feat + ci/cd + backlog | EPIC 4 smoke tests CI/CD + EPIC 9 editeurs /opt/ TERMINE (vscode-update.sh + gradle isoTestSmoke) | `062-epic4-smoke-epic9-editors.adoc` | 8/10
 | 061 | 2026-05-01 | backlog | EPIC 13 plateformes de jeu (Heroic + Prism + RetroArch + Itch) + EPIC 12 precision | `061-epic13-plateformes-jeu.adoc` | 7/10
 | 060 | 2026-05-01 | backlog + governance | EPIC 12 Vinegar + Sober (Roblox) ajout BACKLOG.adoc LAZY, audit contexte | `060-epic12-vinegar-sober-roblox.adoc` | 7/10
@@ -141,6 +141,8 @@ _Lecon Session 041_ : Apres extraction d'un tar avec `--strip-components`, le bi
 | 055 | 2026-04-30 | governance + audit + refactor | Gouvernance agent complete audit 50 points + application sur 5 projets | `055-gouvernance-audit-complet-5-projets.adoc` | 9/10
 | 054 | 2026-04-30 | fix + backlog | Fix checksums lazygit/just chroot + priorisation BACKLOG (traps EXIT + checksums) | (archive integree session 055) | 8/10
 | 053 | 2026-04-30 | fix + security + ci/cd + backlog | EPIC 11 P0.4-P0.7 fixes cumules (bug xh URL, just URL, checksums SHA256 chroot, trap EXIT build-inner.sh, cache-build CI/CD, BACKLOG mis a jour) | `053-epic11-p0.4-p0.7-fixes.adoc` | 8/10
+| 052 | 2026-04-30 | refactor + audit + governance | EPIC 11 Audit contexte agent — split encyclopedique (ESSENTIALS + encyclopedies/) | `052-epic11-audit-contexte-split.adoc` | 8/10
+| 051 | 2026-04-30 | refactor + docs | EPIC 11 Dockerfile convergence : ARG centralises synchronises avec versions.sh, uv pinne, doc AGENT.adoc | `051-epic11-dockerfile-convergence.adoc` | 7/10
 |===
 
 '''
@@ -192,7 +194,7 @@ _Lecon Session 041_ : Apres extraction d'un tar avec `--strip-components`, le bi
 '''
 
 _Note_ : Cet index est maintenu automatiquement par l'agent en fin de session.
-_Localisation active_ : Sessions >= 053. Sessions <= 052 dans `backup/Y2026-sessions-042-052/`
+_Localisation active_ : Sessions >= 051. Sessions <= 050 dans `backup/Y2026-sessions-048-050/INDEX.adoc`
 
 '''
 

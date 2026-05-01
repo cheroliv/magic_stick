@@ -1,0 +1,46 @@
+= Session 062 — EPIC 4 smoke tests CI/CD + EPIC 9 editeurs /opt/ TERMINE
+
+_Date_ : 2026-05-01
+_Type_ : feat + ci/cd + backlog
+_Sujet_ : Intégration isoTestSmoke dans CI/CD + finalisation EPIC 9 (VS Code update script + gh CLI)
+_Score_ : 8/10
+
+== Contexte
+
+Session 062 — Suite de la session 061. L'utilisateur demande d'attaquer les taches restantes sans cle USB.
+
+== Actions
+
+=== EPIC 4 — Smoke tests en CI/CD
+
+. Integration `./gradlew isoTestSmoke` dans `.github/workflows/build.yml` apres `isoTestSoftware`
+. Ajout `isoTestSmoke` dans les aggregate tasks Gradle (`isoTest` et `isoTestFull`)
+. BACKLOG : tache cochee [x]
+
+=== EPIC 9 — Editeurs /opt/
+
+. Constat : VS Code et gh CLI deja installes dans le hook chroot depuis les sessions precedentes
+. Creation `config/live-build/includes.chroot/usr/local/bin/vscode-update.sh` :
+  - Telecharge la derniere version stable VS Code
+  - Compare avec la version installee
+  - Backup timestamped dans `/opt/vscode-backup/`
+  - Remplace `/opt/VSCode-linux-x64/`
+  - Patch `product.json` (supprime checksums)
+  - Flag `--yes` pour mode non-interactif
+. Smoke test enrichi : `bash -n /usr/local/bin/vscode-update.sh`
+. `test-software.sh` : ajout `check_file "vscode-update" "/usr/local/bin/vscode-update.sh"`
+. BACKLOG : EPIC 9 passe a TERMINE, taches cochees [x]
+
+== Fichiers modifies
+
+| `.github/workflows/build.yml` | +step Smoke test (QEMU runtime) |
+| `build.gradle.kts` | isoTestSmoke dans isoTest + isoTestFull |
+| `BACKLOG.adoc` | EPIC 4 tache smoke [x], EPIC 9 → TERMINE |
+| `config/live-build/includes.chroot/usr/local/bin/vscode-update.sh` | cree |
+| `config/live-build/includes.chroot/usr/local/bin/smoke-test.sh` | +vscode-update syntax check |
+| `scripts/test-software.sh` | +check_file vscode-update.sh |
+
+== Taches restantes (sans cle USB)
+
+* EPIC 8 : CI/CD Docker Hub (`secrets.DOCKERHUB_TOKEN` ou pattern local), docker-compose.yml, test push local
+* EPIC 2/EPIC 7 : Auto-update doc site + release notes IA (priorite BASSE)

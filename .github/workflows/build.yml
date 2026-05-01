@@ -66,6 +66,9 @@ jobs:
       - name: Test software in ISO
         run: ./gradlew isoTestSoftware
 
+      - name: Smoke test (QEMU runtime)
+        run: ./gradlew isoTestSmoke
+
       - name: Test A/B partition setup
         # SKIP: Les runners GitHub Actions ne sont pas privileged (loop devices interdits).
         # Le test isoTestAB complet necessite un runner self-hosted avec Docker --privileged.

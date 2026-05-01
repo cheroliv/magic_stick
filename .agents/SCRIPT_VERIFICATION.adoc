@@ -1,6 +1,6 @@
 = Script Verification — Magic Stick
 
-_Derniere mise a jour_ : Session 059 (01 mai 2026) — EPIC 4 smoke tests QEMU + test-software.sh 23 binaires
+_Derniere mise a jour_ : Session 062 (01 mai 2026) — EPIC 4 smoke CI/CD + EPIC 9 vscode-update.sh
 '''
 
 == Scripts du Projet
@@ -19,8 +19,9 @@ _Derniere mise a jour_ : Session 059 (01 mai 2026) — EPIC 4 smoke tests QEMU +
 | scripts/update-system.sh | OK | OK | Partition A/B (setup-ab, update, status, verify, switch) + flag --yes + --dry-run + **`trap` démontage session 046** | Session 046
 | scripts/install-software.sh | OK | OK | Post-install live (docker, ollama, sdkman) | Session 006
 | launch-open-webui.sh | OK | OK | Launcher Docker Open-WebUI sur port 3333 | Session 033
-| scripts/test-software.sh | OK | OK | Verification logiciels dans ISO squashfs (23 binaires + 3 config + reproducibility 14 versions vs versions.sh) — **nmap/iperf3/wireshark/JDK/python3.14 fixes session 059** | Session 059
-| config/live-build/includes.chroot/usr/local/bin/smoke-test.sh | OK | OK | Smoke test QEMU fonctionnel (23 outils + docker-hello-world) — **session 059** | Session 059
+| scripts/test-software.sh | OK | OK | Verification logiciels dans ISO squashfs (24 binaires/configs + reproducibility 14 versions vs versions.sh + vscode-update.sh) | Session 062
+| config/live-build/includes.chroot/usr/local/bin/smoke-test.sh | OK | OK | Smoke test QEMU fonctionnel (23 outils + docker-hello-world + vscode-update syntax) | Session 062
+| config/live-build/includes.chroot/usr/local/bin/vscode-update.sh | OK | OK | Script mise a jour VS Code dans /opt/ (download, compare, backup, replace, patch product.json) | Session 062
 |===
 
 == Dockerfiles
@@ -52,7 +53,7 @@ _Derniere mise a jour_ : Session 059 (01 mai 2026) — EPIC 4 smoke tests QEMU +
 | isoTestVNC | Exec | Test boot QEMU+VNC+noVNC (GUI) | Session 018
 | isoTestAB | Exec | Test A/B partition setup sur loopback device | Session 018
 | isoTestSoftware | Exec | Verify logiciels dans ISO squashfs (22 binaires + 3 config) | Session 025
-| isoTestSmoke | Exec | Smoke test QEMU (boot ISO + 23 tools) | Session 059
+| isoTestSmoke | Exec | Smoke test QEMU (boot ISO + 24 tools) — **CI/CD session 062** | Session 062
 | isoTestFull | Default | Verify + boot + A/B partition | Session 018
 | isoTest | Default | Verify + Test boot | Session 007
 | isoPipeline | Default | Build + Verify + Test boot | Session 007

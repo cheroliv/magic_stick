@@ -1,0 +1,20 @@
+= Session 058 — EPIC 5 finalisation + audit BACKLOG
+
+**Date** : 2026-05-01
+**Type** : backlog + governance
+**Score** : 8/10
+
+== Résumé
+
+- Audit BACKLOG : recensement de toutes les tâches non cochées
+- EPIC 5 (Personnalisation XFCE) : tâche "Scripts de démarrage automatique" cochée [x] + statut passé à TERMINE
+- L'autostart est fonctionnel depuis session 048 (welcome script + zenity + .desktop + hook 070)
+- Planification EPIC 4 pour session 059
+
+== Fichiers modifiés
+
+- `BACKLOG.adoc` : EPIC 5 statut → TERMINE, tâche autostart cochée [x]
+
+== Plan Session 059 — EPIC 4 Validation live boot
+
+- Tester que chaque logiciel fonctionne dans le live boot (dernière tâche EPIC 4)

@@ -14,4 +14,9 @@ _Derniere mise a jour_ : 2026-05-01 (session 062)
 | 055 | 30 avril 2026 | governance + audit + refactor | Gouvernance agent complete audit 50 points (AGENT.adoc ~388, anti-patterns, audit 5 etapes, defense 3 couches, metaphore, backup) + application sur 5 projets | 9/10
 | 054 | 30 avril 2026 | fix + backlog | Fix checksums lazygit/just chroot + priorisation BACKLOG (traps EXIT + checksums [x]) | 8/10
 | 053 | 30 avril 2026 | fix + security + ci/cd + backlog | EPIC 11 P0.4-P0.7 fixes cumules (bug xh URL, just URL, checksums SHA256 chroot, trap EXIT build-inner.sh, cache-build CI/CD, BACKLOG mis a jour) | 8/10
+| 052 | 30 avril 2026 | refactor + audit + governance | EPIC 11 Audit contexte agent (AGENT_MODUS_OPERANDI 627 lignes -> split ESSENTIALS + encyclopedies/). AGENT.adoc mis a jour. | 8/10
+| 051 | 30 avril 2026 | refactor + docs | EPIC 11 Dockerfile convergence : ARG centralises, uv pinne, ARG dupliques retires, doc AGENT.adoc, label bump 0.1.12 | 7/10
+| 050 | 29 avril 2026 | refactor + security | EPIC 11 pinning versions chroot : versions.sh + arch.sh + refactor 060-install-chroot-software.chroot (0 /releases/latest, 8 blocs case factorises). Versions verifiees sur GitHub. CI/CD non lance. | 8/10
+| 049 | 29 avril 2026 | release + fix ci/cd | Release v0.1.13 VERT COMPLET (ISO + Docker Hub + SourceForge), fix checksums just + lazygit Dockerfile, EPIC 11 ajoute au BACKLOG (revue Copilot) | 8.5/10
+| 048 | 29 avril 2026 | feature + fix + ci/cd | EPIC 5 XFCE autostart (welcome script + .desktop + zenity), fix Docker Hub lazygit casse `Linux`->`linux`. ISO v0.1.12 vert complet | 8/10
 |===

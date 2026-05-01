@@ -92,7 +92,7 @@ __
 * [x] Installer zsh + oh-my-zsh / starship dans le chroot
 * [x] CI/CD test-software.sh : checks binaires squashfs pour tous les outils (nmap, iperf3, wireshark, JDK, python3.14 fixes session 059)
 * [x] Smoke tests QEMU : service systemd conditionnel smoke-test.service + mode --smoke dans test-boot.sh + task Gradle isoTestSmoke (session 059)
-* [ ] Valider les smoke tests en CI/CD (lancement `./gradlew isoTestSmoke` apres build)
+* [x] Valider les smoke tests en CI/CD (lancement `./gradlew isoTestSmoke` apres build)
 * [ ] Tester en live boot reel sur cle USB
 
 === EPIC 5 : Personnalisation XFCE
@@ -110,14 +110,14 @@ __
 
 === EPIC 9 : Editeurs de code (dans /opt/)
 
-**Statut** : A FAIRE
+**Statut** : TERMINE
 **Priorite** : MOYENNE
-**Contexte** : REVERSAL session 037 — le maintien d'IDE dans `/home/user/apps/` est une mauvaise idee sur cle bootable installable. Les editeurs retournent dans `/opt/` comme le reste de la stack systeme.
+**Contexte** : REVERSAL session 037 — le maintien d'IDE dans `/home/user/apps/` est une mauvaise idee sur cle bootable installable. Les editeurs retournent dans `/opt/` comme le reste de la stack systeme. EPIC termine session 062.
 
 ==== Taches
 
-* [ ] VS Code : installation tarball dans /opt/VSCode-linux-x64/ + script /usr/local/bin/vscode-update.sh (modele https://cheroliv.com/blog/2026/0103)
-* [ ] gh CLI : installation dans /opt/gh/ + symlink /usr/local/bin/gh
+* [x] VS Code : installation tarball dans /opt/VSCode-linux-x64/ + script /usr/local/bin/vscode-update.sh (modele https://cheroliv.com/blog/2026/0103)
+* [x] gh CLI : installation dans /opt/gh/ + symlink /usr/local/bin/gh
 
 === EPIC 6 : Script de mise a jour systeme A/B
 

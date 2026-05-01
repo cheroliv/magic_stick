@@ -1,0 +1,31 @@
+= Session 060 — EPIC 12 Vinegar + Sober (Roblox)
+
+_Date_ : 2026-05-01
+_Type_ : backlog + governance
+_Sujet_ : Ajout EPIC 12 Vinegar + Sober (Roblox) dans BACKLOG.adoc, correction placement LAZY, fin de session
+_Score_ : 7/10
+
+== Contexte
+
+Demande utilisateur : ajouter une EPIC basse priorite pour installer Vinegar (launcher Roblox) et Sober (runtime Roblox Android porte) dans le chroot Magic Stick, en s'inspirant de l'installation Flatpak sur la machine hote.
+
+== Investigation hote
+
+* **Vinegar** : Flatpak `org.vinegarhq.Vinegar` v1.9.3 — runtime GNOME Platform 49, depuis Flathub
+* **Sober** : Flatpak `org.vinegarhq.Sober` v1.6.7 — runtime GNOME Platform 50, depuis Flathub (refresh 2026-04-10)
+
+== Actions
+
+. Ajout EPIC 12 dans `BACKLOG.adoc` (LAZY)
+. Ajout EPIC 12 dans tableau AGENT.adoc puis retrait — BACKLOG.adoc est LAZY et deja adapte
+. Erreur agent : `git checkout` trop violent a efface l'EPIC 12, puis re-ajout
+
+== Fichiers modifies
+
+* `BACKLOG.adoc` : ajout EPIC 12
+
+== Lecons
+
+* BACKLOG.adoc est LAZY, adapte pour les EPICs non critiques
+* AGENT.adoc (EAGER) ne doit pas contenir d'EPICs a basse priorite
+* Ne pas melanger procedure de fin de session et brainstorm dans la meme sequence

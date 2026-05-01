@@ -67,6 +67,7 @@ smoke_version() {
     smoke_version "starship"        "starship"
     smoke_version "opencode"        "opencode"
     smoke_version "gh"              "gh"
+    smoke_test "vscode-update"      bash -n /usr/local/bin/vscode-update.sh
     smoke_test "jetbrains-toolbox"  /usr/local/bin/jetbrains-toolbox --version
 
     # Docker run test (needs daemon)

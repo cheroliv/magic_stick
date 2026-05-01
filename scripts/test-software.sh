@@ -159,6 +159,7 @@ check_binary "nmap" "/usr/bin/nmap"
 check_binary "iperf3" "/usr/bin/iperf3"
 check_binary "wireshark" "/usr/bin/wireshark" "/usr/bin/tshark"
 check_binary "code" "/usr/local/bin/code"
+check_file "vscode-update" "/usr/local/bin/vscode-update.sh"
 check_binary "gh" "/usr/local/bin/gh"
 
 echo ""
