@@ -392,7 +392,7 @@ if ! command -v lazygit > /dev/null 2>&1; then
         curl -fsSL "${LAZYGIT_URL}" -o "${LAZYGIT_TMP}/lazygit.tar.gz"
         curl -fsSL -o "${LAZYGIT_TMP}/checksums.txt" \
             "https://github.com/jesseduffield/lazygit/releases/download/${LAZYGIT_VERSION}/checksums.txt" \
-            && LAZYGIT_EXPECTED=$(grep "lazygit_${LAZYGIT_VERSION#v}_${LAZYGIT_ARCH}.tar.gz" "${LAZYGIT_TMP}/checksums.txt" | awk '{print $1}') \
+            && LAZYGIT_EXPECTED=$(grep -i "lazygit_${LAZYGIT_VERSION#v}_${LAZYGIT_ARCH}.tar.gz" "${LAZYGIT_TMP}/checksums.txt" | awk '{print $1}') \
             && LAZYGIT_ACTUAL=$(sha256sum "${LAZYGIT_TMP}/lazygit.tar.gz" | awk '{print $1}') \
             && [ "${LAZYGIT_EXPECTED}" = "${LAZYGIT_ACTUAL}" ] || \
             echo "WARNING: lazygit checksum verification failed" >&2
