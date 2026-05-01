@@ -245,11 +245,11 @@ __
 
 '''
 
-=== EPIC 12 : Vinegar + Sober (Roblox)
+=== EPIC 12 : Vinegar + Sober (Roblox Studio + Roblox Player)
 
 **Statut** : A FAIRE
 **Priorite** : BASSE
-**Contexte** : Installer Roblox dans le chroot via Vinegar (launcher Wine-based) et Sober (runtime Android porté). Demande utilisateur session 060. Installation Flatpak sur l'hote de reference.
+**Contexte** : Installer Roblox Studio et Roblox Player dans le chroot via Vinegar (launcher Wine-based pour Roblox Studio) et Sober (runtime Android porté pour Roblox Player). Demande utilisateur session 060. Installation Flatpak sur l'hote de reference.
 
 ==== Etat sur l'hote de reference
 
@@ -271,3 +271,28 @@ Deux options :
 * [ ] Creer des `.desktop` files pour le menu XFCE (Roblox Studio + Roblox Player)
 * [ ] Tester le lancement depuis le live boot (verifier que le GPU est accessible)
 * [ ] Verifier l'integration dans test-software.sh (checks binaires squashfs)
+
+'''
+
+=== EPIC 13 : Plateformes de jeu (Heroic, Prism Launcher, RetroArch, Itch.io)
+
+**Statut** : A FAIRE
+**Priorite** : BASSE
+**Contexte** : Ajouter des plateformes de jeu gaming dans le chroot pour enrichir le Magic Stick en tant que clé bootable gaming zero-install. Toutes disponibles en Flatpak.
+
+==== Plateformes envisagees
+
+* **Heroic Games Launcher** : Epic Games + GOG, open source, jeux gratuits hebdomadaires Epic Games — Flatpak `com.heroicgameslauncher.hgl`
+* **Prism Launcher** : Launcher Minecraft Java open source, le plus reconnu — Flatpak `org.prismlauncher.PrismLauncher`
+* **RetroArch** : Emulateur tout-en-un (NES, SNES, GameBoy, PS1, etc.) — Flatpak `org.libretro.RetroArch`
+* **Itch.io** : Plateforme jeux independants — Flatpak `io.itch.itch`
+
+==== Taches
+
+* [ ] Installer Heroic Games Launcher dans le chroot — Flatpak `com.heroicgameslauncher.hgl`
+* [ ] Installer Prism Launcher dans le chroot — Flatpak `org.prismlauncher.PrismLauncher`
+* [ ] Installer RetroArch dans le chroot — Flatpak `org.libretro.RetroArch`
+* [ ] Installer Itch.io dans le chroot — Flatpak `io.itch.itch`
+* [ ] Creer des `.desktop` files pour le menu XFCE (Heroic, Prism, RetroArch, Itch)
+* [ ] Tester le lancement depuis le live boot (GPU, controleurs)
+* [ ] Verifier l'integration dans test-software.sh

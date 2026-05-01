@@ -2,9 +2,9 @@
 
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
-_Derniere mise a jour_ : 2026-05-01 (session 060)
-_Session en cours_ : 061 — Audit contexte ou Éditeurs /opt/ ou EPIC 4 finition
-_Session terminee_ : 060 (EPIC 12 Vinegar + Sober Roblox ajout BACKLOG.adoc LAZY, audit contexte)
+_Derniere mise a jour_ : 2026-05-01 (session 061)
+_Session en cours_ : 062 — Audit contexte ou EPIC 4 finition ou EPIC 9
+_Session terminee_ : 061 (EPIC 13 plateformes de jeu + EPIC 12 precision Roblox Studio)
 _Session precedente_ : 059 (EPIC 4 validation live boot : test-software.sh +checks, httpie cleanup, statuts BACKLOG, smoke tests QEMU)
 _Session precedente_ : 058 (EPIC 5 finalise BACKLOG + planification EPIC 4)
 _Session precedente_ : 057 (EPIC 11 TERMINE : cache downloads CI/CD 3 strates + validation reproductibilite test-software.sh 14 outils)
@@ -130,6 +130,7 @@ _Lecon Session 041_ : Apres extraction d'un tar avec `--strip-components`, le bi
 
 |===
 | # | Date | Type | Sujet | Fichier | Score
+| 061 | 2026-05-01 | backlog | EPIC 13 plateformes de jeu (Heroic + Prism + RetroArch + Itch) + EPIC 12 precision | `061-epic13-plateformes-jeu.adoc` | 7/10
 | 060 | 2026-05-01 | backlog + governance | EPIC 12 Vinegar + Sober (Roblox) ajout BACKLOG.adoc LAZY, audit contexte | `060-epic12-vinegar-sober-roblox.adoc` | 7/10
 | 059 | 2026-05-01 | test + feat + backlog + governance | EPIC 4 validation live boot : test-software.sh +checks, httpie doc cleanup, statuts BACKLOG, smoke tests QEMU | `059-epic4-validation-live-boot.adoc` | 8/10
 | 058 | 2026-05-01 | backlog + governance | EPIC 5 finalise BACKLOG (autostart OK depuis session 048) + planification EPIC 4 | `058-epic5-finalisation-backlog.adoc` | 8/10
@@ -160,7 +161,8 @@ _Lecon Session 041_ : Apres extraction d'un tar avec `--strip-components`, le bi
 | EPIC 7 : Site de doc auto + IA release notes | 0% | -/10 | BASSE
 | EPIC 8 : Dockerisation CLI | 100% (Docker Hub + ISO v0.1.11 verts, versions verrouillées, checksums) | 8/10 | MOYENNE
 | EPIC 11 : Pinning + reproductibilite | 100% (TERMINE — pinning via versions.sh, 0 /releases/latest, arch.sh, traps EXIT, checksums, CACHE-BUILD 3 strates, test-software.sh reproducibility) | 8/10 | HAUTE
-| EPIC 12 : Vinegar + Sober (Roblox) | 0% | -/10 | BASSE
+| EPIC 12 : Vinegar + Sober (Roblox Studio + Player) | 0% | -/10 | BASSE
+| EPIC 13 : Plateformes jeu (Heroic, Prism, RetroArch, Itch) | 0% | -/10 | BASSE
 |===
 
 '''
@@ -200,7 +202,7 @@ Projets gerant la meme methodologie opencode (EAGER/LAZY, procedure de fin de se
 
 |===
 | Projet | Repertoire | Session en cours | Etape 5 specifique | Derniere mise a jour
-| magic_stick | `~/workspace/__repositories__/magic_stick` | 060 | SCRIPT_VERIFICATION.adoc | 2026-05-01
+| magic_stick | `~/workspace/__repositories__/magic_stick` | 061 | SCRIPT_VERIFICATION.adoc | 2026-05-01
 | bakery-gradle | `~/workspace/__repositories__/bakery-gradle/bakery-plugin` | 5 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-23
 | cheroliv.com | `~/workspace/__repositories__/cheroliv.com` | 4 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-25
 | plantuml-gradle | `~/workspace/__repositories__/plantuml-gradle/plantuml-plugin` | 132 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-23

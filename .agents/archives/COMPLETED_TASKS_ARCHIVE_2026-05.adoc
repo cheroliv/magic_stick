@@ -1,5 +1,16 @@
 = Archive des Taches Terminee — Mai 2026
 
+== Session 061 — EPIC 13 Plateformes jeu + EPIC 12 precision Roblox Studio
+
+**Date** : 01 mai 2026
+**Type** : backlog
+**Score** : 7/10
+
+=== Taches
+
+* [OK] EPIC 13 : Heroic + Prism + RetroArch + Itch en Flatpak dans BACKLOG.adoc
+* [OK] EPIC 12 : titre + contexte clarifies Roblox Studio + Roblox Player
+
 == Session 060 — EPIC 12 Vinegar + Sober (Roblox)
 
 **Date** : 01 mai 2026

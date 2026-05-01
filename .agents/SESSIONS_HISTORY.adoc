@@ -1,10 +1,10 @@
 = Historique des Sessions — Magic Stick
 
-_Derniere mise a jour_ : 2026-05-01 (session 060)
-_Sessions anterieures_ : Voir `backup/Y2026-sessions-046-055/SESSIONS_HISTORY.adoc`
+_Derniere mise a jour_ : 2026-05-01 (session 061)
 
 |===
 | # | Date | Type | Sujet | Score
+| 061 | 01 mai 2026 | backlog | EPIC 13 plateformes de jeu (Heroic, Prism, RetroArch, Itch) + EPIC 12 precision Roblox Studio | 7/10
 | 060 | 01 mai 2026 | backlog + governance | EPIC 12 Vinegar + Sober (Roblox) ajout dans BACKLOG.adoc (LAZY), audit contexte | 7/10
 | 059 | 01 mai 2026 | test + feat + backlog + governance | EPIC 4 validation live boot : test-software.sh (nmap/iperf3/wireshark/JDK/python3.14), httpie doc cleanup, statuts BACKLOG (EPICs 3/6/8/11 → TERMINE), smoke tests QEMU (smoke-test.sh + systemd + --smoke mode + Gradle) | 8/10
 | 058 | 01 mai 2026 | backlog + governance | EPIC 5 finalise BACKLOG (autostart OK depuis session 048) + planification EPIC 4 pour session 059 | 8/10
