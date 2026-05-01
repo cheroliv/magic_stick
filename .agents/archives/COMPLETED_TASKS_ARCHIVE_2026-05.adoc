@@ -1,5 +1,25 @@
 = Archive des Taches Terminee — Mai 2026
 
+== Session 058 — EPIC 5 finalisation BACKLOG + planification EPIC 4
+
+**Date** : 01 mai 2026
+**Type** : backlog + governance
+**Score** : 8/10
+
+=== Contexte
+Audit BACKLOG : recensement complet des taches non cochees. EPIC 5 marque "A FAIRE" mais autostart implemente depuis session 048.
+
+=== Taches
+* [OK] **BACKLOG audite** : toutes les taches non cochees recensees (EPIC 2/4/7/8/9/10)
+* [OK] **EPIC 5 finalise** : tache "Scripts de demarrage automatique" cochee [x] + statut passe a TERMINE. L'autostart est fonctionnel depuis session 048 (welcome script + zenity + .desktop + hook 070)
+* [OK] **Statuts INDEX.adoc mis a jour** : EPIC 3, 6, 11 passes a 100%
+
+=== Fichiers
+| `BACKLOG.adoc` | EPIC 5 statut → TERMINE, tache autostart cochee |
+
+=== Planification
+Session 059 : EPIC 4 — Tester chaque logiciel dans le live boot.
+
 == Session 057 — EPIC 11 TERMINE : Cache Build + Validation Reproducibilite
 
 **Date** : 01 mai 2026

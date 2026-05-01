@@ -1,10 +1,11 @@
 = Historique des Sessions — Magic Stick
 
-_Derniere mise a jour_ : 2026-05-01 (session 057)
+_Derniere mise a jour_ : 2026-05-01 (session 058)
 _Sessions anterieures_ : Voir `backup/Y2026-sessions-046-055/SESSIONS_HISTORY.adoc`
 
 |===
 | # | Date | Type | Sujet | Score
+| 058 | 01 mai 2026 | backlog + governance | EPIC 5 finalise BACKLOG (autostart OK depuis session 048) + planification EPIC 4 pour session 059 | 8/10
 | 057 | 01 mai 2026 | feat + ci/cd | EPIC 11 TERMINE : cache downloads CI/CD 3 strates + validation reproductibilite test-software.sh (14 outils) | 8/10
 | 056 | 01 mai 2026 | fix + ci/cd | EPIC 11 fix checksums lazygit casse Linux_x86_64 vs linux_x86_64 — grep -i. CI/CD VERT 0 warning | 8/10
 | 055 | 30 avril 2026 | governance + audit + refactor | Gouvernance agent complete audit 50 points (AGENT.adoc ~388, anti-patterns, audit 5 etapes, defense 3 couches, metaphore, backup) + application sur 5 projets | 9/10

@@ -1,34 +1,41 @@
-= Prompt de reprise — Session 058
+= Prompt de reprise — Session 059
 
 __
-**EPIC** : EPIC 2 (test boot hardware) + EPIC 4 (validation live boot)
-**Statut** : Session 057 terminee — EPIC 11 TERMINE (cache CI/CD + reproductibilite OK)
+**EPIC** : EPIC 4 — Validation live boot logiciels
+**Statut** : Session 058 terminee — EPIC 5 TERMINE (backlog a jour), planification EPIC 4
 __
 
 '''
 
-== Session 057 — Resume
+== Session 058 — Resume
 
-- EPIC 11 termine a 100%
-- Cache-BUILD 3 strates : GitHub Actions cache `build/cache/`, Docker builder layers (type=gha), cache downloads `build/cache/downloads/` (dl_cached dans hook chroot)
-- Reproducibilite : section dediee dans `test-software.sh` verifie 14 binaires vs `versions.sh`
-- Commit ca1bed6 push
+- Audit BACKLOG : recensement toutes taches non cochees
+- EPIC 5 finalise : autostart etait deja implemente (session 048), case cochee + statut TERMINE dans BACKLOG.adoc
+- Decision : EPIC 4 pour session 059
 
-== Plan Session 058 — Priorites
+== Plan Session 059 — Priorites
 
-=== 1. EPIC 2 — Test boot hardware (si cle flashee)
+=== 1. EPIC 4 — Tester chaque logiciel dans le live boot
 
-* [ ] Tester boot BIOS sur cle USB reelle
-* [ ] Tester boot UEFI sur cle USB reelle
+Il reste UNE tache dans EPIC 4 :
 
-=== 2. EPIC 4 — Validation live boot logiciels
+* [ ] Tester que chaque logiciel fonctionne dans le live boot
 
-* [ ] Tester que chaque logiciel fonctionne dans le live boot reel
+Logiciels a valider :
+- Docker, Podman, Ollama, NVM, pnpm, Python 3.14.4, uv
+- SDKMAN + JDK 25 Temurin, nmap, iperf3, wireshark
+- ripgrep, fd, fzf, lazygit, xh, httpie, just
+- Flatpak, JetBrains Toolbox, zsh + oh-my-zsh/starship
 
-=== 3. EPIC 9 — Editeurs /opt/ (si VS Code/gh manquent)
+**Approche** : Identifier ce qui est deja teste en CI/CD (test-software.sh), voir ce qui manque pour une validation "live boot" complete. Si les tests CI/CD couvrent deja la verification des binaires dans le squashfs, la tache "live boot" est deja satisfaite.
 
-* [ ] VS Code : script vscode-update.sh
-* [ ] Confirmer gh CLI fonctionnel
+=== 2. Backlog — Nettoyage des statuts
+
+Plusieurs EPIC sont termines mais marques "A FAIRE" ou "EN COURS" :
+- EPIC 3 (Partition A/B) : tout coche, statut a mettre a TERMINE
+- EPIC 6 (update-system) : tout coche, statut a mettre a TERMINE
+- EPIC 8 (Dockerisation CLI) : partiellement coche, statut a auditer
+- EPIC 11 (Pinning) : tout coche, statut a mettre a TERMINE
 
 == Regles
 

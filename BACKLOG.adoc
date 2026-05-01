@@ -94,7 +94,7 @@ __
 
 === EPIC 5 : Personnalisation XFCE
 
-**Statut** : A FAIRE
+**Statut** : TERMINE
 **Priorite** : BASSE (session 017 : cosmetique, repriorise)
 
 ==== Taches
@@ -102,7 +102,7 @@ __
 * [x] Theme et fond d'ecran custom
 * [x] Raccourcis clavier standardises
 * [x] Panel XFCE preconfigure
-* [ ] Scripts de demarrage automatique
+* [x] Scripts de demarrage automatique
 * [x] Menu Applications personnalise
 
 === EPIC 9 : Editeurs de code (dans /opt/)
