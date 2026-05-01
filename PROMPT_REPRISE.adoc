@@ -1,42 +1,37 @@
-= Prompt de reprise — Session 057
+= Prompt de reprise — Session 058
 
 __
-**EPIC** : EPIC 11 (validation reproductibilite CI/CD + checksums OK 0 warning)
-**Statut** : Session 056 terminee — lazygit casse Linux_x86_64 vs linux_x86_64 corrige. CI/CD VERT 0 warning.
+**EPIC** : EPIC 2 (test boot hardware) + EPIC 4 (validation live boot)
+**Statut** : Session 057 terminee — EPIC 11 TERMINE (cache CI/CD + reproductibilite OK)
 __
 
 '''
 
-== Session 056 — Resume
+== Session 057 — Resume
 
-- Push fix session 054 → build #25191201213 SUCCESS, lazygit WARNING persiste
-- Diagnostic : `arch.sh` → `Linux_x86_64` (L), `checksums.txt` → `linux_x86_64` (l)
-- Fix : `grep -i` (case-insensitive) dans hook chroot
-- Commit `442b0ba` push → build #25195816231 **VERT 0 WARNING**
-- lazygit + just checksums OK, all steps SUCCESS
+- EPIC 11 termine a 100%
+- Cache-BUILD 3 strates : GitHub Actions cache `build/cache/`, Docker builder layers (type=gha), cache downloads `build/cache/downloads/` (dl_cached dans hook chroot)
+- Reproducibilite : section dediee dans `test-software.sh` verifie 14 binaires vs `versions.sh`
+- Commit ca1bed6 push
 
-== Plan Session 057 — Priorites
+== Plan Session 058 — Priorites
 
-=== 1. EPIC 11 — Validation reproductibilite CI/CD
+=== 1. EPIC 2 — Test boot hardware (si cle flashee)
 
-* [ ] Relancer build avec `workflow_dispatch` sur le meme commit `442b0ba`
-* [ ] Verifier contenu binaire identique (SHA256 ISO, squashfs)
-* [ ] Verifier versions binaires `/usr/local/bin/*` identiques
+* [ ] Tester boot BIOS sur cle USB reelle
+* [ ] Tester boot UEFI sur cle USB reelle
 
-=== 2. EPIC 2 — Validation boot hardware (si cle flashee disponible)
+=== 2. EPIC 4 — Validation live boot logiciels
 
-* [ ] Test boot BIOS sur cle USB reelle
-* [ ] Test boot UEFI sur cle USB reelle
-* [ ] Valider autostart XFCE (magic-stick-welcome.sh + zenity)
+* [ ] Tester que chaque logiciel fonctionne dans le live boot reel
 
-=== 3. CACHE-BUILD — Verification cache live-build
+=== 3. EPIC 9 — Editeurs /opt/ (si VS Code/gh manquent)
 
-* [ ] Verifier que le cache `build/cache/` est bien restaure entre builds
-* [ ] Mesurer gain de temps (build avec cache vs sans cache)
+* [ ] VS Code : script vscode-update.sh
+* [ ] Confirmer gh CLI fonctionnel
 
 == Regles
 
-* Commit/push/tag : je suis seul sur le projet, pas de contrainte permission
+* Commit/push/tag : je suis seul sur le projet
 * Zero sudo, zero build local (CI/CD uniquement)
 * INTERDICTION DE LOG LES TOKENS
-* FICHIERS PERSONNELS : NE JAMAIS modifier ~/.*

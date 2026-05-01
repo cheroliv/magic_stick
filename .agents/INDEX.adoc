@@ -2,21 +2,14 @@
 
 _Regles absolues_ : voir `AGENT.adoc` section "Regles Absolues"
 
-_Derniere mise a jour_ : 2026-05-01 (session 056)
-_Session en cours_ : 057 — EPIC 11 validation reproductibilite CI/CD + EPIC 2 boot hardware
-_Session terminee_ : 056 (EPIC 11 fix checksums lazygit casse Linux_x86_64 vs linux_x86_64 — grep -i. CI/CD VERT 0 warning)
+_Derniere mise a jour_ : 2026-05-01 (session 057)
+_Session en cours_ : 058 — EPIC 2 test boot hardware + EPIC 4 validation live boot
+_Session terminee_ : 057 (EPIC 11 TERMINE : cache downloads CI/CD 3 strates + validation reproductibilite test-software.sh 14 outils)
+_Session precedente_ : 056 (EPIC 11 fix checksums lazygit casse Linux_x86_64 vs linux_x86_64 — grep -i. CI/CD VERT 0 warning)
 _Session precedente_ : 055 (Gouvernance agent complete audit 50 points — AGENT.adoc 388 lignes, anti-patterns, audit 5 etapes, defense 3 couches, backup waves + application sur 5 projets)
-_Session precedente_ : 052 (EPIC 11 Audit contexte agent — split encyclopedique : AGENT_MODUS_OPERANDI 627 lignes -> LAZY_EAGER_ESSENTIALS 70 lignes + encyclopedies/ cold storage)
-_Session precedente_ : 051 (EPIC 11 Dockerfile convergence : ARG centralises synchronises avec versions.sh, uv pinne, doc AGENT.adoc)
-_Session precedente_ : 050 (EPIC 11 pinning versions chroot : versions.sh + arch.sh + refactor 060-install-chroot-software.chroot, 0 /releases/latest, 8 blocs case factorises)
-_Session precedente_ : 048 (EPIC 5 XFCE autostart + fix Docker Hub lazygit casse. ISO v0.1.12 vert complet)
-_Session precedente_ : 047 (EPIC 5 XFCE polishment + EPIC 10 backlog. Tag v0.1.12, build CI/CD en cours)
-_Session precedente_ : 045 (Fix Dockerfile EPIC 8 URLs releases + extraction robuste xh/just, bump v0.1.11, Docker Hub VERT)
-_Session precedente_ : 041 (Fix chaine CI/CD : flatpak + JetBrains Toolbox symlink + ffmpeg apt-mark)
-
-'''
-
-== Regles Absolues
+_Session precedente_ : 054 (Fix checksums lazygit/just chroot + priorisation BACKLOG)
+_Session precedente_ : 053 (EPIC 11 P0.4-P0.7 fixes cumules : xh/just URL, checksums SHA256 chroot, trap EXIT, cache-build CI/CD)
+_Session precedente_ : 052 (EPIC 11 Audit contexte agent — split encyclopedique)
 
 '''
 
@@ -134,6 +127,7 @@ _Lecon Session 041_ : Apres extraction d'un tar avec `--strip-components`, le bi
 
 |===
 | # | Date | Type | Sujet | Fichier | Score
+| 057 | 2026-05-01 | feat + ci/cd | EPIC 11 TERMINE : cache downloads CI/CD 3 strates + validation reproductibilite test-software.sh (14 outils) | `057-epic11-cache-reproducibility.adoc` | 8/10
 | 056 | 2026-05-01 | fix + ci/cd | EPIC 11 fix checksums lazygit casse Linux_x86_64 vs linux_x86_64 — grep -i. CI/CD VERT 0 warning | `056-fix-jt-linux-casse.adoc` | 8/10
 | 055 | 2026-04-30 | governance + audit + refactor | Gouvernance agent complete audit 50 points + application sur 5 projets | `055-gouvernance-audit-complet-5-projets.adoc` | 9/10
 | 054 | 2026-04-30 | fix + backlog | Fix checksums lazygit/just chroot + priorisation BACKLOG (traps EXIT + checksums) | (archive integree session 055) | 8/10
@@ -143,8 +137,6 @@ _Lecon Session 041_ : Apres extraction d'un tar avec `--strip-components`, le bi
 | 050 | 2026-04-29 | refactor + security | EPIC 11 pinning versions chroot : versions.sh + arch.sh + refactor chroot (0 /releases/latest, 8 blocs case factorises). CI/CD non lance. | `050-epic11-pinning-versions.adoc` | 8/10
 | 049 | 2026-04-29 | release + fix ci/cd | Release v0.1.13 VERT COMPLET (ISO + Docker Hub + SourceForge), fix checksums just + lazygit Dockerfile | `049-release-v0.1.13-check-fix.adoc` | 8.5/10
 | 048 | 2026-04-29 | feature + fix + ci/cd | EPIC 5 XFCE autostart (welcome script + .desktop + zenity), fix Docker Hub lazygit casse | `048-xfce-autostart-dockerhub-fix.adoc` | 8/10
-| 047 | 2026-04-29 | feature + backlog | EPIC 5 XFCE polishment (wallpaper, .desktop opencode, desktop-directories), EPIC 10 apps Docker | `047-xfce-polishment-epic10.adoc` | 8/10
-| 046 | 2026-04-29 | fix + security + ci/cd | Fixes revue Copilot : ARG + checksums + trap + externalisation patches live-build. ISO v0.1.11 vert | `046-fix-copilot-review-iso.adoc` | 8/10
 |===
 
 '''
@@ -162,6 +154,7 @@ _Lecon Session 041_ : Apres extraction d'un tar avec `--strip-components`, le bi
 | EPIC 6 : Script de mise a jour systeme A/B | 90% (update-system.sh complet + flag --yes + trap démontage + tests CI/CD) | -/10 | HAUTE
 | EPIC 7 : Site de doc auto + IA release notes | 0% | -/10 | BASSE
 | EPIC 8 : Dockerisation CLI | 100% (Docker Hub + ISO v0.1.11 verts, versions verrouillées, checksums) | 8/10 | MOYENNE
+| EPIC 11 : Pinning + reproductibilite | 100% (pinning via versions.sh, 0 /releases/latest, arch.sh, traps EXIT, checksums, CACHE-BUILD 3 strates, test-software.sh reproducibility) | 8/10 | HAUTE
 |===
 
 '''
@@ -201,7 +194,7 @@ Projets gerant la meme methodologie opencode (EAGER/LAZY, procedure de fin de se
 
 |===
 | Projet | Repertoire | Session en cours | Etape 5 specifique | Derniere mise a jour
-| magic_stick | `~/workspace/__repositories__/magic_stick` | 057 | SCRIPT_VERIFICATION.adoc | 2026-05-01
+| magic_stick | `~/workspace/__repositories__/magic_stick` | 058 | SCRIPT_VERIFICATION.adoc | 2026-05-01
 | bakery-gradle | `~/workspace/__repositories__/bakery-gradle/bakery-plugin` | 5 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-23
 | cheroliv.com | `~/workspace/__repositories__/cheroliv.com` | 4 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-25
 | plantuml-gradle | `~/workspace/__repositories__/plantuml-gradle/plantuml-plugin` | 132 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-23

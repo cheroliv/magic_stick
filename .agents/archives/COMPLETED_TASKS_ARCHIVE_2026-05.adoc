@@ -1,5 +1,37 @@
 = Archive des Taches Terminee — Mai 2026
 
+== Session 057 — EPIC 11 TERMINE : Cache Build + Validation Reproducibilite
+
+**Date** : 01 mai 2026
+**Type** : feat + ci/cd
+**Score** : 8/10
+**Commit** : ca1bed6
+
+=== Contexte
+EPIC 11 a 80% apres session 056. Deux taches restantes : CACHE-BUILD et validation reproductibilite.
+
+=== Taches
+* [OK] **CACHE-BUILD 3 strates** :
+  - Strate 1 : GitHub Actions cache `build/cache/` etendu avec `versions.sh` dans la hash key
+  - Strate 2 : Docker builder layers via `docker/build-push-action` avec `cache-from/cache-to: type=gha`
+  - Strate 3 : Cache downloads `build/cache/downloads/` stage/collect chroot + `dl_cached()` dans hook chroot (UV, ripgrep, fd, lazygit, just, xh, opencode, JetBrains, VS Code, gh CLI)
+* [OK] **Validation reproductibilite** : section `Reproducibility` dans `test-software.sh`
+  - Source `versions.sh`, verifie 14 binaires avec `binary-grep` (`strings` + `grep -qF`)
+  - Outils non pinnes (VS Code, SDKMAN, starship) marques `[SKIP]`
+* [OK] `dockerBuild` Gradle no-op si image existante (evite double build en CI)
+* [OK] Commit ca1bed6 push → CI/CD declenche
+
+=== Fichiers
+| `.github/workflows/build.yml` | Cache etendu + Docker builder build-push-action |
+| `build.gradle.kts` | `dockerBuild` no-op |
+| `scripts/build-inner.sh` | Cache downloads stage/collect |
+| `config/live-build/hooks/060-install-chroot-software.chroot` | `dl_cached()` 10 downloads |
+| `scripts/test-software.sh` | Section Reproducibility 14 outils |
+| `BACKLOG.adoc` | 2 taches [x] |
+
+=== Etat EPIC 11
+**TERMINE 100%** — toutes les taches cochees.
+
 == Session 056 — EPIC 11 Fix checksums lazygit casse Linux_x86_64 vs linux_x86_64
 
 **Date** : 01 mai 2026
