@@ -105,6 +105,17 @@ tasks.register<org.gradle.api.tasks.Exec>("isoVerify") {
         "/magic_stick/scripts/verify.sh", "/magic_stick/build/$isoName")
 }
 
+tasks.register<org.gradle.api.tasks.Exec>("isoTestSmoke") {
+    group = "iso"
+    description = "Smoke test: boot ISO in QEMU with smoke_test=true and verify all tools run"
+    dependsOn("dockerBuild")
+    commandLine("docker", "run", "--rm", "--privileged",
+        "-v", "$projDir:/magic_stick",
+        dockerImage,
+        "/magic_stick/scripts/test-boot.sh", "--smoke",
+        "/magic_stick/build/$isoName", "300")
+}
+
 tasks.register<org.gradle.api.tasks.Exec>("isoTestBoot") {
     group = "iso"
     description = "Test ISO boot in QEMU (BIOS + UEFI) inside Docker"

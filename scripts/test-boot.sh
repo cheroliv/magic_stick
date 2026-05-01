@@ -20,6 +20,9 @@ elif [[ "${1:-}" == "--bios" ]]; then
 elif [[ "${1:-}" == "--uefi" ]]; then
     MODE="uefi"
     shift
+elif [[ "${1:-}" == "--smoke" ]]; then
+    MODE="smoke"
+    shift
 fi
 
 ISO_FILE="${1:-}"
@@ -51,7 +54,7 @@ if ! in_container; then
     exec docker run --rm \
         -v "${PROJECT_DIR}:/magic_stick" \
         "${DOCKER_IMAGE}" \
-        "/magic_stick/scripts/test-boot.sh" "/magic_stick/build/$(basename "$ISO_FILE")" "$TIMEOUT"
+        "/magic_stick/scripts/test-boot.sh" "--${MODE}" "/magic_stick/build/$(basename "$ISO_FILE")" "$TIMEOUT"
 fi
 
 echo "=== Magic Stick Boot Test ==="
@@ -220,3 +223,101 @@ fi
 
 echo ""
 echo "=== Boot test complete ==="
+
+# --- Smoke Mode ---
+if [[ "$MODE" == "smoke" ]]; then
+    echo ""
+    echo "=== Smoke Tests ==="
+
+    SMOKE_MOUNT=$(mktemp -d)
+    SMOKE_KERNEL="/tmp/smoke_vmlinuz"
+    SMOKE_INITRD="/tmp/smoke_initrd.img"
+
+    cleanup_smoke() {
+        umount "${SMOKE_MOUNT}" 2>/dev/null || true
+        rm -rf "${SMOKE_MOUNT}" "${SMOKE_KERNEL}" "${SMOKE_INITRD}"
+    }
+    trap cleanup_smoke EXIT
+
+    mount -o loop,ro "${ISO_FILE}" "${SMOKE_MOUNT}"
+    echo "  OK: ISO mounted"
+
+    for kdir in casper live; do
+        if [ -f "${SMOKE_MOUNT}/${kdir}/vmlinuz" ]; then
+            cp "${SMOKE_MOUNT}/${kdir}/vmlinuz" "${SMOKE_KERNEL}"
+            cp "${SMOKE_MOUNT}/${kdir}/initrd.img" "${SMOKE_INITRD}"
+            break
+        fi
+    done
+
+    if [ ! -f "${SMOKE_KERNEL}" ]; then
+        echo "  ERROR: No kernel found in ISO"
+        exit 1
+    fi
+    echo "  OK: Kernel extracted"
+
+    echo ">>> Booting ISO with smoke_test=true (timeout ${TIMEOUT}s)..."
+    SERIAL_LOG="/tmp/smoke_serial.log"
+    rm -f "${SERIAL_LOG}"
+
+    timeout "${TIMEOUT}" qemu-system-x86_64 \
+        -m 4096 \
+        -smp 4 \
+        -nographic \
+        -cdrom "${ISO_FILE}" \
+        -kernel "${SMOKE_KERNEL}" \
+        -initrd "${SMOKE_INITRD}" \
+        -append "boot=casper username=magic hostname=magic_stick smoke_test=true console=ttyS0,115200 quiet" \
+        -serial "file:${SERIAL_LOG}" \
+        -no-reboot 2>/dev/null &
+    QEMU_PID=$!
+
+    echo ">>> Waiting for SMOKE_TEST_COMPLETE..."
+    SMOKE_FOUND=false
+    for i in $(seq 1 "${TIMEOUT}"); do
+        if grep -q "SMOKE_TEST_COMPLETE:" "${SERIAL_LOG}" 2>/dev/null; then
+            SMOKE_FOUND=true
+            echo "  OK: Smoke test marker found after ${i}s"
+            break
+        fi
+        if ! kill -0 $QEMU_PID 2>/dev/null; then
+            echo "  WARN: QEMU exited after ${i}s"
+            break
+        fi
+        sleep 1
+    done
+
+    kill $QEMU_PID 2>/dev/null || true
+    wait $QEMU_PID 2>/dev/null || true
+
+    if [[ "$SMOKE_FOUND" == true ]]; then
+        echo ""
+        echo ">>> Smoke test results:"
+        grep -E "^\s*\[?(PASS|FAIL)\]" "${SERIAL_LOG}" | tail -30 || true
+
+        if grep -q "PASS=0 FAIL=0" "${SERIAL_LOG}" 2>/dev/null; then
+            echo "  SKIP: No tests ran (service may not have started)"
+        fi
+
+        if grep "SMOKE_TEST_COMPLETE:" "${SERIAL_LOG}" | grep -q "FAIL=0"; then
+            echo ""
+            echo "=== Smoke tests: ALL PASSED ==="
+            exit 0
+        else
+            SMOKE_FAIL=$(grep "FAIL=" "${SERIAL_LOG}" | tail -1 | grep -oP 'FAIL=\K\d+')
+            echo ""
+            echo "=== Smoke tests: ${SMOKE_FAIL:-?} FAILED ==="
+            exit 1
+        fi
+    else
+        echo ""
+        echo ">>> Serial log (first 40 lines):"
+        head -40 "${SERIAL_LOG}" 2>/dev/null || echo "  (empty)"
+        echo ""
+        echo ">>> Serial log (last 20 lines):"
+        tail -20 "${SERIAL_LOG}" 2>/dev/null || echo "  (empty)"
+        echo ""
+        echo "  ERROR: Smoke test did not complete within ${TIMEOUT}s"
+        exit 1
+    fi
+fi

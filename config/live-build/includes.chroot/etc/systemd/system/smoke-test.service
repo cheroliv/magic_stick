@@ -1,0 +1,15 @@
+[Unit]
+Description=Magic Stick Smoke Test (conditional on kernel cmdline smoke_test=true)
+After=multi-user.target getty.target
+ConditionKernelCommandLine=smoke_test=true
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/smoke-test.sh
+StandardOutput=journal+console
+StandardError=journal+console
+RemainAfterExit=yes
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target

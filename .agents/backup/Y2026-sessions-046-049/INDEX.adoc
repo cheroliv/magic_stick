@@ -188,7 +188,7 @@ _Lecon Session 041_ : Apres extraction d'un tar avec `--strip-components`, le bi
 '''
 
 _Note_ : Cet index est maintenu automatiquement par l'agent en fin de session.
-_Localisation active_ : Sessions >= 050. Sessions 046-049 dans `backup/Y2026-sessions-046-049/INDEX.adoc`
+_Localisation active_ : Sessions >= 046. Sessions 044-045 dans `backup/Y2026-sessions-046-055/INDEX.adoc`
 
 '''
 

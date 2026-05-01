@@ -1,41 +1,39 @@
-= Prompt de reprise — Session 059
+= Prompt de reprise — Session 060
 
 __
-**EPIC** : EPIC 4 — Validation live boot logiciels
-**Statut** : Session 058 terminee — EPIC 5 TERMINE (backlog a jour), planification EPIC 4
+**EPIC** : Au choix — EPIC 4 finition ou EPIC 9 editeurs
+**Statut** : Session 059 terminee — EPIC 4 avance a ~97%
 __
 
 '''
 
-== Session 058 — Resume
+== Session 059 — Resume
 
-- Audit BACKLOG : recensement toutes taches non cochees
-- EPIC 5 finalise : autostart etait deja implemente (session 048), case cochee + statut TERMINE dans BACKLOG.adoc
-- Decision : EPIC 4 pour session 059
+- test-software.sh : +checks nmap, iperf3, wireshark, java (JDK), python3.14
+- httpie : nettoie de tous les docs ISO (retire de l'ISO session 039)
+- Statuts BACKLOG : EPICs 3, 6, 8, 11 → TERMINE. EPIC 4 → EN COURS
+- Smoke tests QEMU : script smoke-test.sh + service systemd conditionnel + mode --smoke test-boot.sh + task Gradle isoTestSmoke
 
-== Plan Session 059 — Priorites
+== Plan Session 060 — Priorites
 
-=== 1. EPIC 4 — Tester chaque logiciel dans le live boot
+=== Option A : EPIC 4 finition (reste 2 taches)
 
-Il reste UNE tache dans EPIC 4 :
+* [ ] Lancer smoke tests en CI/CD : ajouter `./gradlew isoTestSmoke` dans build.yml
+* [ ] Tester en live boot reel sur cle USB (build ISO, flash, boot)
 
-* [ ] Tester que chaque logiciel fonctionne dans le live boot
+=== Option B : EPIC 9 — Editeurs de code /opt/
 
-Logiciels a valider :
-- Docker, Podman, Ollama, NVM, pnpm, Python 3.14.4, uv
-- SDKMAN + JDK 25 Temurin, nmap, iperf3, wireshark
-- ripgrep, fd, fzf, lazygit, xh, httpie, just
-- Flatpak, JetBrains Toolbox, zsh + oh-my-zsh/starship
+Statut : A FAIRE. Taches :
+* [ ] VS Code : installation tarball dans /opt/VSCode-linux-x64/ + script update
+* [ ] gh CLI : installation dans /opt/gh/ + symlink /usr/local/bin/gh
 
-**Approche** : Identifier ce qui est deja teste en CI/CD (test-software.sh), voir ce qui manque pour une validation "live boot" complete. Si les tests CI/CD couvrent deja la verification des binaires dans le squashfs, la tache "live boot" est deja satisfaite.
+Note : gh CLI est deja installe dans le chroot (session 038). A verifier si le path est deja /opt/gh/.
 
-=== 2. Backlog — Nettoyage des statuts
+=== Option C : Autre EPIC (voir BACKLOG.adoc)
 
-Plusieurs EPIC sont termines mais marques "A FAIRE" ou "EN COURS" :
-- EPIC 3 (Partition A/B) : tout coche, statut a mettre a TERMINE
-- EPIC 6 (update-system) : tout coche, statut a mettre a TERMINE
-- EPIC 8 (Dockerisation CLI) : partiellement coche, statut a auditer
-- EPIC 11 (Pinning) : tout coche, statut a mettre a TERMINE
+- EPIC 2 : terminaux BIOS/UEFI sur cle reelle
+- EPIC 7 : site doc auto + IA release notes
+- EPIC 10 : Apps Docker
 
 == Regles
 

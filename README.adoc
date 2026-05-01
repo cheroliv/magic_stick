@@ -98,7 +98,7 @@ Magic Stick uses an **A/B partition system** with persistence:
 | lazygit
 
 | HTTP/REST
-| xh, httpie
+| xh
 
 | Task runner
 | just

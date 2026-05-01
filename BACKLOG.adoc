@@ -53,7 +53,7 @@ __
 
 === EPIC 3 : Partition A/B + Persistence
 
-**Statut** : A FAIRE
+**Statut** : TERMINE
 **Priorite** : HAUTE
 
 ==== Taches
@@ -65,9 +65,9 @@ __
 * [-] Tester le rollback en CI/CD — SKIP : runners GitHub non-privileged (session 020). Mock test A/B en remplacement (syntaxe + presence scripts)
 * [x] Valider que les donnees persistence survivent a une mise a jour — CI/CD mock OK (Session 021), full loopback en local (Docker privileged)
 
-=== EPIC 4 : Logiciels (Ollama, Docker, Podman, SDKMAN, NVM, pnpm, Python 3.14.4, uv, ripgrep, fd, fzf, lazygit, xh, httpie, just, flatpak, JetBrains Toolbox)
+=== EPIC 4 : Logiciels (Ollama, Docker, Podman, SDKMAN, NVM, pnpm, Python 3.14.4, uv, ripgrep, fd, fzf, lazygit, xh, just, flatpak, JetBrains Toolbox)
 
-**Statut** : A FAIRE
+**Statut** : EN COURS
 **Priorite** : MOYENNE
 **Contraintes** :
 * **JDK 25 Temurin** obligatoire via SDKMAN (version exacte du JDK dans le chroot)
@@ -85,12 +85,15 @@ __
 * [x] Installer les outils reseau (nmap, iperf3, wireshark)
 * [x] Installer les outils de recherche (ripgrep, fd, fzf)
 * [x] Installer les outils git (lazygit)
-* [x] Installer les outils HTTP (xh, httpie)
+* [x] Installer les outils HTTP (xh)
 * [x] Installer just command runner dans le chroot
 * [x] Installer Flatpak dans le chroot
 * [x] Installer JetBrains Toolbox App dans le chroot
 * [x] Installer zsh + oh-my-zsh / starship dans le chroot
-* [ ] Tester que chaque logiciel fonctionne dans le live boot
+* [x] CI/CD test-software.sh : checks binaires squashfs pour tous les outils (nmap, iperf3, wireshark, JDK, python3.14 fixes session 059)
+* [x] Smoke tests QEMU : service systemd conditionnel smoke-test.service + mode --smoke dans test-boot.sh + task Gradle isoTestSmoke (session 059)
+* [ ] Valider les smoke tests en CI/CD (lancement `./gradlew isoTestSmoke` apres build)
+* [ ] Tester en live boot reel sur cle USB
 
 === EPIC 5 : Personnalisation XFCE
 
@@ -118,7 +121,7 @@ __
 
 === EPIC 6 : Script de mise a jour systeme A/B
 
-**Statut** : A FAIRE
+**Statut** : TERMINE
 **Priorite** : HAUTE
 
 ==== Taches
@@ -142,7 +145,7 @@ __
 
 === EPIC 8 : Dockerisation CLI (artefact parallele)
 
-**Statut** : A FAIRE
+**Statut** : TERMINE
 **Priorite** : MOYENNE
 **Nature** : Facette secondaire / build parallele. Ne modifie en **rien** les objectifs de la Magic Stick en tant que systeme live bootable (EPICs 1-7). L'image Docker est construite independamment de l'ISO en reproduisant la meme stack logicielle CLI.
 
@@ -215,7 +218,7 @@ __
 
 === EPIC 11 : Pinning versions chroot + refactoring patterns
 
-**Statut** : EN COURS
+**Statut** : TERMINE
 **Priorite** : HAUTE
 **Contexte** : Revue de code Copilot session 049. Les hooks chroot `060-install-chroot-software.chroot` et `docker/magic-stick-cli/Dockerfile` telechargent des versions dynamiques via l'API GitHub (`/releases/latest`). Chaque build peut installer des versions differentes, rendant l'ISO non reproductible.
 

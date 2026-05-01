@@ -1,0 +1,84 @@
+= Session 059 — EPIC 4 Validation Live Boot Logiciels
+
+**Date** : 01 mai 2026
+**Type** : test + feat + backlog + governance
+**Score** : 8/10
+**EPIC** : EPIC 4
+
+== Contexte
+
+Suite session 058 (EPIC 5 finalise BACKLOG + planification EPIC 4). Audit test-software.sh et chroot hook pour combler les lacunes de couverture de test logiciels.
+
+== Actions Réalisées
+
+=== 1. Combler les trous de test dans test-software.sh
+
+- Ajout checks binaires : `nmap`, `iperf3`, `wireshark` (tshark fallback), `java` (JDK via SDKMAN à `/opt/sdkman/candidates/java/current/bin/java`)
+- Fix Python : `python3.14` check ajouté en plus de `python3` (avant on vérifiait juste python3 = 3.12)
+- Total : 23 binaires vérifiés dans le squashfs (24 avec python3.14 + python3)
+
+=== 2. Nettoyage httpie de la documentation ISO
+
+httpie retiré de l'ISO en session 039 (contrainte d'espace) mais toujours référencé. Retiré de :
+- `BACKLOG.adoc` : EPIC 4 titre + tâche "outils HTTP (xh, httpie)" → "outils HTTP (xh)"
+- `README.adoc`, `README_FR.adoc` : ligne "xh, httpie" → "xh"
+- `PROMPT_REPRISE.adoc` : liste logiciels
+- `SCRIPT_VERIFICATION.adoc` : description hook
+- `site/content/about.html` : liste outils
+- `prez_hf.md` : ligne HTTP
+
+Conservé dans `docker/magic-stick-cli/Dockerfile` et `site/content/docker-cli.adoc` (httpie toujours installé via uv pip dans l'image Docker).
+
+=== 3. Nettoyage statuts BACKLOG
+
+EPICs synchronisés avec INDEX.adoc :
+- EPIC 3 : A FAIRE → TERMINE
+- EPIC 6 : A FAIRE → TERMINE
+- EPIC 8 : A FAIRE → TERMINE
+- EPIC 11 : EN COURS → TERMINE
+
+EPIC 2 maintient EN COURS (BIOS/UEFI boot sur clé réelle restant).
+EPIC 4 passe A FAIRE → EN COURS.
+
+=== 4. Smoke tests QEMU — infrastructure
+
+- `config/live-build/includes.chroot/usr/local/bin/smoke-test.sh` : script embarqué dans l'ISO
+  - Teste 23 outils en mode fonctionnel (--version/-v/version selon le binaire)
+  - Test docker-hello-world (démarrage daemon + run container)
+  - Écrit les résultats dans `/tmp/smoke_results` et affiche `SMOKE_TEST_COMPLETE:`
+- `config/live-build/includes.chroot/etc/systemd/system/smoke-test.service` : service conditionnel
+  - `ConditionKernelCommandLine=smoke_test=true`
+  - After=multi-user.target getty.target
+  - TimeoutSec=300
+- `scripts/test-boot.sh` : mode `--smoke`
+  - Extrait kernel/initrd de l'ISO
+  - Boot QEMU avec `smoke_test=true console=ttyS0,115200`
+  - Attend `SMOKE_TEST_COMPLETE` dans le log série (timeout 300s)
+  - Parse résultats, affiche PASS/FAIL
+- `build.gradle.kts` : task `isoTestSmoke`
+  - `./gradlew isoTestSmoke`
+
+Approche : on utilise `-kernel` + `-initrd` + `-cdrom` pour passer `smoke_test=true` sur la ligne de commande noyau sans modifier l'ISO.
+
+=== Tâches restantes EPIC 4
+
+* [ ] Valider les smoke tests en CI/CD (lancement `./gradlew isoTestSmoke` apres build)
+* [ ] Tester en live boot reel sur cle USB
+
+=== Fichiers Modifiés
+
+| `scripts/test-software.sh` | +checks nmap, iperf3, wireshark, java, python3.14 |
+| `scripts/test-boot.sh` | +mode --smoke (QEMU kernel + cmdline smoke_test) |
+| `build.gradle.kts` | +task isoTestSmoke |
+| `BACKLOG.adoc` | EPIC 4 mis a jour, EPICs 3/6/8/11 → TERMINE |
+| `README.adoc` | httpie retire |
+| `README_FR.adoc` | httpie retire |
+| `PROMPT_REPRISE.adoc` | httpie retire |
+| `.agents/SCRIPT_VERIFICATION.adoc` | httpie retire |
+| `site/content/about.html` | httpie retire |
+| `prez_hf.md` | httpie retire |
+
+=== Fichiers Créés
+
+| `config/live-build/includes.chroot/usr/local/bin/smoke-test.sh` | Script smoke test QEMU |
+| `config/live-build/includes.chroot/etc/systemd/system/smoke-test.service` | Service systemd conditionnel |

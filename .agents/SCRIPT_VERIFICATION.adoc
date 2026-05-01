@@ -1,6 +1,6 @@
 = Script Verification — Magic Stick
 
-_Derniere mise a jour_ : Session 057 (01 mai 2026) — EPIC 11 TERMINE : cache CI/CD 3 strates + reproducibility validation
+_Derniere mise a jour_ : Session 059 (01 mai 2026) — EPIC 4 smoke tests QEMU + test-software.sh 23 binaires
 '''
 
 == Scripts du Projet
@@ -14,12 +14,13 @@ _Derniere mise a jour_ : Session 057 (01 mai 2026) — EPIC 11 TERMINE : cache C
 | scripts/dockerhub-push.sh | OK | OK | Parse dockerhub-creds.yml, login Docker Hub via stdin, buildx push | Session 031
 | scripts/test-persistence-mock.sh | OK | OK | Test mock CI/CD persistence data survival (analyse statique update-system.sh) | Session 021
 | scripts/verify.sh | OK | OK | Verification ISO (autodetecte container) | Session 007
-| scripts/test-boot.sh | OK | OK | Test boot QEMU BIOS+UEFI+VNC (modes --vnc, --bios, --uefi) | Session 018
+| scripts/test-boot.sh | OK | OK | Test boot QEMU BIOS+UEFI+VNC+Smoke (modes --vnc, --bios, --uefi, --smoke) | Session 059
 | scripts/test-ab-partition.sh | OK | OK | Test suite A/B partition avec loopback device | Session 018
- | scripts/update-system.sh | OK | OK | Partition A/B (setup-ab, update, status, verify, switch) + flag --yes + --dry-run + **`trap` démontage session 046** | Session 046
- | scripts/install-software.sh | OK | OK | Post-install live (docker, ollama, sdkman) | Session 006
- | launch-open-webui.sh | OK | OK | Launcher Docker Open-WebUI sur port 3333 | Session 033
- | scripts/test-software.sh | OK | OK | Verification logiciels dans ISO squashfs (24 binaires + 3 config + reproducibility 14 versions vs versions.sh) — *cache downloads session 057, **reproduciblity section session 057*** | Session 057
+| scripts/update-system.sh | OK | OK | Partition A/B (setup-ab, update, status, verify, switch) + flag --yes + --dry-run + **`trap` démontage session 046** | Session 046
+| scripts/install-software.sh | OK | OK | Post-install live (docker, ollama, sdkman) | Session 006
+| launch-open-webui.sh | OK | OK | Launcher Docker Open-WebUI sur port 3333 | Session 033
+| scripts/test-software.sh | OK | OK | Verification logiciels dans ISO squashfs (23 binaires + 3 config + reproducibility 14 versions vs versions.sh) — **nmap/iperf3/wireshark/JDK/python3.14 fixes session 059** | Session 059
+| config/live-build/includes.chroot/usr/local/bin/smoke-test.sh | OK | OK | Smoke test QEMU fonctionnel (23 outils + docker-hello-world) — **session 059** | Session 059
 |===
 
 == Dockerfiles
@@ -51,6 +52,7 @@ _Derniere mise a jour_ : Session 057 (01 mai 2026) — EPIC 11 TERMINE : cache C
 | isoTestVNC | Exec | Test boot QEMU+VNC+noVNC (GUI) | Session 018
 | isoTestAB | Exec | Test A/B partition setup sur loopback device | Session 018
 | isoTestSoftware | Exec | Verify logiciels dans ISO squashfs (22 binaires + 3 config) | Session 025
+| isoTestSmoke | Exec | Smoke test QEMU (boot ISO + 23 tools) | Session 059
 | isoTestFull | Default | Verify + boot + A/B partition | Session 018
 | isoTest | Default | Verify + Test boot | Session 007
 | isoPipeline | Default | Build + Verify + Test boot | Session 007
@@ -70,7 +72,7 @@ _Derniere mise a jour_ : Session 057 (01 mai 2026) — EPIC 11 TERMINE : cache C
 | 030-setup-persistence.chroot | OK | OK | Casper.conf pour persistance | Session 006
 | 040-post-install-tweaks.chroot | OK | OK | NetworkManager, keyboard FR, services | Session 006
 | 050-setup-ubiquity.chroot | OK | OK | Raccourci Bureau + config ubiquity-dm | Session 007
-| 060-install-chroot-software.chroot | OK | OK | Installation logiciels chroot (Docker, Podman, Ollama, NVM, pnpm, Python, uv, SDKMAN+JDK25, ripgrep, fd, fzf, lazygit, xh, httpie, just, flatpak, JetBrains Toolbox, zsh, oh-my-zsh, starship, opencode, graphify, ffmpeg, VS Code, gh CLI). **EPIC 11 : versions pinnées, arch factorisé, checksums SHA256, dl_cached cache downloads session 057** | Session 057 |
+| 060-install-chroot-software.chroot | OK | OK | Installation logiciels chroot (Docker, Podman, Ollama, NVM, pnpm, Python, uv, SDKMAN+JDK25, ripgrep, fd, fzf, lazygit, xh, just, flatpak, JetBrains Toolbox, zsh, oh-my-zsh, starship, opencode, graphify, ffmpeg, VS Code, gh CLI). **EPIC 11 : versions pinnées, arch factorisé, checksums SHA256, dl_cached cache downloads session 057** | Session 057 |
 | 070-configure-xfce.chroot | OK | OK | Personnalisation XFCE : copie skel XML, xsettings Greybird+PaPirus, fix ownership + **XFCE menu custom categories Magic Stick *session 033*** | Session 033 |
 | 080-cleanup-space.chroot | OK | OK | Purge pre-squashfs (apt clean, headers, dev libs, doc/man, locales, /tmp) | Session 042 |
 | 990-add-efi-support.binary | OK | OK | Support UEFI (grub-mkimage, shim, grub.cfg) | Session 013
