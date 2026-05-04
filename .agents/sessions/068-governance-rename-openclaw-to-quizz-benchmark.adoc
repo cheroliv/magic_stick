@@ -1,0 +1,6 @@
+= Session 068 — Renommage gouvernance openclaw→quizz-benchmark
+:date: 2026-05-04
+:type: governance
+
+Mise a jour de 17 refs references openclaw-codingame → quizz-benchmark-gradle dans la gouvernance agent.
+

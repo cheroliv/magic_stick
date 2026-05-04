@@ -17,3 +17,4 @@ _Derniere mise a jour_ : 2026-05-01 (session 064)
 | 054 | 30 avril 2026 | fix + backlog | Fix checksums lazygit/just chroot + priorisation BACKLOG (traps EXIT + checksums [x]) | 8/10
 | 053 | 30 avril 2026 | fix + security + ci/cd + backlog | EPIC 11 P0.4-P0.7 fixes cumules (bug xh URL, just URL, checksums SHA256 chroot, trap EXIT build-inner.sh, cache-build CI/CD, BACKLOG mis a jour) | 8/10
 |===
+| 068 | 2026-05-04 | governance | Renommage openclaw→quizz-benchmark | -
