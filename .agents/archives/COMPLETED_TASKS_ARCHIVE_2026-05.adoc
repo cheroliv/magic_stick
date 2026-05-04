@@ -222,3 +222,4 @@ Suite session 055. Le fix checksums de session 054 (comparaison manuelle EXPECTE
 
 === Fichiers
 | `config/live-build/hooks/060-install-chroot-software.chroot` | Modifie (grep → grep -i) |
+| 2026-05-04 | 068 | governance | Renommage openclaw-codingame → quizz-benchmark-gradle (gouvernance) |
