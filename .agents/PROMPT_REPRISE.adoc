@@ -1,0 +1,14 @@
+= PROMPT_REPRISE — Session 069 — Magic Stick
+:jbake-status: draft
+
+== Contexte de Reprise
+
+Session 069 suite au renommage gouvernance openclaw-codingame → quizz-benchmark-gradle (session precedente).
+La gouvernance agent globale (`AGENT_GOVERNANCE.adoc`) est a jour.
+
+== Prochaine etape
+
+Reprendre le BACKLOG et la roadmap pour identifier la prochaine tache prioritaire.
+
+[.text-right]
+*Session 2026-05-04 — bootstrap PROMPT_REPRISE.*
