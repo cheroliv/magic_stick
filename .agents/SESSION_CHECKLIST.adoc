@@ -1,0 +1,36 @@
+= SESSION_CHECKLIST — magic_stick
+
+== Hook d'Ouverture — Avant de commencer une session
+
+. [ ] Lire `PROMPT_REPRISE.adoc` — contexte de la session precedente
+. [ ] Lire `AGENT.adoc` — regles absolues (6 regles)
+. [ ] Lire `.agents/INDEX.adoc` — roadmap, etat des EPICs (13 EPICs), portefeuille
+. [ ] Verifier l'etat git (`git status`)
+
+== Pendant la session
+
+. [ ] Respecter la Regle 1 — AUCUN commit sans permission explicite
+. [ ] Respecter la Regle 2 — PAS de commande destructive (dd, mkfs, rm -rf hors build) sans permission
+. [ ] Respecter la Regle 3 — ZERO secret/token dans le terminal
+. [ ] Respecter la Regle 4 — backup avant modif fichier config non versionne
+. [ ] Respecter la Regle 5 — PAS de modif fichiers personnels (~/.*)
+. [ ] Respecter la Regle 6 — 1 fichier a la fois, valider (`bash -n`)
+
+== Hook de Fermeture — Procedure 6 etapes
+
+. [ ] 1. Rapport de session → `.agents/sessions/NNN-sujet.adoc`
+. [ ] 2. Mise a jour `PROMPT_REPRISE.adoc` — contexte reprise N+1 (max 70 lignes)
+. [ ] 3. Mise a jour `SESSIONS_HISTORY.adoc` — ajouter entree
+. [ ] 4. Mise a jour `INDEX.adoc` — numero de session, roadmap, statut EPICs
+. [ ] 5. Mise a jour `COMPLETED_TASKS_ARCHIVE.adoc` — taches terminees
+. [ ] 6. Verification — `git status`, absence de secrets
+. [ ] 7. Rotation backup si N%10==0 ou EAGER > 500 lignes
+
+== Commandes de Verification
+
+[source,shell]
+----
+git status
+grep -r "TOKEN\|SECRET\|PASSWORD\|KEY\|gho_\|ghp_" --include="*.sh" --include="*.yml" --include="*.properties"
+bash -n scripts/*.sh
+----

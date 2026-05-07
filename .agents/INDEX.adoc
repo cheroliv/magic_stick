@@ -41,7 +41,7 @@ _Session terminee_ : 063 (EPIC 8 Docker Hub : docker-compose.yml + doc README)
 | EPIC 4 : Logiciels chroot | 98% (smoke CI/CD OK, manque test cle USB) | MOYENNE
 | EPIC 5 : Personnalisation XFCE | 100% TERMINE | MOYENNE
 | EPIC 6 : Script update-system A/B | 100% TERMINE | HAUTE
-| EPIC 7 : Site doc auto + IA release notes | 0% | BASSE
+| EPIC 7 : Site doc auto + IA release notes | 1% (Migration doc site → office/sites/magic-stick/ done) | BASSE
 | EPIC 8 : Dockerisation CLI (Docker Hub) | 100% TERMINE | MOYENNE
 | EPIC 9 : Editeurs /opt/ | 100% TERMINE | MOYENNE
 | EPIC 10 : Apps Docker suppl. | 0% | BASSE

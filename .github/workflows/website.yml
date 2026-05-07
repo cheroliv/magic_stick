@@ -10,11 +10,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: magic_stick/
+
+      - uses: actions/checkout@v4
+        with:
+          repository: cheroliv/engine
+          path: engine/
 
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '24'
 
-      - name: Push website
-        run: echo "${{ secrets.BAKERY_GRADLE_PLUGIN }}" > site.yml; ./gradlew -q -s publishSite
+      - name: Setup office path for magic-stick site
+        run: |
+          mkdir -p sites/magic-stick/jbake/
+          cp -r magic_stick/site/* sites/magic-stick/jbake/
+
+      - name: Write site.yml from secret
+        env:
+          SITE_YML: ${{ secrets.BAKERY_GRADLE_PLUGIN }}
+        run: echo "$SITE_YML" > sites/magic-stick/site.yml
+
+      - name: Publish website via engine
+        run: OFFICE_PATH="$GITHUB_WORKSPACE" ./gradlew -PsiteName=magic-stick -q -s publishSite
+        working-directory: engine/
