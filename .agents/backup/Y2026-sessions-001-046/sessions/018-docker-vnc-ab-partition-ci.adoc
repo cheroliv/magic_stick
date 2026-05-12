@@ -63,7 +63,7 @@
 === Prochaine session (019)
 
 1. Corriger le Dockerfile ENTRYPOINT pour ne pas casser les taches Gradle existantes (test-boot etc.)
-2. Tester `docker run --entrypoint=bash` ou `docker run magic_stick:builder /magic_stick/scripts/...` dans le conteneur
+2. Tester `docker run --entrypoint=bash` ou `docker run magic-stick:builder /magic-stick/scripts/...` dans le conteneur
 3. Valider test-boot.sh en mode `--vnc` avec une ISO complete (attendre build CI/CD ou re-télécharger)
 4. Valider test-ab-partition.sh en CI/CD sur GitHub Actions (loop devices + privileged containers)
 5. Mettre a jour SCRIPT_VERIFICATION.adoc avec les nouveaux scripts testes

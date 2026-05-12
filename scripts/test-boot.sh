@@ -8,7 +8,7 @@ in_container() {
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 BUILD_DIR="${PROJECT_DIR}/build"
-DOCKER_IMAGE="magic_stick:builder"
+DOCKER_IMAGE="magic-stick:builder"
 
 MODE="headless"
 if [[ "${1:-}" == "--vnc" ]]; then
@@ -29,7 +29,7 @@ ISO_FILE="${1:-}"
 TIMEOUT="${2:-120}"
 
 if [[ -z "$ISO_FILE" ]]; then
-    ISO_FILE=$(ls -t "${BUILD_DIR}"/magic_stick_*.iso 2>/dev/null | head -1 || true)
+    ISO_FILE=$(ls -t "${BUILD_DIR}"/magic-stick_*.iso 2>/dev/null | head -1 || true)
 fi
 
 if [[ -z "$ISO_FILE" ]] || [[ ! -f "$ISO_FILE" ]]; then
@@ -44,17 +44,17 @@ if ! in_container && [[ "$MODE" == "vnc" ]]; then
     exec docker run --rm \
         -p 5900:5900 \
         -p 6080:6080 \
-        -v "${PROJECT_DIR}:/magic_stick" \
+        -v "${PROJECT_DIR}:/magic-stick" \
         "${DOCKER_IMAGE}" \
-        "/magic_stick/scripts/test-boot.sh" "--vnc" "/magic_stick/build/$(basename "$ISO_FILE")" "$TIMEOUT"
+        "/magic-stick/scripts/test-boot.sh" "--vnc" "/magic-stick/build/$(basename "$ISO_FILE")" "$TIMEOUT"
 fi
 
 if ! in_container; then
     echo "=== Magic Stick Boot Test (via Docker) ==="
     exec docker run --rm \
-        -v "${PROJECT_DIR}:/magic_stick" \
+        -v "${PROJECT_DIR}:/magic-stick" \
         "${DOCKER_IMAGE}" \
-        "/magic_stick/scripts/test-boot.sh" "--${MODE}" "/magic_stick/build/$(basename "$ISO_FILE")" "$TIMEOUT"
+        "/magic-stick/scripts/test-boot.sh" "--${MODE}" "/magic-stick/build/$(basename "$ISO_FILE")" "$TIMEOUT"
 fi
 
 echo "=== Magic Stick Boot Test ==="
@@ -127,7 +127,7 @@ if [[ "$MODE" == "vnc" ]]; then
             echo ""
             echo "Connect with a VNC client:"
             echo "  vncviewer localhost:${VNC_DISPLAY}"
-            echo "  Or reinstall Docker image with: docker build -t magic_stick:builder ."
+            echo "  Or reinstall Docker image with: docker build -t magic-stick:builder ."
             echo ""
             echo "Press Ctrl+C to stop."
             wait $QEMU_PID
@@ -267,7 +267,7 @@ if [[ "$MODE" == "smoke" ]]; then
         -cdrom "${ISO_FILE}" \
         -kernel "${SMOKE_KERNEL}" \
         -initrd "${SMOKE_INITRD}" \
-        -append "boot=casper username=magic hostname=magic_stick smoke_test=true console=ttyS0,115200 quiet" \
+        -append "boot=casper username=magic hostname=magic-stick smoke_test=true console=ttyS0,115200 quiet" \
         -serial "file:${SERIAL_LOG}" \
         -no-reboot 2>/dev/null &
     QEMU_PID=$!

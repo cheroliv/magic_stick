@@ -10,15 +10,15 @@
 **Document de reference** — Strategie de gestion du contexte et de l'agent OpenCode
 
 Ce document formalise la methodologie LAZY/EAGER pour optimiser l'efficacite d'OpenCode
-sur le projet magic_stick (cle USB bootable environnement standardise portable).
+sur le projet magic-stick (cle USB bootable environnement standardise portable).
 
-**Inspire de** : `plantuml-plugin/AGENT_MODUS_OPERANDI.adoc` — Adapte au projet `magic_stick`
+**Inspire de** : `plantuml-plugin/AGENT_MODUS_OPERANDI.adoc` — Adapte au projet `magic-stick`
 --
 
 [WARNING]
 ====
-**RACINE DE TRAVAIL** : Ce fichier est dans `magic_stick/`, qui est la **racine de travail** du projet.
-TOUS les chemins dans ce document sont relatifs a `magic_stick/`.
+**RACINE DE TRAVAIL** : Ce fichier est dans `magic-stick/`, qui est la **racine de travail** du projet.
+TOUS les chemins dans ce document sont relatifs a `magic-stick/`.
 ====
 
 ---
@@ -96,7 +96,7 @@ C'est l'utilisateur qui gere Git.
 
 [source,bash]
 ----
-magic_stick/
+magic-stick/
 ├── .agents/                          # Documentation agent
 │   ├── INDEX.adoc                    # Regles absolues + sessions recentes (EAGER)
 │   ├── AB_PARTITION_ESSENTIALS.adoc  # Contexte metier partition A/B (EAGER)
@@ -615,7 +615,7 @@ Pour appliquer ce modus operandi a un **nouveau projet** :
 
 |1.0
 |2026-04-23
-|Creation du document — Adaptation plantuml-plugin pour magic_stick
+|Creation du document — Adaptation plantuml-plugin pour magic-stick
 |OpenCode
 |===
 

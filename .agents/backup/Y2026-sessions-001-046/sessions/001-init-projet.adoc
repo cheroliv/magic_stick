@@ -4,7 +4,7 @@
 
 == Contexte
 
-Creation du projet magic_stick depuis zero. Le dossier etait vide. L'objectif etait de mettre en place le systeme de contexte agent (inspire du plantuml-plugin) et la structure du projet pour une cle USB bootable avec Xubuntu + partition A/B + persistence.
+Creation du projet magic-stick depuis zero. Le dossier etait vide. L'objectif etait de mettre en place le systeme de contexte agent (inspire du plantuml-plugin) et la structure du projet pour une cle USB bootable avec Xubuntu + partition A/B + persistence.
 
 Reflexion initiale sur la finalite du projet : clarification que ce n'est PAS une cle de recovery, mais un environnement standardise portable (formation, terrain, dev nomade). L'analogie de l'ecluse pour le systeme A/B a ete validee.
 

@@ -257,8 +257,8 @@ Options:
 
 Examples:
   sudo ${0##*/} create-disk
-  sudo ${0##*/} setup-ab build/magic_stick_0.1.0.iso
-  sudo ${0##*/} install build/magic_stick_0.1.0.iso A
+  sudo ${0##*/} setup-ab build/magic-stick_0.1.0.iso
+  sudo ${0##*/} install build/magic-stick_0.1.0.iso A
   sudo ${0##*/} test
   sudo ${0##*/} status
 USAGE

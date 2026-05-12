@@ -8,10 +8,10 @@ cleanup_build_inner() {
 
 trap cleanup_build_inner EXIT
 
-PROJECT_DIR="/magic_stick"
+PROJECT_DIR="/magic-stick"
 BUILD_DIR="${PROJECT_DIR}/build"
 CONFIG_DIR="${PROJECT_DIR}/config/live-build"
-ISO_NAME="magic_stick_${MAGIC_STICK_VERSION}.iso"
+ISO_NAME="magic-stick_${MAGIC_STICK_VERSION}.iso"
 
 echo "=== Inner build (container) v${MAGIC_STICK_VERSION} ==="
 
@@ -53,7 +53,7 @@ if [[ ! -f "${BUILD_DIR}/config/common" ]]; then
         --mirror-bootstrap http://archive.ubuntu.com/ubuntu \
         --mirror-binary http://archive.ubuntu.com/ubuntu \
         --archive-areas 'main restricted universe multiverse' \
-        --bootappend-live 'boot=casper username=magic hostname=magic_stick locales=fr_FR.UTF-8 keyboard-layouts=fr quiet splash' \
+        --bootappend-live 'boot=casper username=magic hostname=magic-stick locales=fr_FR.UTF-8 keyboard-layouts=fr quiet splash' \
         --iso-volume "Magic Stick ${MAGIC_STICK_VERSION}" \
         --iso-publisher 'Magic Stick' \
         --iso-application 'Magic Stick Live System'
@@ -169,14 +169,14 @@ echo "Post-build cleanup complete."
 if [[ "${RUN_TEST:-0}" == "1" ]]; then
     echo ""
     echo "=== Running post-build verification ==="
-    /magic_stick/scripts/verify.sh "${FINAL_ISO}"
+    /magic-stick/scripts/verify.sh "${FINAL_ISO}"
     echo ""
     echo "=== Running boot test ==="
-    /magic_stick/scripts/test-boot.sh "${FINAL_ISO}"
+    /magic-stick/scripts/test-boot.sh "${FINAL_ISO}"
 fi
 
 echo ""
 echo "Next steps:"
 echo "  Verify ISO:  scripts/verify.sh"
 echo "  Test boot:   scripts/test-boot.sh"
-echo "  Flash to USB: docker run --rm --device=/dev/sdX -v \$(pwd):/magic_stick magic_stick:builder /magic_stick/scripts/flash.sh /dev/sdX"
+echo "  Flash to USB: docker run --rm --device=/dev/sdX -v \$(pwd):/magic-stick magic-stick:builder /magic-stick/scripts/flash.sh /dev/sdX"

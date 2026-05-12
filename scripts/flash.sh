@@ -16,7 +16,7 @@ usage() {
     echo "WARNING: This will ERASE ALL DATA on the target device!"
     echo ""
     echo "Run inside Docker (no sudo needed on host):"
-    echo "  docker run --rm --device=/dev/sdX -v \$(pwd):/magic_stick magic_stick:builder scripts/flash.sh /dev/sdX"
+    echo "  docker run --rm --device=/dev/sdX -v \$(pwd):/magic-stick magic-stick:builder scripts/flash.sh /dev/sdX"
     echo ""
     echo "First, identify your USB drive with:"
     echo "  lsblk"
@@ -39,7 +39,7 @@ if [[ ! -b "$DEVICE" ]]; then
     exit 1
 fi
 
-ISO_FILE=$(ls -t "${BUILD_DIR}"/magic_stick_*.iso 2>/dev/null | head -1)
+ISO_FILE=$(ls -t "${BUILD_DIR}"/magic-stick_*.iso 2>/dev/null | head -1)
 
 if [[ -z "$ISO_FILE" ]]; then
     echo "ERROR: No ISO file found in ${BUILD_DIR}/"

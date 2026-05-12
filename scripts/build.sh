@@ -6,8 +6,8 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 MAGIC_STICK_VERSION="$(head -n 1 "${PROJECT_DIR}/VERSION" | tr -d '[:space:]')"
 BUILD_DIR="${PROJECT_DIR}/build"
 CONFIG_DIR="${PROJECT_DIR}/config/live-build"
-ISO_NAME="magic_stick_${MAGIC_STICK_VERSION}.iso"
-DOCKER_IMAGE="magic_stick:builder"
+ISO_NAME="magic-stick_${MAGIC_STICK_VERSION}.iso"
+DOCKER_IMAGE="magic-stick:builder"
 
 echo "=== Magic Stick Builder v${MAGIC_STICK_VERSION} ==="
 echo "Project dir: ${PROJECT_DIR}"
@@ -95,11 +95,11 @@ mkdir -p "${BUILD_DIR}"
 echo "Launching build in Docker container..."
 docker run --rm --privileged \
     "${DOCKER_OPTS[@]}" \
-    -v "${PROJECT_DIR}:/magic_stick" \
+    -v "${PROJECT_DIR}:/magic-stick" \
     -e MAGIC_STICK_VERSION="${MAGIC_STICK_VERSION}" \
     -e CLEAN="${CLEAN}" \
     -e PURGE="${PURGE}" \
     "${DOCKER_IMAGE}" \
-    /magic_stick/scripts/build-inner.sh
+    /magic-stick/scripts/build-inner.sh
 
 echo "Done."

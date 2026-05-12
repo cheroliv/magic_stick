@@ -14,7 +14,7 @@
 
 === Tâches réalisées
 
-* [OK] Dockerfile : correction CMD ["bash"] + WORKDIR /magic_stick (compatibilité docker run avec arguments)
+* [OK] Dockerfile : correction CMD ["bash"] + WORKDIR /magic-stick (compatibilité docker run avec arguments)
 * [OK] Vérification syntaxe de tous les scripts bash : 5/5 OK (test-boot, test-ab-partition, verify, flash, update-system)
 * [OK] Validation test-boot.sh --vnc : QEMU lancé en container, localhost:5900 et localhost:6080/vnc.html accessibles
 * [OK] Rebuild Docker image post-correction (WORKDIR + CMD)

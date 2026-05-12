@@ -2,7 +2,7 @@
 :jbake-status: EAGER
 
 [abstract]
-Ce fichier définit la stratégie de gestion du contexte agent pour le projet `magic_stick`.
+Ce fichier définit la stratégie de gestion du contexte agent pour le projet `magic-stick`.
 Chargé automatiquement (EAGER) en début de session.
 Documentation exhaustive dans `.agents/encyclopedies/LAZY_EAGER_ENCYCLOPEDIE.adoc`.
 

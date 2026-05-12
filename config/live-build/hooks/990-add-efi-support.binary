@@ -87,22 +87,22 @@ insmod gfxterm
 terminal_output gfxterm
 
 menuentry "Magic Stick - Live" {
-    linux /${KERNEL_NAME} boot=casper username=magic hostname=magic_stick locales=fr_FR.UTF-8 keyboard-layouts=fr quiet splash ---
+    linux /${KERNEL_NAME} boot=casper username=magic hostname=magic-stick locales=fr_FR.UTF-8 keyboard-layouts=fr quiet splash ---
     initrd /${INITRD_NAME}
 }
 
 menuentry "Magic Stick - Live (nomodeset)" {
-    linux /${KERNEL_NAME} boot=casper username=magic hostname=magic_stick locales=fr_FR.UTF-8 keyboard-layouts=fr nomodeset ---
+    linux /${KERNEL_NAME} boot=casper username=magic hostname=magic-stick locales=fr_FR.UTF-8 keyboard-layouts=fr nomodeset ---
     initrd /${INITRD_NAME}
 }
 
 menuentry "Magic Stick - Live (safe mode)" {
-    linux /${KERNEL_NAME} boot=casper username=magic hostname=magic_stick locales=fr_FR.UTF-8 keyboard-layouts=fr noapic nolapic ---
+    linux /${KERNEL_NAME} boot=casper username=magic hostname=magic-stick locales=fr_FR.UTF-8 keyboard-layouts=fr noapic nolapic ---
     initrd /${INITRD_NAME}
 }
 
 menuentry "Magic Stick - Install" {
-    linux /${KERNEL_NAME} boot=casper username=magic hostname=magic_stick locales=fr_FR.UTF-8 keyboard-layouts=fr quiet splash only-ubiquity ---
+    linux /${KERNEL_NAME} boot=casper username=magic hostname=magic-stick locales=fr_FR.UTF-8 keyboard-layouts=fr quiet splash only-ubiquity ---
     initrd /${INITRD_NAME}
 }
 GRUBCFG

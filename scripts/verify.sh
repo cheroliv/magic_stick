@@ -8,12 +8,12 @@ in_container() {
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 BUILD_DIR="${PROJECT_DIR}/build"
-DOCKER_IMAGE="magic_stick:builder"
+DOCKER_IMAGE="magic-stick:builder"
 
 ISO_FILE="${1:-}"
 
 if [[ -z "$ISO_FILE" ]]; then
-    ISO_FILE=$(ls -t "${BUILD_DIR}"/magic_stick_*.iso 2>/dev/null | head -1 || true)
+    ISO_FILE=$(ls -t "${BUILD_DIR}"/magic-stick_*.iso 2>/dev/null | head -1 || true)
 fi
 
 if [[ -z "$ISO_FILE" ]] || [[ ! -f "$ISO_FILE" ]]; then
@@ -25,9 +25,9 @@ fi
 if ! in_container; then
     echo "=== Magic Stick ISO Verification (via Docker) ==="
     exec docker run --rm \
-        -v "${PROJECT_DIR}:/magic_stick" \
+        -v "${PROJECT_DIR}:/magic-stick" \
         "${DOCKER_IMAGE}" \
-        "/magic_stick/scripts/verify.sh" "/magic_stick/build/$(basename "$ISO_FILE")"
+        "/magic-stick/scripts/verify.sh" "/magic-stick/build/$(basename "$ISO_FILE")"
 fi
 
 echo "=== Magic Stick ISO Verification ==="

@@ -10,7 +10,7 @@ Suite session 051 (commit + push Dockerfile convergence, doc AGENT.adoc). Le bui
 
 == Actions
 
-* [OK] Audit des fichiers EAGER magic_stick (1414 lignes total)
+* [OK] Audit des fichiers EAGER magic-stick (1414 lignes total)
   ** Coupable identifié : `AGENT_MODUS_OPERANDI.adoc` (627 lignes, 44% du contexte)
   ** Audit section par section : P1-P2 = connaissance unique (161 lignes), P3/P4/P9 = doublons avec AGENT.adoc/INDEX.adoc (167 lignes), P5/P6/P7/P8/Annexes = jamais consulté (215 lignes)
 

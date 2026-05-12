@@ -9,10 +9,10 @@ _Sessions anterieures_ : Voir `backup/Y2026-sessions-042-053/COMPLETED_TASKS_ARC
 **Score** : 9/10
 
 === Contexte
-Suite session 053 (P0.4-P0.7). Mission etendue par l'utilisateur : appliquer la gouvernance complete des articles 0108-0110-0111 sur magic_stick puis sur 4 autres projets.
+Suite session 053 (P0.4-P0.7). Mission etendue par l'utilisateur : appliquer la gouvernance complete des articles 0108-0110-0111 sur magic-stick puis sur 4 autres projets.
 
 === Taches
-* [OK] magic_stick AGENT.adoc enrichi (388 lignes) : regle d'or 5x20min, anti-patterns (7), audit contexte (5 etapes, >100 lignes suspect), defense 3 couches, metaphore 3 etageres, consultation backup, bootstrap 6 etapes, table EPICs
+* [OK] magic-stick AGENT.adoc enrichi (388 lignes) : regle d'or 5x20min, anti-patterns (7), audit contexte (5 etapes, >100 lignes suspect), defense 3 couches, metaphore 3 etageres, consultation backup, bootstrap 6 etapes, table EPICs
 * [OK] INDEX.adoc portefeuille 6 projets (jhipster-gradle-plugins + quizz-benchmark-gradle ajoutes)
 * [OK] Backup vague froide 001-046 restauree (sessions/ ajoute, 40 fichiers)
 * [OK] Sessions actives nettoyees (044-053, 10 sessions)
@@ -23,12 +23,12 @@ Suite session 053 (P0.4-P0.7). Mission etendue par l'utilisateur : appliquer la 
   ** jhipster-gradle-plugins : AGENT 340 lignes, ESSENTIALS cree, encyclopedies cree, backup cree
   ** plantuml-gradle/plantuml-plugin : ESSENTIALS 73, encyclopedies 594, backup vague 001-123, sliding window 10 sessions
   ** quizz-benchmark-gradle : AGENT 278, ESSENTIALS 70, encyclopedies, git init + commit
-* [OK] Push tous projets sur leurs remotes (bakery, jhipster, plantuml, magic_stick)
+* [OK] Push tous projets sur leurs remotes (bakery, jhipster, plantuml, magic-stick)
 
 === Fichiers
-| magic_stick/AGENT.adoc | Modifie (+16 sections) |
-| magic_stick/.agents/INDEX.adoc | Modifie (portefeuille) |
-| magic_stick/.agents/backup/Y2026-sessions-001-046/sessions/ | Restaure (40 fichiers) |
+| magic-stick/AGENT.adoc | Modifie (+16 sections) |
+| magic-stick/.agents/INDEX.adoc | Modifie (portefeuille) |
+| magic-stick/.agents/backup/Y2026-sessions-001-046/sessions/ | Restaure (40 fichiers) |
 | 4 autres projets | 15+ fichiers modifies/crees |
 
 == Session 053 — EPIC 11 P0.4-P0.7 Fixes Cumulés

@@ -24,8 +24,8 @@ Reflexion sur l'authentification : plusieurs tentatives SSH et HTTPS ont echoue 
 git init
 git branch -m main
 git add -A
-git commit -m "init: structure projet magic_stick..."
-git remote add origin https://github.com/cheroliv/magic_stick.git
+git commit -m "init: structure projet magic-stick..."
+git remote add origin https://github.com/cheroliv/magic-stick.git
 git push -u origin main
 ----
 

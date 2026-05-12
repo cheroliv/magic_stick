@@ -58,7 +58,7 @@ Projets gerant la meme methodologie opencode :
 
 |===
 | Projet | Repertoire | Version | Derniere maj
-| magic_stick | `~/workspace/foundry/OSS/magic_stick` | 064 | 2026-05-01
+| magic-stick | `~/workspace/foundry/OSS/magic-stick` | 064 | 2026-05-01
 | bakery-gradle | `~/workspace/foundry/OSS/bakery-gradle/bakery-plugin` | 5 | 2026-04-23
 | cheroliv.com | `~/workspace/foundry/OSS/cheroliv.com` | 4 | 2026-04-25
 | plantuml-gradle | `~/workspace/foundry/OSS/plantuml-gradle/plantuml-plugin` | 132 | 2026-04-23

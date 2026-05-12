@@ -41,7 +41,7 @@ Suite session 025. L'utilisateur a demande un mecanisme d'incrementation automat
 |----------|--------|
 | Bump semver | patch/minor/major via GitHub Actions UI |
 | Tag auto | `v${version}` pousse apres commit VERSION |
-| Nom ISO | `magic_stick_${VERSION}.iso` — plus de hardcode |
+| Nom ISO | `magic-stick_${VERSION}.iso` — plus de hardcode |
 | Secrets requis | `SF_SSH_KEY`, `SF_USERNAME`, `SF_KNOWN_HOSTS`, `GITHUB_TOKEN` |
 | Commit + push | `7917747` (6 fichiers, +93 lignes) |
 

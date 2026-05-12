@@ -350,10 +350,10 @@ EOF
     else
         echo "Next steps:"
         echo "  1. Install initial system:"
-        echo "     sudo $0 install ${device} /path/to/magic_stick.iso A"
+        echo "     sudo $0 install ${device} /path/to/magic-stick.iso A"
         echo ""
         echo "  2. Optional: install to System B:"
-        echo "     sudo $0 install ${device} /path/to/magic_stick.iso B"
+        echo "     sudo $0 install ${device} /path/to/magic-stick.iso B"
         echo ""
         echo "  3. Boot from USB and select System A or B in GRUB menu"
     fi
@@ -420,25 +420,25 @@ terminal_output console serial
 
 menuentry "Magic Stick - System A" {
     search --set=root --label ${SYSTEM_A_LABEL}
-    linux /casper/vmlinuz boot=casper persistence persistence-label=${PERSISTENCE_LABEL} username=magic hostname=magic_stick locales=fr_FR.UTF-8 keyboard-layouts=fr quiet splash console=ttyS0,115200
+    linux /casper/vmlinuz boot=casper persistence persistence-label=${PERSISTENCE_LABEL} username=magic hostname=magic-stick locales=fr_FR.UTF-8 keyboard-layouts=fr quiet splash console=ttyS0,115200
     initrd /casper/initrd.img
 }
 
 menuentry "Magic Stick - System B" {
     search --set=root --label ${SYSTEM_B_LABEL}
-    linux /casper/vmlinuz boot=casper persistence persistence-label=${PERSISTENCE_LABEL} username=magic hostname=magic_stick locales=fr_FR.UTF-8 keyboard-layouts=fr quiet splash console=ttyS0,115200
+    linux /casper/vmlinuz boot=casper persistence persistence-label=${PERSISTENCE_LABEL} username=magic hostname=magic-stick locales=fr_FR.UTF-8 keyboard-layouts=fr quiet splash console=ttyS0,115200
     initrd /casper/initrd.img
 }
 
 menuentry "Magic Stick - System A (nomodeset)" {
     search --set=root --label ${SYSTEM_A_LABEL}
-    linux /casper/vmlinuz boot=casper persistence persistence-label=${PERSISTENCE_LABEL} username=magic hostname=magic_stick locales=fr_FR.UTF-8 keyboard-layouts=fr nomodeset console=ttyS0,115200
+    linux /casper/vmlinuz boot=casper persistence persistence-label=${PERSISTENCE_LABEL} username=magic hostname=magic-stick locales=fr_FR.UTF-8 keyboard-layouts=fr nomodeset console=ttyS0,115200
     initrd /casper/initrd.img
 }
 
 menuentry "Magic Stick - System B (nomodeset)" {
     search --set=root --label ${SYSTEM_B_LABEL}
-    linux /casper/vmlinuz boot=casper persistence persistence-label=${PERSISTENCE_LABEL} username=magic hostname=magic_stick locales=fr_FR.UTF-8 keyboard-layouts=fr nomodeset console=ttyS0,115200
+    linux /casper/vmlinuz boot=casper persistence persistence-label=${PERSISTENCE_LABEL} username=magic hostname=magic-stick locales=fr_FR.UTF-8 keyboard-layouts=fr nomodeset console=ttyS0,115200
     initrd /casper/initrd.img
 }
 GRUBCFG
@@ -643,7 +643,7 @@ cmd_update() {
     [[ -b "$device" ]] || die "${device} is not a block device"
 
     if [[ -z "$iso_file" ]]; then
-        iso_file=$(ls -t "${BUILD_DIR}"/magic_stick_*.iso 2>/dev/null | head -1)
+        iso_file=$(ls -t "${BUILD_DIR}"/magic-stick_*.iso 2>/dev/null | head -1)
     fi
 
     [[ -f "$iso_file" ]] || die "No ISO file found. Run scripts/build.sh first."

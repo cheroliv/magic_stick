@@ -38,14 +38,14 @@ tasks.register("a11yAudit") {
 // ============================================================
 
 val magicStickVersion = rootProject.file("VERSION").readText().trim()
-val dockerImage = "magic_stick:builder"
+val dockerImage = "magic-stick:builder"
 val projDir = layout.projectDirectory.asFile.absolutePath
 val isoDir = "${projDir}/build"
-val isoName = "magic_stick_${magicStickVersion}.iso"
+val isoName = "magic-stick_${magicStickVersion}.iso"
 
 tasks.register<org.gradle.api.tasks.Exec>("dockerBuild") {
     group = "iso"
-    description = "Build the Docker builder image (magic_stick:builder) — no-op if image already exists"
+    description = "Build the Docker builder image (magic-stick:builder) — no-op if image already exists"
     commandLine(
         "bash", "-c",
         "docker image inspect $dockerImage >/dev/null 2>&1 || docker build -t $dockerImage $projDir"
@@ -57,9 +57,9 @@ tasks.register<org.gradle.api.tasks.Exec>("isoClean") {
     description = "Clean ISO build artifacts (keep config)"
     dependsOn("dockerBuild")
     commandLine("docker", "run", "--rm", "--privileged",
-        "-v", "$projDir:/magic_stick",
+        "-v", "$projDir:/magic-stick",
         dockerImage,
-        "bash", "-c", "cd /magic_stick/build && lb clean 2>/dev/null || true")
+        "bash", "-c", "cd /magic-stick/build && lb clean 2>/dev/null || true")
 }
 
 tasks.register<org.gradle.api.tasks.Exec>("isoPurge") {
@@ -67,9 +67,9 @@ tasks.register<org.gradle.api.tasks.Exec>("isoPurge") {
     description = "Purge all ISO build state (config + artifacts)"
     dependsOn("dockerBuild")
     commandLine("docker", "run", "--rm", "--privileged",
-        "-v", "$projDir:/magic_stick",
+        "-v", "$projDir:/magic-stick",
         dockerImage,
-        "bash", "-c", "cd /magic_stick/build && lb clean --purge 2>/dev/null || true")
+        "bash", "-c", "cd /magic-stick/build && lb clean --purge 2>/dev/null || true")
 }
 
 tasks.register<org.gradle.api.tasks.Exec>("isoBuild") {
@@ -80,12 +80,12 @@ tasks.register<org.gradle.api.tasks.Exec>("isoBuild") {
     environment("CLEAN", "false")
     environment("PURGE", "false")
     commandLine("docker", "run", "--rm", "--privileged",
-        "-v", "$projDir:/magic_stick",
+        "-v", "$projDir:/magic-stick",
         "-e", "MAGIC_STICK_VERSION=$magicStickVersion",
         "-e", "CLEAN=false",
         "-e", "PURGE=false",
         dockerImage,
-        "/magic_stick/scripts/build-inner.sh")
+        "/magic-stick/scripts/build-inner.sh")
 }
 
 tasks.register("isoRebuild") {
@@ -100,9 +100,9 @@ tasks.register<org.gradle.api.tasks.Exec>("isoVerify") {
     description = "Verify the built ISO (boot files, bootloader, squashfs)"
     dependsOn("dockerBuild")
     commandLine("docker", "run", "--rm", "--privileged",
-        "-v", "$projDir:/magic_stick",
+        "-v", "$projDir:/magic-stick",
         dockerImage,
-        "/magic_stick/scripts/verify.sh", "/magic_stick/build/$isoName")
+        "/magic-stick/scripts/verify.sh", "/magic-stick/build/$isoName")
 }
 
 tasks.register<org.gradle.api.tasks.Exec>("isoTestSmoke") {
@@ -110,10 +110,10 @@ tasks.register<org.gradle.api.tasks.Exec>("isoTestSmoke") {
     description = "Smoke test: boot ISO in QEMU with smoke_test=true and verify all tools run"
     dependsOn("dockerBuild")
     commandLine("docker", "run", "--rm", "--privileged",
-        "-v", "$projDir:/magic_stick",
+        "-v", "$projDir:/magic-stick",
         dockerImage,
-        "/magic_stick/scripts/test-boot.sh", "--smoke",
-        "/magic_stick/build/$isoName", "300")
+        "/magic-stick/scripts/test-boot.sh", "--smoke",
+        "/magic-stick/build/$isoName", "300")
 }
 
 tasks.register<org.gradle.api.tasks.Exec>("isoTestBoot") {
@@ -121,9 +121,9 @@ tasks.register<org.gradle.api.tasks.Exec>("isoTestBoot") {
     description = "Test ISO boot in QEMU (BIOS + UEFI) inside Docker"
     dependsOn("dockerBuild")
     commandLine("docker", "run", "--rm", "--privileged",
-        "-v", "$projDir:/magic_stick",
+        "-v", "$projDir:/magic-stick",
         dockerImage,
-        "/magic_stick/scripts/test-boot.sh", "/magic_stick/build/$isoName", "120")
+        "/magic-stick/scripts/test-boot.sh", "/magic-stick/build/$isoName", "120")
 }
 
 tasks.register<org.gradle.api.tasks.Exec>("isoTestSoftware") {
@@ -131,9 +131,9 @@ tasks.register<org.gradle.api.tasks.Exec>("isoTestSoftware") {
     description = "Test installed software inside the ISO squashfs via Docker"
     dependsOn("dockerBuild")
     commandLine("docker", "run", "--rm", "--privileged",
-        "-v", "$projDir:/magic_stick",
+        "-v", "$projDir:/magic-stick",
         dockerImage,
-        "bash", "/magic_stick/scripts/test-software.sh", "/magic_stick/build/$isoName")
+        "bash", "/magic-stick/scripts/test-software.sh", "/magic-stick/build/$isoName")
 }
 
 tasks.register("isoTest") {
@@ -156,9 +156,9 @@ tasks.register<org.gradle.api.tasks.Exec>("isoFlash") {
     val device = (project.findProperty("device") as? String) ?: "/dev/null"
     commandLine("docker", "run", "--rm", "--privileged",
         "--device", device,
-        "-v", "$projDir:/magic_stick",
+        "-v", "$projDir:/magic-stick",
         dockerImage,
-        "/magic_stick/scripts/flash.sh", device)
+        "/magic-stick/scripts/flash.sh", device)
     onlyIf { project.hasProperty("device") }
 }
 
@@ -172,7 +172,7 @@ tasks.register<org.gradle.api.tasks.Exec>("isoTestAB") {
     dependsOn("dockerBuild")
     // Runs test-ab-partition.sh inside Docker with all needed perms
     commandLine("docker", "run", "--rm", "--privileged",
-        "-v", "$projDir:/magic_stick",
+        "-v", "$projDir:/magic-stick",
         "--cap-add", "SYS_ADMIN",
         "--device", "/dev/loop-control",
         "--device", "/dev/loop0",
@@ -185,11 +185,11 @@ tasks.register<org.gradle.api.tasks.Exec>("isoTestAB") {
         "--device", "/dev/loop7",
         dockerImage,
         "bash", "-c",
-        "chmod +x /magic_stick/scripts/test-ab-partition.sh /magic_stick/scripts/update-system.sh \u0026\u0026 " +
-        "/magic_stick/scripts/test-ab-partition.sh create-disk \u0026\u0026 " +
-        "/magic_stick/scripts/test-ab-partition.sh setup-ab " +
-        (if (file("build/$isoName").exists()) "/magic_stick/build/$isoName" else "") +
-        " \u0026\u0026 /magic_stick/scripts/test-ab-partition.sh test"
+        "chmod +x /magic-stick/scripts/test-ab-partition.sh /magic-stick/scripts/update-system.sh \u0026\u0026 " +
+        "/magic-stick/scripts/test-ab-partition.sh create-disk \u0026\u0026 " +
+        "/magic-stick/scripts/test-ab-partition.sh setup-ab " +
+        (if (file("build/$isoName").exists()) "/magic-stick/build/$isoName" else "") +
+        " \u0026\u0026 /magic-stick/scripts/test-ab-partition.sh test"
     )
 }
 
@@ -200,10 +200,10 @@ tasks.register<org.gradle.api.tasks.Exec>("isoTestVNC") {
     commandLine("docker", "run", "--rm", "--privileged",
         "-p", "5900:5900",
         "-p", "6080:6080",
-        "-v", "$projDir:/magic_stick",
+        "-v", "$projDir:/magic-stick",
         dockerImage,
-        "/magic_stick/scripts/test-boot.sh", "--vnc",
-        "/magic_stick/build/$isoName", "300")
+        "/magic-stick/scripts/test-boot.sh", "--vnc",
+        "/magic-stick/build/$isoName", "300")
 }
 
 tasks.register("isoTestFull") {

@@ -10,7 +10,7 @@ Session de planification. SourceForge valide en session 016. Mission initiale : 
 
 == Taches realisees
 
-* [OK] Verifier la presence des fichiers ISO sur SourceForge (magic_stick_0.1.0.iso + .sha256)
+* [OK] Verifier la presence des fichiers ISO sur SourceForge (magic-stick_0.1.0.iso + .sha256)
 * [OK] Reprioriser le backlog : EPIC 3+6 (A/B) > boot test > EPIC 4 > EPIC 7 > EPIC 5
 * [OK] Choisir la methode de test boot : QEMU+VNC (ecarte headless, QEMU natif, VirtualBox)
 * [OK] Creer `.agents/BOOT_TEST_REFERENCE.adoc` (fichier LAZY — justification + mode operatoire)

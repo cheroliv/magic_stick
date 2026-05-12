@@ -1,4 +1,4 @@
-= SESSION_CHECKLIST — magic_stick
+= SESSION_CHECKLIST — magic-stick
 
 == Hook d'Ouverture — Avant de commencer une session
 

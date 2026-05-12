@@ -38,6 +38,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     x11vnc \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /magic_stick
+WORKDIR /magic-stick
 
 CMD ["bash"]

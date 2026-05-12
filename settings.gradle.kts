@@ -7,4 +7,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "magic_stick"
+rootProject.name = "magic-stick"

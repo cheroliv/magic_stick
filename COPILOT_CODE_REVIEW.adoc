@@ -518,7 +518,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     x11vnc=0.9.16-1.2ubuntu3 \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /magic_stick
+WORKDIR /magic-stick
 
 CMD ["bash"]
 ----
@@ -965,7 +965,7 @@ With the implementations above, it moves from 8.5/10 → 9.5/10:
 
 [source]
 ----
-magic_stick/
+magic-stick/
 │
 ├── 📦 PRODUCT (ISO bootable)
 │   ├── config/

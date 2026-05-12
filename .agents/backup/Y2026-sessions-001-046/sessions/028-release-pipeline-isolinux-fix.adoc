@@ -26,7 +26,7 @@ Suite session 027 (validation pipeline release, 3 bugs identifiés, fixes locaux
 
 === 3. Declencher release v0.1.5
 
-* [OK] Release declenchee via `gh workflow run release.yml --repo cheroliv/magic_stick -f bump=patch`
+* [OK] Release declenchee via `gh workflow run release.yml --repo cheroliv/magic-stick -f bump=patch`
 * [OK] Run `25021044350` : bump-and-tag OK (8s) + build-and-deploy / build EN COURS
 * [OK] Version `0.1.5` deployee automatiquement par le workflow `bump-and-tag` (commit `0a4a426`)
 

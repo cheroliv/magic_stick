@@ -15,12 +15,12 @@
 
 == Avertissement — Racine de Travail
 
-**Ce fichier est dans `magic_stick/`**, la racine de travail du projet.
-Les chemins dans ce fichier sont relatifs a `magic_stick/`. L'agent travaille depuis `magic_stick/`.
+**Ce fichier est dans `magic-stick/`**, la racine de travail du projet.
+Les chemins dans ce fichier sont relatifs a `magic-stick/`. L'agent travaille depuis `magic-stick/`.
 
 == Projet
 
-**Nom** : magic_stick — environnement portable standardise sur cle USB bootable
+**Nom** : magic-stick — environnement portable standardise sur cle USB bootable
 **But** : Environnement de dev/diagnostic complet, bootable sur tout PC, independant de l'OS hote
 **Stack** : Bash, live-build (Debian/Ubuntu ISO customization), xorriso, syslinux/GRUB
 
@@ -91,7 +91,7 @@ L'environnement utilisateur est hors scope projet.
 
 [source,bash]
 ----
-magic_stick/                          # RACINE DE TRAVAIL
+magic-stick/                          # RACINE DE TRAVAIL
 ├── build/                             # Sortie live-build (ISO generees)
 ├── config/
 │   ├── live-build/

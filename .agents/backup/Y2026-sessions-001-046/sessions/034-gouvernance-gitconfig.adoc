@@ -11,7 +11,7 @@
 
 === Gouvernance — Leçon fichiers personnels
 * Ajout de la règle **Fichiers personnels — Interdiction de modifier** dans :
-  - `magic_stick/AGENT.adoc` + `.agents/INDEX.adoc`
+  - `magic-stick/AGENT.adoc` + `.agents/INDEX.adoc`
   - `cheroliv.com/AGENT.adoc` + `.agents/INDEX.adoc`
   - `plantuml-gradle/plantuml-plugin/AGENT.adoc` + `.agents/INDEX.adoc`
   - `bakery-gradle/bakery-plugin/AGENT.adoc` + `.agents/INDEX.adoc` (fichiers non versionnes, force-add)

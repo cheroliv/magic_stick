@@ -119,7 +119,7 @@ _L'agent NE DOIT JAMAIS_ modifier, ecraser ou supprimer un fichier personnel de 
 
 * **NE JAMAIS** utiliser `Write` ou `Edit` sur un fichier `~/.*` ou `~/*` qui n'est pas dans le repertoire de travail du projet
 * **NE JAMAIS** executer de commande touchant `~/.gitconfig`, `~/.bashrc`, `~/.ssh/*`, `~/.zshrc`, etc. meme avec l'intention de "reparer" ou "configurer"
-* **Toujours rester dans le working directory** (`magic_stick/` ou le repertoire projet actuel)
+* **Toujours rester dans le working directory** (`magic-stick/` ou le repertoire projet actuel)
 
 _Lecon Session 033_ : L'agent a tente de modifier `/home/cheroliv/.gitconfig` pour changer le `user.name` de `opencode` vers `cheroliv`. Sans permission explicite. Modifier les configs utilisateur hors projet est un comportrement dangereux qui peut corrompre l'environnement de travail.
 
@@ -242,7 +242,7 @@ Projets gerant la meme methodologie opencode (EAGER/LAZY, procedure de fin de se
 
 |===
 | Projet | Repertoire | Session en cours | Etape 5 specifique | Derniere mise a jour
-| magic_stick | `~/workspace/foundry/magic_stick` | 044 | SCRIPT_VERIFICATION.adoc | 2026-04-29
+| magic-stick | `~/workspace/foundry/magic-stick` | 044 | SCRIPT_VERIFICATION.adoc | 2026-04-29
 | bakery-gradle | `~/workspace/foundry/bakery-gradle/bakery-plugin` | 5 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-23
 | cheroliv.com | `~/workspace/foundry/cheroliv.com` | 4 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-25
 | plantuml-gradle | `~/workspace/foundry/plantuml-gradle/plantuml-plugin` | 132 | TEST_COVERAGE_ANALYSIS.adoc | 2026-04-23

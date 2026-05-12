@@ -65,7 +65,7 @@
 
 * Tag : `v0.1.13`
 * Commit HEAD session : `b0b8f70`
-* Run : https://github.com/cheroliv/magic_stick/actions/runs/25123106840
+* Run : https://github.com/cheroliv/magic-stick/actions/runs/25123106840
 
 == Fichiers Modifies
 

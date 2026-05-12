@@ -56,10 +56,10 @@ Ou manuellement :
 ----
 docker run --rm --privileged \
   -p 5900:5900 -p 6080:6080 \
-  -v "$(pwd):/magic_stick" \
-  magic_stick:builder \
-  /magic_stick/scripts/test-boot.sh --vnc \
-  /magic_stick/build/magic_stick_0.1.0.iso 300
+  -v "$(pwd):/magic-stick" \
+  magic-stick:builder \
+  /magic-stick/scripts/test-boot.sh --vnc \
+  /magic-stick/build/magic-stick_0.1.0.iso 300
 ----
 
 ==== 1. Verifier les prerequis
@@ -77,7 +77,7 @@ which vinagre remmina vncviewer  # client VNC au choix
 [source,bash]
 ----
 qemu-system-x86_64 \
-  -cdrom magic_stick_0.1.0.iso \
+  -cdrom magic-stick_0.1.0.iso \
   -m 2G \
   -display none \
   -vnc :0
@@ -87,7 +87,7 @@ qemu-system-x86_64 \
 [source,bash]
 ----
 qemu-system-x86_64 \
-  -cdrom magic_stick_0.1.0.iso \
+  -cdrom magic-stick_0.1.0.iso \
   -m 2G \
   -bios /usr/share/OVMF/OVMF_CODE.fd \
   -display none \

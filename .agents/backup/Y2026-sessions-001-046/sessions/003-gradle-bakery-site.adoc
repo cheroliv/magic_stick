@@ -6,7 +6,7 @@
 
 Suite de la session 002 (Git + Push GitHub). L'utilisateur a demande la mise en place d'un site de documentation statique genere par le plugin bakery-gradle et deploye sur GitHub Pages (branche gh-pages). Apres analyse du style de code des 8 repos Gradle de l'utilisateur (bakery-gradle, cheroliv, plantuml-gradle, slider-gradle, newpipe-gradle, codebase-gradle, readme-gradle, jhipster-gradle-plugins), l'agent a reproduit les memes conventions et structures.
 
-L'utilisateur a precise : pas de CNAME, le site sera sur cheroliv.com/magic_stick. Le dossier `bake/` ne doit pas etre dans .gitignore car il est dans le layout de build deja couvert par `build/`. Le `site.yml` contient des credentials et reste dans .gitignore, injecte par la CI via le secret `BAKERY_GRADLE_PLUGIN`.
+L'utilisateur a precise : pas de CNAME, le site sera sur cheroliv.com/magic-stick. Le dossier `bake/` ne doit pas etre dans .gitignore car il est dans le layout de build deja couvert par `build/`. Le `site.yml` contient des credentials et reste dans .gitignore, injecte par la CI via le secret `BAKERY_GRADLE_PLUGIN`.
 
 == Actions
 
@@ -17,7 +17,7 @@ L'utilisateur a precise : pas de CNAME, le site sera sur cheroliv.com/magic_stic
 | `gradle.properties` | Creation — configuration-cache=false |
 | `gradle/libs.versions.toml` | Creation — version catalog bakery 0.0.9 |
 | `site.yml` | Creation — config bakery (pushPage vers gh-pages) |
-| `site/jbake.properties` | Creation — config JBake (Thymeleaf, host cheroliv.com/magic_stick) |
+| `site/jbake.properties` | Creation — config JBake (Thymeleaf, host cheroliv.com/magic-stick) |
 | `site/.jbakeignore` | Creation |
 | `site/templates/index.thyme` | Creation — page d'accueil Magic Stick (hero, features, architecture A/B) |
 | `site/templates/header.thyme` | Creation — head HTML, Bootstrap 5.3, theme switcher |
@@ -68,7 +68,7 @@ L'utilisateur a precise : pas de CNAME, le site sera sur cheroliv.com/magic_stic
 == Lecons apprises
 
 * Le dossier `bake/` est un artefact dans le layout de build Gradle, pas besoin de l'ajouter au .gitignore — `build/` le couvre deja
-* Pas de CNAME pour un site projet GitHub Pages sous un domaine personnalise — le site est servi sous cheroliv.com/magic_stick
+* Pas de CNAME pour un site projet GitHub Pages sous un domaine personnalise — le site est servi sous cheroliv.com/magic-stick
 * Le secret `BAKERY_GRADLE_PLUGIN` contient le contenu complet du site.yml, injecte par la CI avant le build
 * `cname` est non-nullable dans le plugin bakery — ne jamais le laisser vide
 * Le Gradle wrapper doit etre commit dans le repo pour que la CI fonctionne
