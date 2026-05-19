@@ -6,4 +6,4 @@ playwright = "1.52.0"
 playwright = { module = "com.microsoft.playwright:playwright", version.ref = "playwright" }
 
 [plugins]
-bakery = { id = "com.cheroliv.bakery", version.ref = "bakery" }
+bakery = { id = "education.cccp.bakery", version.ref = "bakery" }
